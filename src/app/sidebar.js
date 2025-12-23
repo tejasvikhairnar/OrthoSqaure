@@ -29,7 +29,9 @@ import {
   CalendarCheck,
   Receipt,
   Activity,
-  Package
+  Package,
+  CircleHelp,
+  UserCog
 } from "lucide-react";
 
 import { useMenuData } from "@/hooks/useMenuData";
@@ -56,6 +58,9 @@ const getMenuIcon = (menuName) => {
     'Pharmacy': Activity,
     'Inventory': Package,
     'Accounts': CreditCard,
+    'Help': CircleHelp,
+    'Enquiry Settings': Settings,
+    'User Settings': UserCog,
   };
 
   const IconComponent = iconMap[menuName] || Activity;
@@ -434,10 +439,50 @@ export default function Sidebar({ open }) {
   //   ]
   // };
 
+  // Add Help menu
+  const helpMenu = {
+    menuID: 'help-menu',
+    menuName: 'Help',
+    menuPath: '/help',
+    menuChild: []
+  };
+
+
+  // Add Enquiry Settings menu
+  const enquirySettingsMenu = {
+    menuID: 'enquiry-settings-menu',
+    menuName: 'Enquiry Settings',
+    menuPath: '/enquiry-settings',
+    menuChild: []
+  };
+
+  // Add User Settings menu
+  const userSettingsMenu = {
+    menuID: 'user-settings-menu',
+    menuName: 'User Settings',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'employee',
+        menuName: 'Employee',
+        menuPath: '/user-settings/employee'
+      },
+      {
+        menuID: 'user-access',
+        menuName: 'User Access',
+        menuPath: '/user-settings/user-access'
+      },
+      {
+        menuID: 'area-manager',
+        menuName: 'Area Manager',
+        menuPath: '/user-settings/area-manager'
+      }
+    ]
+  };
 
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
-  const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, accountsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, accountsMenu];
+  const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu];
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -449,9 +494,9 @@ export default function Sidebar({ open }) {
       )}
     >
       {/* Logo */}
-      <div className="flex items-center justify-center h-16 border-b border-[#4DB8AC]/30 flex-shrink-0">
+      <div className="flex items-center justify-center h-20 py-6 border-b border-[#4DB8AC]/30 flex-shrink-0">
         {open ? (
-          <Image src="/medivardaan-logo.png" width={50} height={60} alt="MediVardaan Logo" className="object-contain " />
+          <Image src="/medivardaan-logo.png" width={60} height={25} alt="MediVardaan Logo" className="object-contain" />
         ) : (
           <Image src="/medivardaan-logo.png" width={40} height={40} alt="MediVardaan Logo" className="object-contain" />
         )}
