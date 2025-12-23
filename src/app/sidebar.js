@@ -189,6 +189,31 @@ export default function Sidebar({ open }) {
         menuID: 'lead-followups',
         menuName: 'Lead Followups',
         menuPath: '/enquiry/enquiry-followups'
+      },
+      {
+        menuID: 'pending-followups',
+        menuName: 'Pending Followups',
+        menuPath: '/enquiry/pending-followups'
+      },
+      {
+        menuID: 'follow-up-report',
+        menuName: 'Followups',
+        menuPath: '/enquiry/follow-up-report'
+      },
+      {
+        menuID: 'non-converted-leads',
+        menuName: 'Non-Converted Leads',
+        menuPath: '/enquiry/non-converted-leads'
+      },
+      {
+        menuID: 'upload-leads',
+        menuName: 'Upload Leads',
+        menuPath: '/enquiry/upload-leads'
+      },
+      {
+        menuID: 'area-manager-leads',
+        menuName: 'Area Manager Leads',
+        menuPath: '/enquiry/area-manager-leads'
       }
     ]
   };

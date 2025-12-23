@@ -10,9 +10,9 @@ export default function BookAppointmentsPage() {
   useEffect(() => {
     // Get today's date
     const today = new Date()
-    const formattedDate = format(today, 'dd-MMM-yyyy')
+    const formattedDate = format(today, 'yyyy-MM-dd') // Use yyyy-MM-dd for HTML date input compatibility
 
-    // Default values for clinic and doctor
+    // Default values
     const defaultClinic = 'Panvel'
     const defaultDoctor = ''
 
