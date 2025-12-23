@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 
 import { useMenuData } from "@/hooks/useMenuData";
-import { getUser } from "@/api/getUser";
+import { getUser } from "@/api/client/getUser";
 
 // Function to get icon component for menu
 const getMenuIcon = (menuName) => {
