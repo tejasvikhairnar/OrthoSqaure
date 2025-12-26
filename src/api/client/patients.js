@@ -44,4 +44,10 @@ export const patientService = {
     });
     return response.data;
   },
+
+  // Get all patients
+  getAllPatients: async () => {
+    const response = await axiosClient.get(`/api/Patient/GetAllPatients`);
+    return response.data;
+  },
 };

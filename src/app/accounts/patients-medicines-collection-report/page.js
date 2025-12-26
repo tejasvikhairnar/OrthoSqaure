@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -113,18 +113,68 @@ export default function PatientsMedicinesCollectionReportPage() {
     },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
+  const parseDate = (dateStr) => {
+    // DD-MM-YYYY to Date object
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('-');
+    return new Date(`${year}-${month}-${day}`);
+  }
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, patientName, fromDate, toDate });
+    let result = reportData;
+
+    if (clinicName && clinicName !== "all") {
+       // Normalize clinic name for matching (simple case-insensitive check and hyphen replacement)
+       const normalizedSearch = clinicName.replace(/-/g, ' ').toLowerCase();
+       result = result.filter(item => 
+         item.clinic.toLowerCase().includes(normalizedSearch)
+       );
+    }
+
+    if (patientName) {
+      result = result.filter((item) =>
+        item.patientName.toLowerCase().includes(patientName.toLowerCase())
+      );
+    }
+
+    if (fromDate) {
+       const from = new Date(fromDate);
+       from.setHours(0,0,0,0);
+       result = result.filter(item => {
+         const itemDate = parseDate(item.date);
+         return itemDate && itemDate >= from;
+       });
+    }
+
+    if (toDate) {
+      const to = new Date(toDate);
+      to.setHours(23,59,59,999);
+      result = result.filter(item => {
+         const itemDate = parseDate(item.date);
+         return itemDate && itemDate <= to;
+       });
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleExport = () => {
-    exportToExcel(reportData, "Patients_Medicines_Collection_Report");
+    exportToExcel(filteredReportData, "Patients_Medicines_Collection_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  const totalRevenue = filteredReportData.reduce((sum, item) => sum + parseFloat(item.paidTotal || 0), 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -147,6 +197,7 @@ export default function PatientsMedicinesCollectionReportPage() {
               <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Clinics</SelectItem>
               <SelectItem value="salunkhe-vihar">Salunkhe vihar</SelectItem>
               <SelectItem value="toli-chowki">Toli Chowki</SelectItem>
               <SelectItem value="dombivali-east">Dombivali East</SelectItem>
@@ -200,8 +251,8 @@ export default function PatientsMedicinesCollectionReportPage() {
 
        {/* Stats */}
        <div className="flex gap-20 px-4">
-        <span className="font-semibold text-gray-700 dark:text-gray-300">Total Count : {reportData.length}</span>
-        <span className="font-semibold text-gray-700 dark:text-gray-300">Revenue Total: 290819.50</span>
+        <span className="font-semibold text-gray-700 dark:text-gray-300">Total Count : {filteredReportData.length}</span>
+        <span className="font-semibold text-gray-700 dark:text-gray-300">Revenue Total: {totalRevenue.toFixed(2)}</span>
        </div>
 
       {/* Table */}
@@ -270,7 +321,7 @@ export default function PatientsMedicinesCollectionReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

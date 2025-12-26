@@ -1,8 +1,9 @@
 import axiosClient from "@/lib/axiosClient";
 
-export const getLeads = async (params) => {
+export const getLeads = async (params = {}) => {
+    const mergedParams = { PageSize: 20, ...params };
     const response = await axiosClient.get('/api/Leads/GetAllLeads', {
-        params: params
+        params: mergedParams
     });
 
     return response.data;

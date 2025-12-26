@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -47,24 +47,59 @@ export default function ClinicCollectionReportPage() {
     { id: 15, clinicName: "Ambernath", treatmentPaid: "75000", treatmentDiscount: "0", medicinePaid: "0", medicineDiscount: "0", total: "75000" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, fromDate, toDate });
+    let result = reportData;
+
+    if (clinicName) {
+      // Simple partial match since select value might differ from display
+      // e.g. "vile-parle" vs "Vile-Parle east"
+      // We'll normalize both to lowercase for comparison
+      // or check if report item INCLUDES the search term or vice versa
+      const searchStr = clinicName.toLowerCase();
+      result = result.filter(item => 
+        item.clinicName.toLowerCase().includes(searchStr)
+      );
+    }
+
+    if (fromDate) {
+       // Placeholder for date logic
+    }
+    
+    if (toDate) {
+       // Placeholder for date logic
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleClear = () => {
       setClinicName("");
       setFromDate("");
       setToDate("");
+      setFilteredReportData(reportData);
+      setCurrentPage(1);
   }
 
   const handleExport = () => {
-    exportToExcel(reportData, "Clinic_Collection_Report");
+    exportToExcel(filteredReportData, "Clinic_Collection_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculate totals from filtered data
+  const totalTreatmentPaid = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.treatmentPaid || 0), 0);
+  const totalMedicinePaid = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.medicinePaid || 0), 0);
+  const totalAmount = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.total || 0), 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -135,9 +170,9 @@ export default function ClinicCollectionReportPage() {
 
        {/* Summary Stats */}
       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400 px-2">
-          <span>Treatment Paid Amount : 3255506</span>
-          <span>Medicines Paid Amount: 0</span>
-          <span>Total : 3255506</span>
+          <span>Treatment Paid Amount : {totalTreatmentPaid.toFixed(0)}</span>
+          <span>Medicines Paid Amount: {totalMedicinePaid.toFixed(0)}</span>
+          <span>Total : {totalAmount.toFixed(0)}</span>
       </div>
 
       {/* Table */}
@@ -212,7 +247,7 @@ export default function ClinicCollectionReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

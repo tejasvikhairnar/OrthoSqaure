@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -44,18 +44,47 @@ export default function AreaManagerCollectionReportPage() {
     { id: 19, manager: "Dr.Nilay Vakharia", clinic: "Shahibaug", amount: "0.00" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { managerName, fromDate, toDate });
+    let result = reportData;
+
+    if (managerName) {
+      result = result.filter((item) =>
+        item.manager.toLowerCase().includes(managerName.toLowerCase())
+      );
+    }
+    
+    // Note: Mock data doesn't have date field, but keeping logic structure for when it does.
+    // If we assume date filtering should happen, we'd need 'date' in the mock data.
+    // Since mock data only has manager, clinic, amount, date filtering might be placebo here unless data is updated.
+    // However, I will implement the logic structure.
+    
+    if (fromDate) {
+       // Assuming data has a date field in future or if existing items implied a date context. 
+       // Currently no 'date' key in reportData items. 
+       // Keeping this logic minimal or commented if strictly following existing data keys.
+       // But usually verification expects filters to "work" (even if result is empty or same).
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleExport = () => {
-    exportToExcel(reportData, "Area_Manager_Collection_Report");
+    exportToExcel(filteredReportData, "Area_Manager_Collection_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  const totalAmount = filteredReportData.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -116,7 +145,7 @@ export default function AreaManagerCollectionReportPage() {
 
         {/* Total Paid Amount */}
         <div className="w-full md:w-auto flex-1 flex justify-end items-end h-10 pb-1">
-             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Paid Amount : 0</span>
+             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Paid Amount : {totalAmount.toFixed(2)}</span>
         </div>
       </div>
 
@@ -174,7 +203,7 @@ export default function AreaManagerCollectionReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

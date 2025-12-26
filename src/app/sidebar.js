@@ -565,13 +565,131 @@ export default function Sidebar({ open }) {
         menuID: 'packaging-type',
         menuName: 'Packaging Type',
         menuPath: '/inventory-settings/packaging-type'
+      },
+      {
+        menuID: 'vendor-type',
+        menuName: 'Vendor Type',
+        menuPath: '/inventory-settings/vendor-type'
+      },
+      {
+        menuID: 'inventory-type',
+        menuName: 'Inventory Type',
+        menuPath: '/inventory-settings/inventory-type'
+      }
+    ]
+  };
+
+  // Add Lab Settings menu
+  const labSettingsMenu = {
+    menuID: 'lab-settings-menu',
+    menuName: 'Lab Settings',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'lab-service-master',
+        menuName: 'Lab Service Master',
+        menuPath: '/lab-settings/lab-service-master'
+      },
+      {
+        menuID: 'lab-service-mapping',
+        menuName: 'Lab Service Mapping',
+        menuPath: '/lab-settings/lab-service-mapping'
+      },
+      {
+        menuID: 'lab-master',
+        menuName: 'Lab Master',
+        menuPath: '/lab-settings/lab-master'
+      },
+      {
+        menuID: 'lab-order-pending',
+        menuName: 'Lab Order Pending',
+        menuPath: '/lab-settings/lab-order-pending'
+      }
+    ]
+  };
+
+  const clinicSettingsMenu = {
+    menuID: 'clinic-settings-menu',
+    menuName: 'Clinic Settings',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'branch-profile',
+        menuName: 'Add Branch Profile',
+        menuPath: '/clinic-settings/branch-profile'
+      },
+      {
+        menuID: 'treatments',
+        menuName: 'Treatments',
+        menuPath: '/clinic-settings/treatments'
+      },
+      {
+        menuID: 'medical-problem',
+        menuName: 'Medical Problem',
+        menuPath: '/clinic-settings/medical-problem'
+      },
+      {
+        menuID: 'ticket-details',
+        menuName: 'Ticket Details',
+        menuPath: '/clinic-settings/ticket-details'
+      },
+      {
+        menuID: 'medicines',
+        menuName: 'Medicines',
+        menuPath: '/clinic-settings/medicines'
+      },
+      {
+        menuID: 'branch-handover',
+        menuName: 'Branch Handover',
+        menuPath: '/clinic-settings/branch-handover'
+      }
+    ]
+  };
+
+  const offerMenu = {
+    menuID: 'offer-menu',
+    menuName: 'Offer',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'offer-type',
+        menuName: 'Offer Type',
+        menuPath: '/offer/offer-type'
+      },
+      {
+        menuID: 'offer-list',
+        menuName: 'Offer',
+        menuPath: '/offer/offer-list'
+      }
+    ]
+  };
+
+  const couponMenu = {
+    menuID: 'coupon-menu',
+    menuName: 'Coupon',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'company',
+        menuName: 'Company',
+        menuPath: '/coupon/company'
+      },
+      {
+        menuID: 'coupon-generate',
+        menuName: 'Coupon Generate',
+        menuPath: '/coupon/generate'
+      },
+      {
+        menuID: 'assigned-coupon',
+        menuName: 'Assigned Coupon',
+        menuPath: '/coupon/assigned'
       }
     ]
   };
 
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
-  const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu];
+  const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu];
 
   if (isLoading) return <div>Loading...</div>;
 

@@ -38,7 +38,7 @@ export default function NewLeadPage() {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(20);
 
   // Fetch leads on component mount and when page changes
   useEffect(() => {
@@ -57,7 +57,8 @@ export default function NewLeadPage() {
       const queryParams = {
         ...cleanFilters,
         PageNumber: currentPage,
-        PageSize: pageSize
+        PageSize: pageSize,
+
       };
 
       const data = await getLeads(queryParams);
@@ -191,10 +192,7 @@ export default function NewLeadPage() {
             Add New Lead
           </Button>
         </div>
-        <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {/* Optional: Show range if available, else just page */}
-             Page {currentPage} | Rows per page: {pageSize}
-        </div>
+
       </div>
 
       {/* Leads Table */}
@@ -261,29 +259,7 @@ export default function NewLeadPage() {
             </Table>
           </div>
           
-          {/* Pagination Controls */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
-              <Button
-                  variant="outline"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1 || isLoading}
-                  className="min-w-[100px]"
-              >
-                  Previous
-              </Button>
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                  Page {currentPage}
-              </span>
-              <Button
-                  variant="outline"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  // Disable if we got fewer results than pageSize (indicates end of list)
-                  disabled={leads.length < pageSize || isLoading}
-                  className="min-w-[100px]"
-              >
-                  Next
-              </Button>
-          </div>
+
         </CardContent>
       </Card>
     </div>

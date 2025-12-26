@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Settings, Trash2, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,18 +14,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+const AREA_MANAGERS_DATA = [
+  { id: 1, name: "Dr.RUCHII BHANSALI" },
+  { id: 2, name: "Sayali Jadhav" },
+  { id: 3, name: "Dr.Kunal Shet" },
+  { id: 4, name: "Dr.Nilay Vakharia" },
+  { id: 5, name: "Dr.Isha jain" },
+  { id: 6, name: "Dr.Akhil Nair" },
+  { id: 7, name: "Dr.Anagha Patil Chavan" },
+  { id: 8, name: "Dr.Apurva Vaidya" },
+  { id: 9, name: "Dr.MADHU PAWAR" },
+];
+
 const AreaManagerPage = () => {
-  const areaManagers = [
-    { id: 1, name: "Dr.RUCHII BHANSALI" },
-    { id: 2, name: "Sayali Jadhav" },
-    { id: 3, name: "Dr.Kunal Shet" },
-    { id: 4, name: "Dr.Nilay Vakharia" },
-    { id: 5, name: "Dr.Isha jain" },
-    { id: 6, name: "Dr.Akhil Nair" },
-    { id: 7, name: "Dr.Anagha Patil Chavan" },
-    { id: 8, name: "Dr.Apurva Vaidya" },
-    { id: 9, name: "Dr.MADHU PAWAR" },
-  ];
+  const [areaManagers, setAreaManagers] = useState(AREA_MANAGERS_DATA);
+  const [filteredManagers, setFilteredManagers] = useState(AREA_MANAGERS_DATA);
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearch = () => {
+    let result = areaManagers;
+
+    if (searchName) {
+      result = result.filter((manager) =>
+        manager.name.toLowerCase().includes(searchName.toLowerCase())
+      );
+    }
+
+    setFilteredManagers(result);
+  };
 
   return (
     <div className="w-full p-6 space-y-6 bg-background text-foreground min-h-screen">
@@ -49,9 +65,14 @@ const AreaManagerPage = () => {
                 <Input 
                   placeholder="Area Manager Name" 
                   className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 active:border-orange-500 focus:border-orange-500 pl-3"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
                 />
               </div>
-              <Button className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800">
+              <Button 
+                className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800"
+                onClick={handleSearch}
+              >
                 Search
               </Button>
               <Button className="bg-[#1F618D] hover:bg-[#154360] text-white dark:bg-blue-700 dark:hover:bg-blue-800">
@@ -59,7 +80,7 @@ const AreaManagerPage = () => {
               </Button>
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-              Total : {areaManagers.length}
+              Total : {filteredManagers.length}
             </div>
           </div>
 
@@ -74,7 +95,7 @@ const AreaManagerPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {areaManagers.map((manager, index) => (
+                {filteredManagers.map((manager, index) => (
                   <TableRow 
                     key={manager.id} 
                     className="border-b last:border-b-0 border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"

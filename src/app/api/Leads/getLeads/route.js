@@ -18,8 +18,9 @@ export async function GET(request) {
     
     // Construct potential POST payload for search/pagination
     const searchPayload = {
-      PageSize: searchParams.get('PageSize') || 100,
+      PageSize: searchParams.get('PageSize') || 20,
       PageNumber: searchParams.get('PageNumber') || 1,
+
       // Map common filters
       firstName: searchParams.get('firstName') || "",
       mobile: searchParams.get('mobile') || "",
@@ -52,8 +53,12 @@ export async function GET(request) {
     let methodUsed = "POST";
 
     try {
+        console.log(`[PERF] Starting External API Call (${methodUsed})...`);
+        console.time("ExternalAPI_Duration");
         response = await axiosClient.post('/api/Leads/GetAllLeads', searchPayload, requestConfig);
+        console.timeEnd("ExternalAPI_Duration");
     } catch (postError) {
+        console.timeEnd("ExternalAPI_Duration");
         // Log detailed error from the POST attempt
         if (postError.response) {
             console.log(`[DEBUG] POST Error Status: ${postError.response.status}`);

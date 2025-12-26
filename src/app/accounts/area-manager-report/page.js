@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,18 +32,31 @@ export default function AreaManagerReportPage() {
     { id: 9, manager: "Dr.MADHU PAWAR" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { managerName });
+    let result = reportData;
+    if (managerName) {
+      result = result.filter((item) =>
+        item.manager.toLowerCase().includes(managerName.toLowerCase())
+      );
+    }
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleExport = () => {
-    exportToExcel(reportData, "Area_Manager_Report");
+    exportToExcel(filteredReportData, "Area_Manager_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -81,7 +94,7 @@ export default function AreaManagerReportPage() {
 
         {/* Total Count */}
         <div className="w-full md:w-auto flex-1 flex justify-end items-end h-10 pb-1">
-             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total : {reportData.length}</span>
+             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total : {filteredReportData.length}</span>
         </div>
       </div>
 
@@ -127,7 +140,7 @@ export default function AreaManagerReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -43,18 +43,44 @@ export default function ClinicExpenseReportPage() {
     { id: 11, clinicName: "Aurangabad", total: "55000.00" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, fromDate, toDate });
+    let result = reportData;
+
+    if (clinicName) {
+      const searchStr = clinicName.toLowerCase();
+      result = result.filter(item => 
+        item.clinicName.toLowerCase().includes(searchStr)
+      );
+    }
+    
+     if (fromDate) {
+       // Placeholder for date logic
+    }
+    
+    if (toDate) {
+       // Placeholder for date logic
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleExport = () => {
-    exportToExcel(reportData, "Clinic_Expense_Report");
+    exportToExcel(filteredReportData, "Clinic_Expense_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  const totalAmount = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.total || 0), 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -119,7 +145,7 @@ export default function ClinicExpenseReportPage() {
 
        {/* Total Count */}
       <div className="flex justify-end pr-2">
-         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : 13227321.00</span>
+         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : {totalAmount.toFixed(2)}</span>
       </div>
 
       {/* Table */}
@@ -160,7 +186,7 @@ export default function ClinicExpenseReportPage() {
                     Total
                  </TableCell>
                  <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3">
-                    1500760.00
+                    {totalAmount.toFixed(2)}
                  </TableCell>
              </TableRow>
           </TableBody>
@@ -178,7 +204,7 @@ export default function ClinicExpenseReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

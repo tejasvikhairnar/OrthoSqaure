@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -10,12 +10,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { PlusCircle, ArrowDownCircle, Settings } from "lucide-react";
-import { exportToExcel } from "@/utils/exportToExcel";
+import * as XLSX from "xlsx";
 import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function AccountantExpensePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const fileInputRef = useRef(null);
 
   // Mock data matching the screenshot
   const [reportData, setReportData] = useState([
@@ -61,35 +62,84 @@ export default function AccountantExpensePage() {
       billNo: "854785445",
       heads: "Test",
     },
-    {
-      id: 4,
-      bank: "SBI",
-      date: "30-Sep-2022",
-      party: "aa",
-      natureOfExpense: "100",
-      gross: "100.00",
-      tds: "100.00",
-      netAmount: "100.00",
-      modeOfPayment: "Paytm",
-      clinic: "aa",
-      billNo: "1212121",
-      heads: "zzz",
-    },
-    {
-      id: 5,
-      bank: "SBI",
-      date: "30-Sep-2023",
-      party: "aa",
-      natureOfExpense: "100",
-      gross: "100.00",
-      tds: "100.00",
-      netAmount: "100.00",
-      modeOfPayment: "Paytm",
-      clinic: "aa",
-      billNo: "1212121",
-      heads: "zzz",
-    },
   ]);
+
+  const handleDownloadBlankSheet = () => {
+    const headers = [
+      {
+        bank: "",
+        date: "",
+        party: "",
+        natureOfExpense: "",
+        gross: "",
+        tds: "",
+        netAmount: "",
+        modeOfPayment: "",
+        clinic: "",
+        billNo: "",
+        heads: "",
+      },
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(headers);
+    
+    // Fix headers row (optional: make them more readable if needed, or stick to keys)
+    // XLSX.utils.sheet_add_aoa(worksheet, [["Bank", "Date", "Party", "Nature Of Expense", "Gross", "Tds", "Net Amount", "Mode Of Payment", "Clinic", "Bill Or Ref No", "Major And Minor Heads"]], { origin: "A1" });
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Expense Template");
+    XLSX.writeFile(workbook, "Accountant_Expense_Template.xlsx");
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target?.result;
+      const workbook = XLSX.read(bstr, { type: "binary" });
+      const wsname = workbook.SheetNames[0];
+      const ws = workbook.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws);
+
+      if (data && data.length > 0) {
+        // Map data to ensure structure matches state (assuming template keys match)
+        // Note: Imported data keys depend on the Excel headers. 
+        // If template uses keys 'bank', 'date' etc directly, fine.
+        // If template uses nice headers "Bank", "Date", mapping is needed.
+        
+        // For simplicity, assuming validation is loose or template matches keys.
+        // Adding simple ID generation
+        const newEntries = data.map((item, index) => ({
+          id: Date.now() + index, // simple unique id
+          bank: item.bank || item.Bank || "",
+          date: item.date || item.Date || "",
+          party: item.party || item.Party || "",
+          natureOfExpense: item.natureOfExpense || item["Nature Of Expense"] || "",
+          gross: item.gross || item.Gross || "",
+          tds: item.tds || item.Tds || "",
+          netAmount: item.netAmount || item["Net Amount"] || "",
+          modeOfPayment: item.modeOfPayment || item["Mode Of Payment"] || "",
+          clinic: item.clinic || item.Clinic || "",
+          billNo: item.billNo || item.bill || item["Bill Or Ref No"] || "",
+          heads: item.heads || item["Major And Minor Heads"] || "",
+        }));
+
+        setReportData((prev) => [...prev, ...newEntries]);
+      }
+      
+      // Reset input
+      if (fileInputRef.current) {
+         fileInputRef.current.value = "";
+      }
+    };
+    reader.readAsBinaryString(file);
+  };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -110,11 +160,24 @@ export default function AccountantExpensePage() {
 
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-4">
-        <Button className="bg-green-600 hover:bg-green-700 text-white gap-2 transition-colors">
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          onChange={handleFileChange} 
+          accept=".xlsx, .xls" 
+          className="hidden" 
+        />
+        <Button 
+          onClick={handleImportClick}
+          className="bg-green-600 hover:bg-green-700 text-white gap-2 transition-colors"
+        >
           <PlusCircle className="w-4 h-4" />
           Import Excel
         </Button>
-        <Button className="bg-blue-800 hover:bg-blue-900 text-white gap-2 transition-colors">
+        <Button 
+          onClick={handleDownloadBlankSheet}
+          className="bg-blue-800 hover:bg-blue-900 text-white gap-2 transition-colors"
+        >
           <ArrowDownCircle className="w-4 h-4" />
           Download Blank Sheet
         </Button>

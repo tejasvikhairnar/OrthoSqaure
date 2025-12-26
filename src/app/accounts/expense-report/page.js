@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,117 +33,139 @@ export default function ExpenseReportPage() {
   const [reportData, setReportData] = useState([
     {
       id: 1,
-      clinic: "Market Yard",
+      clinic: "Salunkhe vihar",
       doctor: "Dr.Anagha Patil Chavan",
-      vendorType: "Courier",
-      vendor: "--- Select ---",
-      amount: "150.00",
-      date: "29-12-2025",
+      vendorType: "Stationary",
+      amount: "95.00",
     },
     {
       id: 2,
       clinic: "Salunkhe vihar",
       doctor: "Dr.Anagha Patil Chavan",
       vendorType: "Courier",
-      vendor: "--- Select ---",
       amount: "80.00",
-      date: "23-12-2025",
     },
     {
       id: 3,
-      clinic: "Salunkhe vihar",
-      doctor: "Dr.Anagha Patil Chavan",
-      vendorType: "Stationary",
-      vendor: "stationery shop",
-      amount: "95.00",
-      date: "23-12-2025",
-    },
-    {
-      id: 4,
       clinic: "BYCULLA West",
       doctor: "Dr.RUCHI BHANSALI",
       vendorType: "Travelling",
-      vendor: "From Byculla To Dadar",
       amount: "10.00",
-      date: "22-12-2025",
+    },
+    {
+      id: 4,
+      clinic: "AURANGABAD",
+      doctor: "Dr.Anagha Patil Chavan",
+      vendorType: "Courier",
+      amount: "300.00",
     },
     {
       id: 5,
-      clinic: "Salunkhe vihar",
-      doctor: "Dr.Anagha Patil Chavan",
-      vendorType: "Courier",
-      vendor: "--- Select ---",
+      clinic: "BYCULLA West",
+      doctor: "Dr.RUCHI BHANSALI",
+      vendorType: "Clinic Maintenance",
       amount: "100.00",
-      date: "21-12-2025",
     },
     {
       id: 6,
-      clinic: "Salunkhe vihar",
-      doctor: "Dr.Anagha Patil Chavan",
+      clinic: "WadgaonSheri",
+      doctor: "Dr.Dhanashree Shinde",
       vendorType: "Courier",
-      vendor: "--- Select ---",
-      amount: "220.00",
-      date: "20-12-2025",
+      amount: "130.00",
     },
     {
       id: 7,
-      clinic: "Vapi",
-      doctor: "Dr.Khushbu Ranva",
+      clinic: "WadgaonSheri",
+      doctor: "Dr.Dhanashree Shinde",
       vendorType: "Courier",
-      vendor: "--- Select ---",
-      amount: "100.00",
-      date: "20-12-2025",
+      amount: "113.00",
     },
     {
       id: 8,
-      clinic: "Vapi",
-      doctor: "Dr.Khushbu Ranva",
+      clinic: "WadgaonSheri",
+      doctor: "Dr.Dhanashree Shinde",
       vendorType: "Courier",
-      vendor: "--- Select ---",
-      amount: "210.00",
-      date: "19-12-2025",
+      amount: "139.00",
     },
     {
       id: 9,
-      clinic: "Vapi",
-      doctor: "Dr.Khushbu Ranva",
-      vendorType: "Cleaning Supplies",
-      vendor: "GENERAL STORE",
-      amount: "649.00",
-      date: "19-12-2025",
+      clinic: "WadgaonSheri",
+      doctor: "Dr.Dhanashree Shinde",
+      vendorType: "Courier",
+      amount: "131.00",
     },
     {
       id: 10,
-      clinic: "BYCULLA West",
-      doctor: "Dr.RUCHI BHANSALI",
-      vendorType: "Clinic Maintenance",
-      vendor: "Amazon",
-      amount: "100.00",
-      date: "19-12-2025",
+      clinic: "WadgaonSheri",
+      doctor: "Dr.Dhanashree Shinde",
+      vendorType: "Courier",
+      amount: "118.00",
     },
     {
-      id: 11,
-      clinic: "BYCULLA West",
-      doctor: "Dr.RUCHI BHANSALI",
-      vendorType: "Clinic Maintenance",
-      vendor: "Amazon",
-      amount: "150.00",
-      date: "19-12-2025",
-    },
+        id: 11,
+        clinic: "WadgaonSheri",
+        doctor: "Dr.Dhanashree Shinde",
+        vendorType: "Courier",
+        amount: "125.00",
+      },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+    useEffect(() => {
+        setFilteredReportData(reportData);
+    }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, doctorName, fromDate, toDate });
+        let result = reportData;
+
+        if (clinicName) {
+            const searchStr = clinicName.toLowerCase().replace(/_/g, " ");
+            result = result.filter(item => {
+                 const cVal = item.clinic.toLowerCase();
+                 const selectedNormalized = clinicName.toLowerCase().replace(/_/g, " ");
+                 return cVal.includes(selectedNormalized) || selectedNormalized.includes(cVal);
+            });
+        }
+        
+        if (doctorName) {
+            result = result.filter(item => 
+                item.doctor.toLowerCase().includes(doctorName.toLowerCase())
+            );
+        }
+
+        if (fromDate) {
+           // Placeholder for date logic
+        }
+        
+        if (toDate) {
+           // Placeholder for date logic
+        }
+
+        setFilteredReportData(result);
+        setCurrentPage(1);
   };
+    
+    const handleClear = () => {
+      setClinicName("");
+      setDoctorName("");
+      setFromDate("");
+      setToDate("");
+      setFilteredReportData(reportData);
+      setCurrentPage(1);
+    }
 
   const handleExport = () => {
-    exportToExcel(reportData, "Expense_Report");
+    exportToExcel(filteredReportData, "Expense_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalAmount = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.amount || 0), 0);
+
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -158,38 +180,43 @@ export default function ExpenseReportPage() {
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-        {/* Clinic Name */}
-        <div className="space-y-1">
+      <div className="flex flex-col md:flex-row gap-4 items-end bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+        {/* Clinic Name (Required) */}
+        <div className="w-full md:w-1/5 space-y-1">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+             Clinic Name <span className="text-red-500">*</span>
+          </label>
            <Select value={clinicName} onValueChange={setClinicName}>
-            <SelectTrigger className="h-10 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700">
+            <SelectTrigger className="h-10 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700">
                 <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="market_yard">Market Yard</SelectItem>
                 <SelectItem value="salunkhe_vihar">Salunkhe vihar</SelectItem>
                 <SelectItem value="byculla_west">BYCULLA West</SelectItem>
-                <SelectItem value="vapi">Vapi</SelectItem>
+                <SelectItem value="aurangabad">AURANGABAD</SelectItem>
+                <SelectItem value="wadgaonsheri">WadgaonSheri</SelectItem>
             </SelectContent>
             </Select>
         </div>
 
-        {/* Doctor */}
-        <div className="space-y-1">
-           <Select value={doctorName} onValueChange={setDoctorName}>
-            <SelectTrigger className="h-10 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700">
-                <SelectValue placeholder="-- Select Doctor --" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectItem value="dr_anagha">Dr.Anagha Patil Chavan</SelectItem>
-                <SelectItem value="dr_ruchi">Dr.RUCHI BHANSALI</SelectItem>
-                <SelectItem value="dr_khushbu">Dr.Khushbu Ranva</SelectItem>
-            </SelectContent>
-            </Select>
+         {/* Doctor */}
+         <div className="w-full md:w-1/5 space-y-1">
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Doctor
+          </label>
+           <Input
+            placeholder=""
+            value={doctorName}
+            onChange={(e) => setDoctorName(e.target.value)}
+            className="h-10 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700"
+          />
         </div>
-        
+
         {/* From Date */}
-        <div className="space-y-1">
+        <div className="w-full md:w-1/5 space-y-1">
+           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            From Date
+          </label>
            <Input
             type="date"
             placeholder="From Date"
@@ -200,7 +227,10 @@ export default function ExpenseReportPage() {
         </div>
 
         {/* To Date */}
-        <div className="space-y-1">
+        <div className="w-full md:w-1/5 space-y-1">
+           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            To Date
+          </label>
            <Input
             type="date"
             placeholder="To Date"
@@ -210,20 +240,26 @@ export default function ExpenseReportPage() {
           />
         </div>
 
-        {/* Search Button */}
-        <div className="">
+        {/* Buttons */}
+        <div className="flex gap-2 w-full md:w-auto">
           <Button
             onClick={handleSearch}
-            className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full transition-colors"
+            className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-6 h-10 w-full md:w-auto transition-colors"
           >
             Search
+          </Button>
+           <Button
+            onClick={handleClear}
+            className="bg-[#A01A1A] hover:bg-[#8a1616] text-white px-6 h-10 w-full md:w-auto transition-colors"
+          >
+            Clear
           </Button>
         </div>
       </div>
 
        {/* Total Count */}
       <div className="flex justify-end pr-2">
-         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : 13227321.00</span>
+         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Amount : {totalAmount.toFixed(2)}</span>
       </div>
 
       {/* Table */}
@@ -232,25 +268,19 @@ export default function ExpenseReportPage() {
           <TableHeader className="bg-[#e6ffcc] dark:bg-[#e6ffcc]/20">
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-[60px] font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
-                Sr No.
+                Sr. No.
               </TableHead>
               <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
                 Clinic Name
               </TableHead>
-              <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
-                 Doctor Name
+               <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
+                Doctor Name
               </TableHead>
-              <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
-                 Vendor Type
+               <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
+                Vendor Type
               </TableHead>
-              <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
-                 Vendor / Travelling
-              </TableHead>
-              <TableHead className="font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
-                Amount
-              </TableHead>
-              <TableHead className="font-bold text-gray-800 dark:text-gray-200">
-                 Date
+              <TableHead className="font-bold text-gray-800 dark:text-gray-200 text-right">
+                 Amount
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -266,30 +296,23 @@ export default function ExpenseReportPage() {
                 <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
                   {row.clinic}
                 </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                 <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
                   {row.doctor}
                 </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                 <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
                   {row.vendorType}
                 </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.vendor}
-                </TableCell>
-                 <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                <TableCell className="text-gray-600 dark:text-gray-300 py-3 text-right font-medium">
                   {row.amount}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3">
-                  {row.date}
                 </TableCell>
               </TableRow>
             ))}
              <TableRow className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
-                 <TableCell colSpan={5} className="border-r border-gray-200 dark:border-gray-700 py-3"></TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4">
+                 <TableCell colSpan={4} className="border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4 font-bold text-gray-700 dark:text-gray-300">
                     Total
                  </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3">
-                    100.00
+                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right pr-4">
+                    {totalAmount.toFixed(2)}
                  </TableCell>
              </TableRow>
           </TableBody>
@@ -307,7 +330,7 @@ export default function ExpenseReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

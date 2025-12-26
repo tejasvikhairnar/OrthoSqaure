@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Settings, CheckCircle2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,63 +15,92 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+const EMPLOYEES_DATA = [
+  {
+    id: 1,
+    empCode: "EMP3",
+    name: "sneha gaikwad",
+    mobile: "7738328642",
+    email: "",
+    regDate: "21-08-2019",
+    photo: null,
+  },
+  {
+    id: 2,
+    empCode: "EMP9",
+    name: "sayali palshetkar",
+    mobile: "8424930024",
+    email: "",
+    regDate: "06-11-2019",
+    photo: null,
+  },
+  {
+    id: 3,
+    empCode: "EMP11",
+    name: "Account a",
+    mobile: "5566448855",
+    email: "",
+    regDate: "13-03-2020",
+    photo: null,
+  },
+  {
+    id: 4,
+    empCode: "EMP12",
+    name: "Nikita Rajaram Mhapankar",
+    mobile: "9004310736",
+    email: "",
+    regDate: "28-08-2020",
+    photo: null,
+  },
+  {
+    id: 5,
+    empCode: "EMP13",
+    name: "seher shaikh",
+    mobile: "9022942698",
+    email: "",
+    regDate: "09-09-2020",
+    photo: null,
+  },
+  {
+    id: 6,
+    empCode: "EMP14",
+    name: "Mahek Kanojiya",
+    mobile: "7700011473",
+    email: "mahekanojiya01@gmail.com",
+    regDate: "30-09-2020",
+    photo: null,
+  },
+];
+
 const EmployeePage = () => {
-  const employees = [
-    {
-      id: 1,
-      empCode: "EMP3",
-      name: "sneha gaikwad",
-      mobile: "7738328642",
-      email: "",
-      regDate: "21-08-2019",
-      photo: null,
-    },
-    {
-      id: 2,
-      empCode: "EMP9",
-      name: "sayali palshetkar",
-      mobile: "8424930024",
-      email: "",
-      regDate: "06-11-2019",
-      photo: null,
-    },
-    {
-      id: 3,
-      empCode: "EMP11",
-      name: "Account a",
-      mobile: "5566448855",
-      email: "",
-      regDate: "13-03-2020",
-      photo: null,
-    },
-    {
-      id: 4,
-      empCode: "EMP12",
-      name: "Nikita Rajaram Mhapankar",
-      mobile: "9004310736",
-      email: "",
-      regDate: "28-08-2020",
-      photo: null,
-    },
-    {
-      id: 5,
-      empCode: "EMP13",
-      name: "seher shaikh",
-      mobile: "9022942698",
-      email: "",
-      regDate: "09-09-2020",
-      photo: null,
-    },
-    {
-      id: 6,
-      empCode: "EMP14",
-      name: "Mahek Kanojiya",
-      mobile: "7700011473",
-      email: "mahekanojiya01@gmail.com",
-      regDate: "30-09-2020",
-      photo: null,
-    },
-  ];
+  const [employees, setEmployees] = useState(EMPLOYEES_DATA);
+  const [filteredEmployees, setFilteredEmployees] = useState(EMPLOYEES_DATA);
+  
+  const [searchName, setSearchName] = useState("");
+  const [searchMobile, setSearchMobile] = useState("");
+  const [searchEmpCode, setSearchEmpCode] = useState("");
+
+  const handleSearch = () => {
+    let result = employees;
+
+    if (searchName) {
+      result = result.filter((emp) =>
+        emp.name.toLowerCase().includes(searchName.toLowerCase())
+      );
+    }
+    if (searchMobile) {
+      result = result.filter((emp) =>
+        emp.mobile.includes(searchMobile)
+      );
+    }
+    if (searchEmpCode) {
+      result = result.filter((emp) =>
+        emp.empCode.toLowerCase().includes(searchEmpCode.toLowerCase())
+      );
+    }
+
+    setFilteredEmployees(result);
+  };
 
   return (
     <div className="w-full p-6 space-y-6 bg-background text-foreground min-h-screen">
@@ -95,6 +124,8 @@ const EmployeePage = () => {
               <Input 
                 placeholder="Employee Name" 
                 className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700"
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -102,6 +133,8 @@ const EmployeePage = () => {
               <Input 
                 placeholder="Mobile No." 
                 className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700"
+                value={searchMobile}
+                onChange={(e) => setSearchMobile(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -109,10 +142,15 @@ const EmployeePage = () => {
               <Input 
                 placeholder="Employee Code" 
                 className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700"
+                value={searchEmpCode}
+                onChange={(e) => setSearchEmpCode(e.target.value)}
               />
             </div>
             <div>
-              <Button className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800 px-8">
+              <Button 
+                className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800 px-8"
+                onClick={handleSearch}
+              >
                 Search
               </Button>
             </div>
@@ -141,7 +179,7 @@ const EmployeePage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {employees.map((emp, index) => (
+                {filteredEmployees.map((emp, index) => (
                   <TableRow 
                     key={emp.id} 
                     className="border-b last:border-b-0 border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"

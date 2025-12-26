@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -119,8 +119,37 @@ export default function ExpenseEntryPage() {
     },
   ]);
 
+  const [filteredExpenses, setFilteredExpenses] = useState(expenses);
+
+  useEffect(() => {
+    setFilteredExpenses(expenses);
+  }, [expenses]);
+
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, doctorName });
+    let result = expenses;
+
+    if (clinicName) {
+      const searchStr = clinicName.toLowerCase().replace(/_/g, " "); // Basic normalization if keys use underscores
+      // Actually, select values are like "salunkhe_vihar", distinct from "Salunkhe vihar". 
+      // I'll make a more robust check by stripping special chars or checking loose match
+      result = result.filter(item => {
+         const cVal = item.clinic.toLowerCase();
+         // Check if clinicName (selected) is subset of data clinic string or vise versa, 
+         // treating underscore as space
+         const selectedNormalized = clinicName.toLowerCase().replace(/_/g, " ");
+         return cVal.includes(selectedNormalized) || selectedNormalized.includes(cVal);
+      });
+    }
+
+    if (doctorName) {
+      result = result.filter(item => 
+        item.doctor.toLowerCase().includes(doctorName.toLowerCase())
+      );
+    }
+
+    setFilteredExpenses(result);
+    setCurrentPage(1);
   };
 
   const handleDelete = (id) => {
@@ -132,13 +161,13 @@ export default function ExpenseEntryPage() {
   };
 
   const handleExport = () => {
-    exportToExcel(expenses, "Expense_Entry");
+    exportToExcel(filteredExpenses, "Expense_Entry");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = expenses.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredExpenses.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -278,7 +307,7 @@ export default function ExpenseEntryPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={expenses.length} 
+            totalItems={filteredExpenses.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

@@ -32,7 +32,7 @@ export const getAllLeads = async (filters = {}) => {
     if (filters.toDate) params.append('toDate', filters.toDate);
     
     // Pagination parameters
-    const size = '100';
+    const size = '20';
     if (!params.has('PageSize')) params.append('PageSize', size);
     if (!params.has('pageSize')) params.append('pageSize', size);
     if (!params.has('limit')) params.append('limit', size);

@@ -32,8 +32,19 @@ const UserAccessPage = () => {
                 <SelectValue placeholder="--- Select ---" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="option1">Option 1</SelectItem>
-                <SelectItem value="option2">Option 2</SelectItem>
+                <SelectItem value="branch-admin">Branch Admin</SelectItem>
+                <SelectItem value="super-admin">Super Admin</SelectItem>
+                <SelectItem value="doctor">Doctor</SelectItem>
+                <SelectItem value="accountant">Accountant</SelectItem>
+                <SelectItem value="receptionist">Receptionist</SelectItem>
+                <SelectItem value="hr">HR</SelectItem>
+                <SelectItem value="sales">Sales</SelectItem>
+                <SelectItem value="telecaller">Telecaller</SelectItem>
+                <SelectItem value="telecaller-call">Telecaller Call</SelectItem>
+                <SelectItem value="material-admin">Material Admin</SelectItem>
+                <SelectItem value="marketing">Marketing</SelectItem>
+                <SelectItem value="corporate">Corporate</SelectItem>
+                <SelectItem value="report-checker">Report Checker</SelectItem>
               </SelectContent>
             </Select>
           </div>

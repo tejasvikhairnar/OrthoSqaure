@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,18 +42,48 @@ export default function ClinicMedicinesCollectionReportPage() {
     { id: 10, clinicName: "Aundh", paidAmount: "44,539" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, fromDate, toDate });
+    let result = reportData;
+
+    if (clinicName) {
+      const searchStr = clinicName.toLowerCase();
+      result = result.filter(item => 
+        item.clinicName.toLowerCase().includes(searchStr)
+      );
+    }
+    
+     if (fromDate) {
+       // Placeholder for date logic
+    }
+    
+    if (toDate) {
+       // Placeholder for date logic
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
   const handleExport = () => {
-    exportToExcel(reportData, "Clinic_Medicines_Collection_Report");
+    exportToExcel(filteredReportData, "Clinic_Medicines_Collection_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  const totalAmount = filteredReportData.reduce((acc, curr) => {
+      // Remove commas from amount string before parsing
+      const amountStr = String(curr.paidAmount).replace(/,/g, '');
+      return acc + parseFloat(amountStr || 0);
+  }, 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -117,7 +147,7 @@ export default function ClinicMedicinesCollectionReportPage() {
 
         {/* Total Paid Amount */}
         <div className="w-full md:w-auto flex-1 flex justify-end items-end h-10 pb-1">
-             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Paid Amount : 287219.50</span>
+             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Paid Amount : {totalAmount.toFixed(2)}</span>
         </div>
       </div>
 
@@ -159,7 +189,7 @@ export default function ClinicMedicinesCollectionReportPage() {
                     Total
                  </TableCell>
                  <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3">
-                    56814
+                    {totalAmount.toFixed(0)}
                  </TableCell>
              </TableRow>
           </TableBody>
@@ -177,7 +207,7 @@ export default function ClinicMedicinesCollectionReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 
