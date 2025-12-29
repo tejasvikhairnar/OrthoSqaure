@@ -19,13 +19,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function ClinicStock() {
   const [clinic, setClinic] = useState("");
   const [itemName, setItemName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data for Clinic Stock
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
       id: 1,
       clinicName: "Borivali",
@@ -66,7 +70,23 @@ export default function ClinicStock() {
       unit: "Kits",
       lastUpdated: "2025-12-15",
     },
-  ];
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(tableData, "Clinic_Stock");
+  };
+
+  // Filter Data
+  const filteredData = tableData.filter((item) => {
+      const matchesClinic = !clinic || clinic === "all" || item.clinicName.toLowerCase() === clinic.toLowerCase(); // In real app use IDs
+      const matchesItem = item.itemName.toLowerCase().includes(itemName.toLowerCase());
+      return matchesClinic && matchesItem;
+  });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -89,9 +109,9 @@ export default function ClinicStock() {
                     </SelectTrigger>
                     <SelectContent>
                     <SelectItem value="all">All Clinics</SelectItem>
-                    <SelectItem value="clinic1">Borivali</SelectItem>
-                    <SelectItem value="clinic2">Kalyan Nagar</SelectItem>
-                    <SelectItem value="clinic3">Shahibaug</SelectItem>
+                    <SelectItem value="Borivali">Borivali</SelectItem>
+                    <SelectItem value="Kalyan Nagar">Kalyan Nagar</SelectItem>
+                    <SelectItem value="Shahibaug">Shahibaug</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -107,11 +127,16 @@ export default function ClinicStock() {
             </div>
 
             <div className="flex gap-2">
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all">
+                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all md:w-auto w-full">
                     Search
                 </Button>
             </div>
         </div>
+      </div>
+      
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -128,16 +153,22 @@ export default function ClinicStock() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableData.map((row) => (
-              <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{row.id}</TableCell>
-                <TableCell className="dark:text-gray-300">{row.clinicName}</TableCell>
-                <TableCell className="dark:text-gray-300">{row.itemName}</TableCell>
-                <TableCell className="dark:text-gray-300">{row.quantity}</TableCell>
-                <TableCell className="dark:text-gray-300">{row.unit}</TableCell>
-                <TableCell className="dark:text-gray-300">{row.lastUpdated}</TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
+                    <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                    <TableCell className="dark:text-gray-300">{row.clinicName}</TableCell>
+                    <TableCell className="dark:text-gray-300">{row.itemName}</TableCell>
+                    <TableCell className="dark:text-gray-300">{row.quantity}</TableCell>
+                    <TableCell className="dark:text-gray-300">{row.unit}</TableCell>
+                    <TableCell className="dark:text-gray-300">{row.lastUpdated}</TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={6} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -145,18 +176,17 @@ export default function ClinicStock() {
        {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
          {/* Excel Export Icon */}
-         <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
+         <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
               <FileSpreadsheet className="w-6 h-6" />
          </Button>
 
-          <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
-            {[1, 2, 3].map((num) => (
-              <span key={num} className="cursor-pointer hover:underline p-1">
-                {num}
-              </span>
-            ))}
-            <span className="cursor-pointer hover:underline p-1">... &gt;&gt;</span>
-          </div>
+          {/* Pagination component */}
+            <CustomPagination 
+                totalItems={filteredData.length} 
+                itemsPerPage={itemsPerPage} 
+                currentPage={currentPage} 
+                onPageChange={setCurrentPage} 
+            />
         </div>
     </div>
   );

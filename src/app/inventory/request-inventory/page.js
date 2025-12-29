@@ -59,6 +59,28 @@ export default function RequestInventory() {
     );
   };
 
+  const handleSubmit = () => {
+      // Validation: Check if clinic name is selected and rows have data
+      if (!clinicName) {
+          alert("Please select a clinic.");
+          return;
+      }
+      // Simulate API call
+      console.log("Submitting Request:", { clinicName, rows });
+      alert("Inventory Request Submitted Successfully!");
+      
+      // Reset form
+      setClinicName("");
+      setRows([{
+        id: 1,
+        inventoryType: "",
+        itemName: "",
+        packaging: "",
+        quantity: 0,
+        remarks: "",
+      }]);
+  };
+
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
@@ -200,7 +222,7 @@ export default function RequestInventory() {
 
        {/* Submit Button */}
        <div className="flex justify-center pt-6">
-        <Button className="bg-[#4DB6AC] hover:bg-[#00897B] text-white px-8 font-medium shadow-sm transition-all h-10">
+        <Button onClick={handleSubmit} className="bg-[#4DB6AC] hover:bg-[#00897B] text-white px-8 font-medium shadow-sm transition-all h-10">
           Submit
         </Button>
       </div>

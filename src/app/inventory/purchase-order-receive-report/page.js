@@ -26,7 +26,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 1,
       orderNo: "ORD4968",
-      receivedDate: "04-Feb-2025",
+      receivedDate: "2025-02-04",
       materialName: "Saline",
       requestQty: 1,
       receivedQty: 1,
@@ -35,7 +35,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 2,
       orderNo: "ORD5814",
-      receivedDate: "02-Jan-2025",
+      receivedDate: "2025-01-02",
       materialName: "Composite",
       requestQty: 40,
       receivedQty: 40,
@@ -44,7 +44,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 3,
       orderNo: "ORD5814",
-      receivedDate: "02-Jan-2025",
+      receivedDate: "2025-01-02",
       materialName: "Bonding Agent",
       requestQty: 10,
       receivedQty: 10,
@@ -53,7 +53,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 4,
       orderNo: "ORD5814",
-      receivedDate: "02-Jan-2025",
+      receivedDate: "2025-01-02",
       materialName: "Epoxyseal",
       requestQty: 20,
       receivedQty: 20,
@@ -62,7 +62,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 5,
       orderNo: "ORD3123",
-      receivedDate: "05-Nov-2024",
+      receivedDate: "2024-11-05",
       materialName: "Indurent Gel",
       requestQty: 20,
       receivedQty: 20,
@@ -71,7 +71,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 6,
       orderNo: "ORD3123",
-      receivedDate: "05-Nov-2024",
+      receivedDate: "2024-11-05",
       materialName: "Oranwash",
       requestQty: 10,
       receivedQty: 10,
@@ -80,7 +80,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 7,
       orderNo: "ORD7594",
-      receivedDate: "23-Aug-2024",
+      receivedDate: "2024-08-23",
       materialName: "Blue Bite",
       requestQty: 5,
       receivedQty: 5,
@@ -89,7 +89,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 8,
       orderNo: "ORD7594",
-      receivedDate: "23-Aug-2024",
+      receivedDate: "2024-08-23",
       materialName: "Composite N75 B2",
       requestQty: 5,
       receivedQty: 5,
@@ -98,7 +98,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 9,
       orderNo: "ORD7594",
-      receivedDate: "23-Aug-2024",
+      receivedDate: "2024-08-23",
       materialName: "Composite N75 A3",
       requestQty: 5,
       receivedQty: 5,
@@ -107,7 +107,7 @@ export default function PurchaseOrderReceiveReportPage() {
     {
       id: 10,
       orderNo: "ORD7594",
-      receivedDate: "23-Aug-2024",
+      receivedDate: "2024-08-23",
       materialName: "Composite N75 A2",
       requestQty: 12,
       receivedQty: 12,
@@ -115,18 +115,25 @@ export default function PurchaseOrderReceiveReportPage() {
     },
   ]);
 
-  const handleSearch = () => {
-    console.log("Searching with:", { orderNo, fromDate, toDate });
-  };
-
   const handleExport = () => {
     exportToExcel(reportData, "Purchase_Order_Receive_Report");
   };
 
+   // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesOrder = item.orderNo.toLowerCase().includes(orderNo.toLowerCase());
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.receivedDate) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.receivedDate) <= new Date(toDate);
+
+      return matchesOrder && matchesDate;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -144,6 +151,7 @@ export default function PurchaseOrderReceiveReportPage() {
       <div className="flex flex-col md:flex-row gap-4 items-end bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
         {/* Order No */}
         <div className="w-full md:w-1/4 space-y-1">
+             <label className="text-xs font-semibold text-gray-500 uppercase">Order No</label>
           <Input
             placeholder="Order No"
             value={orderNo}
@@ -154,6 +162,7 @@ export default function PurchaseOrderReceiveReportPage() {
 
         {/* From Date */}
         <div className="w-full md:w-1/4 space-y-1">
+             <label className="text-xs font-semibold text-gray-500 uppercase">From Date</label>
           <Input
             type="date"
             placeholder="From Date"
@@ -165,6 +174,7 @@ export default function PurchaseOrderReceiveReportPage() {
 
         {/* To Date */}
         <div className="w-full md:w-1/4 space-y-1">
+             <label className="text-xs font-semibold text-gray-500 uppercase">To Date</label>
           <Input
             type="date"
             placeholder="To Date"
@@ -177,12 +187,16 @@ export default function PurchaseOrderReceiveReportPage() {
         {/* Search Button */}
         <div className="w-full md:w-auto">
           <Button
-            onClick={handleSearch}
             className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto transition-colors"
           >
             Search
           </Button>
         </div>
+      </div>
+      
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -214,34 +228,40 @@ export default function PurchaseOrderReceiveReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {indexOfFirstItem + index + 1}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.orderNo}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.receivedDate}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.materialName}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.requestQty}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.receivedQty}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3">
-                  {row.price}
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {indexOfFirstItem + index + 1}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.orderNo}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.receivedDate}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.materialName}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.requestQty}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.receivedQty}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3">
+                    {row.price}
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={7} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -257,7 +277,7 @@ export default function PurchaseOrderReceiveReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

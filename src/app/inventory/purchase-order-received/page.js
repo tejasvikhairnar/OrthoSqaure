@@ -26,105 +26,108 @@ export default function PurchaseOrderReceivedPage() {
       id: 1,
       orderNo: "ORD4968",
       vendorName: "PROMIS DENTAL SYSTEM",
-      status: "Received",
-      orderDate: "01-Jan-2025",
+      status: "Pending",
+      orderDate: "2025-01-01",
     },
     {
       id: 2,
       orderNo: "ORD5814",
       vendorName: "Nidhi Dental Solution",
       status: "Received",
-      orderDate: "11-Oct-2024",
+      orderDate: "2024-10-11",
     },
     {
       id: 3,
       orderNo: "ORD3123",
       vendorName: "A-Z Dental World",
       status: "Received",
-      orderDate: "02-Oct-2024",
+      orderDate: "2024-10-02",
     },
     {
       id: 4,
       orderNo: "ORD7594",
       vendorName: "PROMIS DENTAL SYSTEM",
       status: "Received",
-      orderDate: "03-Aug-2024",
+      orderDate: "2024-08-03",
     },
     {
       id: 5,
       orderNo: "ORD3068",
       vendorName: "PROMIS DENTAL SYSTEM",
       status: "Received",
-      orderDate: "23-Aug-2024",
+      orderDate: "2024-08-23",
     },
     {
       id: 6,
       orderNo: "ORD9755",
       vendorName: "PROMIS DENTAL SYSTEM",
       status: "Received",
-      orderDate: "17-Aug-2024",
+      orderDate: "2024-08-17",
     },
     {
       id: 7,
       orderNo: "ORD3393",
       vendorName: "A-Z Dental World",
       status: "Received",
-      orderDate: "31-Jul-2024",
+      orderDate: "2024-07-31",
     },
     {
       id: 8,
       orderNo: "ORD7751",
       vendorName: "PROMIS DENTAL SYSTEM",
       status: "Received",
-      orderDate: "25-Jul-2024",
+      orderDate: "2024-07-25",
     },
     {
       id: 9,
       orderNo: "ORD6749",
       vendorName: "OHI MARKETING",
       status: "Received",
-      orderDate: "26-Jul-2024",
+      orderDate: "2024-07-26",
     },
     {
       id: 10,
       orderNo: "ORD9253",
       vendorName: "A-Z Dental World",
       status: "Received",
-      orderDate: "24-Jul-2024",
+      orderDate: "2024-07-24",
     },
     {
       id: 11,
       orderNo: "ORD4163",
       vendorName: "SHREEYASH MEDICOS",
       status: "Received",
-      orderDate: "23-Jul-2024",
+      orderDate: "2024-07-23",
     },
     {
       id: 12,
       orderNo: "ORD8666",
       vendorName: "SHREEYASH MEDICOS",
       status: "Received",
-      orderDate: "23-Jul-2024",
+      orderDate: "2024-07-23",
     },
   ]);
 
-  const handleSearch = () => {
-    console.log("Searching with:", { vendorName, orderNo });
-  };
-
   const handleReceive = (id) => {
-    console.log("Receiving order ID:", id);
-    // Logic to mark order as received or open receive modal would go here
+    setOrders(orders.map(order => order.id === id ? { ...order, status: "Received" } : order));
+    alert("Order marked as Received");
   };
 
   const handleExport = () => {
     exportToExcel(orders, "Purchase_Order_Received_Report");
   };
 
+  // Filter Data
+  const filteredOrders = orders.filter((order) => {
+      const matchesVendor = order.vendorName.toLowerCase().includes(vendorName.toLowerCase());
+      const matchesOrderNo = order.orderNo.toLowerCase().includes(orderNo.toLowerCase());
+      return matchesVendor && matchesOrderNo;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = orders.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredOrders.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -166,10 +169,9 @@ export default function PurchaseOrderReceivedPage() {
           />
         </div>
 
-        {/* Search Button */}
+        {/* Search Button (Optional since filtering is real-time, but kept for UI consistency) */}
         <div className="w-full md:w-auto">
           <Button
-            onClick={handleSearch}
             className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto shadow-sm transition-all"
           >
             Search
@@ -179,7 +181,7 @@ export default function PurchaseOrderReceivedPage() {
 
        {/* Total Count */}
        <div className="flex justify-end pr-2">
-         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : {orders.length}</span>
+         <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : {filteredOrders.length}</span>
       </div>
 
       {/* Table */}
@@ -203,41 +205,48 @@ export default function PurchaseOrderReceivedPage() {
                  Order Date
               </TableHead>
               <TableHead className="w-[120px] font-bold text-gray-800 dark:text-gray-200 text-center">
-                 
+                 Action
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((order, index) => (
-              <TableRow
-                key={order.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {indexOfFirstItem + index + 1}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                   {order.orderNo}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 uppercase text-sm">
-                  {order.vendorName}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {order.status}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {order.orderDate}
-                </TableCell>
-                 <TableCell className="py-2 text-center">
-                  <Button 
-                    onClick={() => handleReceive(order.id)}
-                    className="bg-[#E09F7D] hover:bg-[#d08e6b] text-white h-8 px-4 text-xs rounded shadow-sm"
-                  >
-                    Receive
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((order, index) => (
+                <TableRow
+                    key={order.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {indexOfFirstItem + index + 1}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {order.orderNo}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 uppercase text-sm">
+                    {order.vendorName}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {order.status}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {order.orderDate}
+                    </TableCell>
+                    <TableCell className="py-2 text-center">
+                    <Button 
+                        onClick={() => handleReceive(order.id)}
+                        disabled={order.status === "Received"}
+                        className={`text-white h-8 px-4 text-xs rounded shadow-sm ${order.status === "Received" ? "bg-green-600 opacity-50 cursor-not-allowed" : "bg-[#E09F7D] hover:bg-[#d08e6b]"}`}
+                    >
+                        {order.status === "Received" ? "Received" : "Receive"}
+                    </Button>
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={6} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -253,7 +262,7 @@ export default function PurchaseOrderReceivedPage() {
 
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={orders.length} 
+            totalItems={filteredOrders.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

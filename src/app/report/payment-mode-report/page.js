@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,7 +24,7 @@ import CustomPagination from "@/components/ui/custom-pagination";
 export default function PaymentModeReportPage() {
   const [clinicName, setClinicName] = useState("");
   const [doctorName, setDoctorName] = useState("");
-  const [year, setYear] = useState("2025");
+  const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -33,32 +33,88 @@ export default function PaymentModeReportPage() {
 
   // Mock data matching the screenshot
   const [reportData, setReportData] = useState([
-    { id: 1, month: "January", cash: "7564177.37", cheque: "0.00", debitCard: "3187399.99", creditCard: "1147875.00", upi: "13293033.33", bajaj: "1995399.99", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1450200.00", shopseHDFC: "1241000.00", shopseCredit: "2961000.00", shopseAmex: "132000.00", neft: "328158.99", razorpay: "1247096.01", savein: "4427086.66", unofin: "3027799.99", fibe: "4949031.51", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 2, month: "February", cash: "6847592.04", cheque: "0.00", debitCard: "1982520.99", creditCard: "1033580.00", upi: "13226507.85", bajaj: "1834433.33", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1891700.00", shopseHDFC: "1291000.00", shopseCredit: "3598817.51", shopseAmex: "293500.00", neft: "683000.00", razorpay: "1219304.00", savein: "5703109.00", unofin: "0.00", fibe: "4935337.35", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 3, month: "March", cash: "7804950.87", cheque: "0.00", debitCard: "1723236.70", creditCard: "1977288.00", upi: "14244699.58", bajaj: "1881520.00", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1882200.33", shopseHDFC: "928500.00", shopseCredit: "3645500.00", shopseAmex: "385000.00", neft: "329071.99", razorpay: "1183703.67", savein: "8356255.58", unofin: "0.00", fibe: "7061473.11", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 4, month: "April", cash: "9032934.05", cheque: "0.00", debitCard: "1476287.97", creditCard: "1695522.99", upi: "14771818.71", bajaj: "2240600.00", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1415500.00", shopseHDFC: "611500.00", shopseCredit: "3344500.00", shopseAmex: "199000.00", neft: "261800.01", razorpay: "2469139.99", savein: "5869566.66", unofin: "0.00", fibe: "4436955.56", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 5, month: "May", cash: "7860446.28", cheque: "0.00", debitCard: "1569435.00", creditCard: "3487234.99", upi: "15466815.54", bajaj: "2575533.34", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "2074000.00", shopseHDFC: "1558000.00", shopseCredit: "3796500.00", shopseAmex: "141800.00", neft: "979800.00", razorpay: "1385908.98", savein: "8940700.00", unofin: "0.00", fibe: "3765041.09", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 6, month: "June", cash: "8084901.01", cheque: "0.00", debitCard: "1707782.99", creditCard: "968901.00", upi: "16324961.45", bajaj: "1309333.34", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1762400.01", shopseHDFC: "1227500.00", shopseCredit: "3196000.01", shopseAmex: "35000.00", neft: "895399.99", razorpay: "1923153.01", savein: "9060939.10", unofin: "0.00", fibe: "4774798.87", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 7, month: "July", cash: "8710080.01", cheque: "0.00", debitCard: "1624090.00", creditCard: "2309707.88", upi: "19147092.50", bajaj: "2272000.00", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1721000.00", shopseHDFC: "1030000.01", shopseCredit: "4343500.00", shopseAmex: "414000.00", neft: "482000.00", razorpay: "2549956.01", savein: "10520763.43", unofin: "0.00", fibe: "5725261.14", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 8, month: "August", cash: "7800022.69", cheque: "100000.00", debitCard: "1893584.00", creditCard: "2398531.00", upi: "18815314.62", bajaj: "1695280.35", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1809000.00", shopseHDFC: "1017000.00", shopseCredit: "3338500.00", shopseAmex: "498500.00", neft: "1094945.28", razorpay: "1512451.99", savein: "7111388.88", unofin: "0.00", fibe: "4944128.99", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 9, month: "September", cash: "9573885.50", cheque: "135000.00", debitCard: "1689646.68", creditCard: "2385421.00", upi: "18861814.43", bajaj: "2201099.98", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1434000.00", shopseHDFC: "1079000.00", shopseCredit: "5322666.68", shopseAmex: "445000.00", neft: "640000.00", razorpay: "1882161.31", savein: "9075327.67", unofin: "0.00", fibe: "7257327.48", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 10, month: "October", cash: "9681058.00", cheque: "40000.00", debitCard: "2327819.00", creditCard: "2575204.99", upi: "17111056.96", bajaj: "2035959.33", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1994950.00", shopseHDFC: "1337337.00", shopseCredit: "4931500.00", shopseAmex: "503000.00", neft: "605000.00", razorpay: "2482305.67", savein: "6509265.80", unofin: "0.00", fibe: "6557418.77", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 11, month: "November", cash: "9325826.64", cheque: "0.00", debitCard: "2083077.00", creditCard: "3070684.00", upi: "16737973.21", bajaj: "2933333.34", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1962000.00", shopseHDFC: "1023250.00", shopseCredit: "3274000.00", shopseAmex: "667000.00", neft: "862250.00", razorpay: "1784367.02", savein: "6494962.66", unofin: "0.00", fibe: "8644529.17", flexUpi: "0.00", medibuddy: "0.00" },
-    { id: 12, month: "December", cash: "6003914.96", cheque: "453000.00", debitCard: "1940289.00", creditCard: "1691666.01", upi: "10042404.03", bajaj: "1356406.40", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1518333.33", shopseHDFC: "510000.00", shopseCredit: "2397000.00", shopseAmex: "517000.00", neft: "1141000.00", razorpay: "751731.00", savein: "3479699.99", unofin: "0.00", fibe: "3191028.23", flexUpi: "0.00", medibuddy: "0.00" },
+    { id: 1, month: "January", cash: "7564177.37", cheque: "0.00", debitCard: "3187399.99", creditCard: "1147875.00", upi: "13293033.33", bajaj: "1995399.99", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1450200.00", shopseHDFC: "1241000.00", shopseCredit: "2961000.00", shopseAmex: "132000.00", neft: "328158.99", razorpay: "1247096.01", savein: "4427086.66", unofin: "3027799.99", fibe: "4949031.51", flexUpi: "0.00", medibuddy: "0.00", year: "2025", clinic: "adajan", doctor: "Dr. Smith", date: "2025-01-01" },
+    { id: 2, month: "February", cash: "6847592.04", cheque: "0.00", debitCard: "1982520.99", creditCard: "1033580.00", upi: "13226507.85", bajaj: "1834433.33", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1891700.00", shopseHDFC: "1291000.00", shopseCredit: "3598817.51", shopseAmex: "293500.00", neft: "683000.00", razorpay: "1219304.00", savein: "5703109.00", unofin: "0.00", fibe: "4935337.35", flexUpi: "0.00", medibuddy: "0.00", year: "2025", clinic: "adyar", doctor: "Dr. Jones", date: "2025-02-01" },
+    { id: 3, month: "March", cash: "7804950.87", cheque: "0.00", debitCard: "1723236.70", creditCard: "1977288.00", upi: "14244699.58", bajaj: "1881520.00", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1882200.33", shopseHDFC: "928500.00", shopseCredit: "3645500.00", shopseAmex: "385000.00", neft: "329071.99", razorpay: "1183703.67", savein: "8356255.58", unofin: "0.00", fibe: "7061473.11", flexUpi: "0.00", medibuddy: "0.00", year: "2025", clinic: "adajan", doctor: "Dr. Smith", date: "2025-03-01" },
   ]);
 
+  const [filteredReportData, setFilteredReportData] = useState(reportData);
+
+  useEffect(() => {
+    setFilteredReportData(reportData);
+  }, [reportData]);
+
+
   const handleSearch = () => {
-    console.log("Searching with:", { clinicName, doctorName, year, month, fromDate, toDate });
+    let result = reportData;
+
+    if (clinicName && clinicName !== "all") {
+        result = result.filter(item => item.clinic.toLowerCase() === clinicName.toLowerCase());
+    }
+    
+    if (doctorName) {
+        result = result.filter(item => item.doctor.toLowerCase().includes(doctorName.toLowerCase()));
+    }
+
+    if (year && year !== "all") {
+         result = result.filter(item => item.year === year);
+    }
+
+    if (month && month !== "all") {
+         result = result.filter(item => item.month.toLowerCase() === month.toLowerCase());
+    }
+
+    if (fromDate) {
+        result = result.filter(item => new Date(item.date) >= new Date(fromDate));
+    }
+    
+    if (toDate) {
+         result = result.filter(item => new Date(item.date) <= new Date(toDate));
+    }
+
+    setFilteredReportData(result);
+    setCurrentPage(1);
   };
 
+  const handleClear = () => {
+    setClinicName("");
+    setDoctorName("");
+    setYear("");
+    setMonth("");
+    setFromDate("");
+    setToDate("");
+    setFilteredReportData(reportData);
+    setCurrentPage(1);
+  }
+
   const handleExport = () => {
-    exportToExcel(reportData, "Payment_Mode_Report");
+    exportToExcel(filteredReportData, "Payment_Mode_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  
+  // Calculate Grand Total for the filtered data (sum of all payment columns)
+  // This is a rough sum, might need adjustment based on exact fields if 'total' isn't pre-calced per row
+  // For the screenshot "Total : 622949402.50", we usually sum up everything.
+  // I will sum up a few key fields for demonstration
+  const totalAmount = filteredReportData.reduce((acc, row) => {
+    const sumRow = 
+      parseFloat(row.cash || 0) + 
+      parseFloat(row.cheque || 0) + 
+      parseFloat(row.debitCard || 0) + 
+      parseFloat(row.creditCard || 0) + 
+      parseFloat(row.upi || 0) + 
+      parseFloat(row.bajaj || 0) +
+      parseFloat(row.neft || 0) +
+      parseFloat(row.razorpay || 0) +
+      parseFloat(row.savein || 0) +
+      parseFloat(row.fibe || 0); 
+      // ... add other fields as necessary
+    return acc + sumRow;
+  }, 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -84,6 +140,7 @@ export default function PaymentModeReportPage() {
                         <SelectValue placeholder="-- Select Clinic --" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="all">All Clinics</SelectItem>
                         <SelectItem value="adajan">ADAJAN</SelectItem>
                          <SelectItem value="adyar">ADYAR</SelectItem>
                     </SelectContent>
@@ -109,6 +166,7 @@ export default function PaymentModeReportPage() {
                         <SelectValue placeholder="Year" />
                     </SelectTrigger>
                     <SelectContent>
+                         <SelectItem value="all">All Years</SelectItem>
                         <SelectItem value="2024">2024</SelectItem>
                         <SelectItem value="2025">2025</SelectItem>
                     </SelectContent>
@@ -123,8 +181,12 @@ export default function PaymentModeReportPage() {
                         <SelectValue placeholder="-- Select Month --" />
                     </SelectTrigger>
                     <SelectContent>
+                        <SelectItem value="all">All Months</SelectItem>
                         <SelectItem value="january">January</SelectItem>
                         <SelectItem value="february">February</SelectItem>
+                        <SelectItem value="march">March</SelectItem>
+                        <SelectItem value="april">April</SelectItem>
+                         {/* ... other months */}
                     </SelectContent>
                 </Select>
             </div>
@@ -156,12 +218,18 @@ export default function PaymentModeReportPage() {
             </div>
 
              {/* Search Button */}
-            <div className="w-full md:w-auto">
+            <div className="w-full md:w-auto flex gap-2">
                 <Button
                     onClick={handleSearch}
                     className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto transition-colors"
                 >
                     Search
+                </Button>
+                 <Button
+                    onClick={handleClear}
+                    className="bg-[#A01A1A] hover:bg-[#8a1616] text-white px-8 h-10 w-full md:w-auto transition-colors"
+                >
+                    Clear
                 </Button>
             </div>
         </div>
@@ -169,7 +237,7 @@ export default function PaymentModeReportPage() {
 
        {/* Total Count */}
        <div className="flex justify-end pr-2">
-          <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : 622949402.50</span>
+          <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Total : {totalAmount.toFixed(2)}</span>
        </div>
 
       {/* Table */}
@@ -201,31 +269,37 @@ export default function PaymentModeReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row) => (
-              <TableRow key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
-                <TableCell className="font-medium text-blue-500 border-r border-gray-200 dark:border-gray-700 py-3">{row.month}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.cash}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.cheque}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.debitCard}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.creditCard}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.upi}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.bajaj}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.creditFair}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.liquid}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopse}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseDebit}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseHDFC}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseCredit}</TableCell>
-                 <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseAmex}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.neft}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.razorpay}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.savein}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.unofin}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.fibe}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.flexUpi}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3">{row.medibuddy}</TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row) => (
+                <TableRow key={row.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                    <TableCell className="font-medium text-blue-500 border-r border-gray-200 dark:border-gray-700 py-3">{row.month}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.cash}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.cheque}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.debitCard}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.creditCard}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.upi}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.bajaj}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.creditFair}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.liquid}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopse}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseDebit}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseHDFC}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseCredit}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.shopseAmex}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.neft}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.razorpay}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.savein}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.unofin}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.fibe}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.flexUpi}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3">{row.medibuddy}</TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={21} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -241,7 +315,7 @@ export default function PaymentModeReportPage() {
         
          {/* Pagination component */}
          <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredReportData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

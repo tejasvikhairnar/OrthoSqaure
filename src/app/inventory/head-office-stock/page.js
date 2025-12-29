@@ -150,11 +150,17 @@ export default function HeadOfficeStock() {
     exportToExcel(tableData, "Head_Office_Stock");
   };
 
+  // Filter Data
+  const filteredData = tableData.filter(item => {
+      const matchesType = !inventoryType || inventoryType === "all" || item.inventoryType.toLowerCase() === inventoryType.toLowerCase();
+      const matchesName = item.itemName.toLowerCase().includes(itemName.toLowerCase());
+      return matchesType && matchesName;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
-
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -176,6 +182,7 @@ export default function HeadOfficeStock() {
                 <SelectValue placeholder="--- Select Inventory Type---" />
                 </SelectTrigger>
                 <SelectContent>
+                <SelectItem value="all">Check All</SelectItem>
                 <SelectItem value="material">MATERIAL</SelectItem>
                 <SelectItem value="medicine">MEDICINE</SelectItem>
                 </SelectContent>
@@ -214,32 +221,38 @@ export default function HeadOfficeStock() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow key={row.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{indexOfFirstItem + index + 1}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.inventoryType}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.itemName}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.brandName}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.packaging}</TableCell>
-                <TableCell className="border-r border-gray-200 dark:border-gray-700">
-                     <Input
-                        type="number"
-                        value={row.rate}
-                        onChange={(e) => handleRateChange(row.id, e.target.value)}
-                        className="h-8 w-24 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
-                    />
-                </TableCell>
-                <TableCell className="border-r border-gray-200 dark:border-gray-700">
-                    <Input
-                        type="number"
-                        value={row.openingStock}
-                        onChange={(e) => handleOpeningStockChange(row.id, e.target.value)}
-                        className="h-8 w-24 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
-                    />
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300">{row.currentStock}</TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow key={row.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{indexOfFirstItem + index + 1}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.inventoryType}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.itemName}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.brandName}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.packaging}</TableCell>
+                    <TableCell className="border-r border-gray-200 dark:border-gray-700">
+                        <Input
+                            type="number"
+                            value={row.rate}
+                            onChange={(e) => handleRateChange(row.id, e.target.value)}
+                            className="h-8 w-24 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
+                        />
+                    </TableCell>
+                    <TableCell className="border-r border-gray-200 dark:border-gray-700">
+                        <Input
+                            type="number"
+                            value={row.openingStock}
+                            onChange={(e) => handleOpeningStockChange(row.id, e.target.value)}
+                            className="h-8 w-24 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600"
+                        />
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300">{row.currentStock}</TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={8} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -255,7 +268,7 @@ export default function HeadOfficeStock() {
 
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={tableData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

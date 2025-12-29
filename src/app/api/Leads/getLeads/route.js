@@ -6,15 +6,24 @@ import axiosClient from '@/lib/axiosClient';
 const USE_MOCK_FALLBACK = false;
 
 // Fallback token for testing/dev when header is missing
-const FALLBACK_TOKEN = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6IkFkbWluIiwiSXNDdXN0b21lciI6ImZhbHNlIiwiZXhwIjoxNzY2NTgzNzA1LCJpc3MiOiJodHRwczovL215d2ViYXBpLmNvbSIsImF1ZCI6Imh0dHBzOi8vbXl3ZWJhcGkuY29tIn0.w09KxWQ82EFW5TrT9Gw6mVwPcolWmtUzhj2hnrf2am8";
+// Fallback token removed
 
 export async function GET(request) {
   try {
     console.log('Fetching leads list...');
+    console.log('[DEBUG] Request URL:', request.url);
 
     // Get query parameters from the request
-    const { searchParams } = new URL(request.url);
-    const queryString = searchParams.toString();
+    let searchParams, queryString;
+    try {
+        const urlObj = new URL(request.url);
+        searchParams = urlObj.searchParams;
+        queryString = searchParams.toString();
+    } catch (e) {
+        console.error('[DEBUG] URL parse error:', e.message);
+        // Fallback or throw
+        throw new Error('Invalid Request URL');
+    }
     
     // Construct potential POST payload for search/pagination
     const searchPayload = {
@@ -35,16 +44,18 @@ export async function GET(request) {
     console.log('[DEBUG] Attempting POST search with payload:', JSON.stringify(searchPayload));
 
     // Extract auth header from incoming request to pass to backend
-    let authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get('authorization');
     
     if (!authHeader) {
-        console.log('[DEBUG] No Authorization header found, using fallback token');
-        authHeader = `Bearer ${FALLBACK_TOKEN}`;
+        return NextResponse.json(
+            { error: 'Unauthorized', details: 'No authorization header provided' },
+            { status: 401 }
+        );
     }
 
     const requestConfig = {
         headers: {
-            'Authorization': authHeader // Pass the incoming token or fallback
+            'Authorization': authHeader
         }
     };
 
@@ -96,11 +107,13 @@ export async function GET(request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching leads:', error.message);
+    
+    // Log full error details for debugging
     if (error.response) {
          console.error('[DEBUG] Full Error Response Data:', JSON.stringify(error.response.data, null, 2));
     }
 
-    // Fallback to mock data on any error if enabled
+    // Fallback to mock data if enabled (currently false)
     if (USE_MOCK_FALLBACK) {
       console.log('⚠️  Exception occurred, using mock data for leads list');
       const mockLeads = getMockLeads();
@@ -112,16 +125,13 @@ export async function GET(request) {
       });
     }
 
-    const status = error.response ? error.response.status : 500;
-    const errorMessage = error.response ? error.response.data : error.message;
-
     return NextResponse.json(
       {
         error: 'Failed to fetch leads',
-        details: errorMessage,
+        details: error.response ? error.response.data : error.message,
         stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       },
-      { status: status }
+      { status: 500 }
     );
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Settings, FileSpreadsheet } from "lucide-react";
+import { Settings, FileSpreadsheet, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,13 +21,24 @@ import {
 } from "@/components/ui/table";
 
 export default function LabOrderPending() {
-  const [clinic, setClinic] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const [startDate, setStartDate] = useState("11-12-2025");
-  const [endDate, setEndDate] = useState("26-12-2025");
+  const [filters, setFilters] = useState({
+    clinic: "",
+    patientName: "",
+    startDate: "11-12-2025",
+    endDate: "26-12-2025",
+  });
+  
+  // State to hold search query applied on clicking "Search"
+  const [activeFilters, setActiveFilters] = useState({
+      clinic: "",
+      patientName: "", // We can search in realtime or on button click. Usually Search button implies on-click.
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // Mock data for Lab Order Pending
-  const tableData = [
+  const [data] = useState([
     { id: 1, clinicName: "bandra west", patientName: "Anil Shinde", mobile: "9892598092", treatment: "CROWN - PFM", toothNo: "11,12,21,22", date: "26-Dec-2025" },
     { id: 2, clinicName: "bandra west", patientName: "Prisha Parekh", mobile: "8425842261", treatment: "CROWN - PFM", toothNo: "47", date: "26-Dec-2025" },
     { id: 3, clinicName: "bandra west", patientName: "Manish Bandi", mobile: "9821455290", treatment: "CROWN - PFM", toothNo: "15,16,17", date: "26-Dec-2025" },
@@ -38,7 +49,49 @@ export default function LabOrderPending() {
     { id: 8, clinicName: "bandra west", patientName: "viral kothari", mobile: "9702580930", treatment: "CROWN - Z-10YW", toothNo: "15", date: "25-Dec-2025" },
     { id: 9, clinicName: "Hadapsar", patientName: "deep nahar", mobile: "9822217102", treatment: "CROWN - Z-5YW", toothNo: "11", date: "25-Dec-2025" },
     { id: 10, clinicName: "MALAD West", patientName: "Crisenta c", mobile: "7045014013", treatment: "CROWN - PFM", toothNo: "32", date: "25-Dec-2025" }
-  ];
+  ]);
+
+  // Handle Search
+  const handleSearch = () => {
+      setActiveFilters({
+          clinic: filters.clinic,
+          patientName: filters.patientName
+      });
+      setCurrentPage(1);
+  };
+
+  const handleClear = () => {
+      setFilters({
+        clinic: "",
+        patientName: "",
+        startDate: "",
+        endDate: "",
+      });
+      setActiveFilters({
+          clinic: "",
+          patientName: ""
+      });
+      setCurrentPage(1);
+  };
+
+  // Derived state for filtered data
+  const filteredData = data.filter((item) => {
+    const matchesClinic = activeFilters.clinic === "" || activeFilters.clinic === "all" || item.clinicName.toLowerCase().includes(activeFilters.clinic.toLowerCase());
+    const matchesPatient = item.patientName.toLowerCase().includes(activeFilters.patientName.toLowerCase());
+    // Date filtering would require parsing, skipping for now as instructed to focus on ui/functionality of buttons roughly
+    return matchesClinic && matchesPatient;
+  });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -54,13 +107,19 @@ export default function LabOrderPending() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
         <div className="space-y-1">
             <label className="text-sm text-gray-600 dark:text-gray-400">Clinic Name</label>
-            <Select value={clinic} onValueChange={setClinic}>
+            <Select 
+                value={filters.clinic} 
+                onValueChange={(val) => setFilters({...filters, clinic: val})}
+            >
                 <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
                 <SelectValue placeholder="-- Select Clinic --" />
                 </SelectTrigger>
                 <SelectContent>
-                <SelectItem value="clinic1">Clinic 1</SelectItem>
-                <SelectItem value="clinic2">Clinic 2</SelectItem>
+                     <SelectItem value="all">All</SelectItem>
+                    {/* Unique clinics */}
+                    {Array.from(new Set(data.map(i => i.clinicName))).map(c => (
+                        <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
          </div>
@@ -69,33 +128,43 @@ export default function LabOrderPending() {
              <label className="text-sm text-gray-600 dark:text-gray-400">Patient Name</label>
             <Input
                 placeholder="Patient Name"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
+                value={filters.patientName}
+                onChange={(e) => setFilters({...filters, patientName: e.target.value})}
                 className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
             />
         </div>
         
          <div className="space-y-1">
+            <label className="text-sm text-gray-600 dark:text-gray-400">Start Date</label>
             <Input
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                value={filters.startDate}
+                onChange={(e) => setFilters({...filters, startDate: e.target.value})}
                  className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                 placeholder="DD-MM-YYYY"
             />
         </div>
          <div className="space-y-1">
+            <label className="text-sm text-gray-600 dark:text-gray-400">End Date</label>
             <Input
-                value={endDate}
-                 onChange={(e) => setEndDate(e.target.value)}
+                value={filters.endDate}
+                 onChange={(e) => setFilters({...filters, endDate: e.target.value})}
                  className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                 placeholder="DD-MM-YYYY"
             />
         </div>
       </div>
       
        <div className="flex gap-2">
-            <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+            <Button 
+                onClick={handleSearch}
+                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
+            >
                 Search
             </Button>
-            <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+            <Button 
+                onClick={handleClear}
+                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
+            >
                 Clear
             </Button>
         </div>
@@ -116,7 +185,8 @@ export default function LabOrderPending() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableData.map((row) => (
+             {currentData.length > 0 ? (
+                currentData.map((row) => (
               <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
                 <TableCell className="dark:text-gray-300">{row.id}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.clinicName}</TableCell>
@@ -126,7 +196,14 @@ export default function LabOrderPending() {
                  <TableCell className="dark:text-gray-300">{row.toothNo}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.date}</TableCell>
               </TableRow>
-            ))}
+              ))
+             ) : (
+                 <TableRow>
+                     <TableCell colSpan={7} className="text-center text-gray-500 h-24">
+                        No records found
+                     </TableCell>
+                 </TableRow>
+             )}
           </TableBody>
         </Table>
       </div>
@@ -134,11 +211,42 @@ export default function LabOrderPending() {
         {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
            <div className="flex items-center">
-             <FileSpreadsheet className="w-8 h-8 text-green-700" />
+             <FileSpreadsheet className="w-8 h-8 text-green-700 cursor-pointer" title="Export to Excel (Mock)" />
            </div>
-          <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
-             <span className="cursor-pointer hover:underline p-1">12345678910... &gt;&gt;</span>
-          </div>
+           
+            <div className="text-sm text-gray-500">
+                Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} entries
+            </div>
+
+           <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
+               <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(page)}
+                        className={currentPage === page ? "bg-[#1E6B8C] hover:bg-[#15526d] text-white" : ""}
+                    >
+                        {page}
+                    </Button>
+                ))}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    <ChevronRight className="h-4 w-4" />
+                </Button>
+           </div>
         </div>
     </div>
   );

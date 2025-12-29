@@ -19,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function TreatmentsReportPage() {
   const [clinic, setClinic] = useState("");
@@ -26,20 +28,45 @@ export default function TreatmentsReportPage() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [treatmentName, setTreatmentName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data inferred standard report structure
-  const reportData = [
-    { id: 1, clinic: "Nerul", doctor: "Dr.Riddhi Rathi", patient: "John Doe", treatment: "Root Canal", date: "26-05-2021", fees: "2500.00" },
-    { id: 2, clinic: "ELECTRONIC CITY", doctor: "Dr.Akhil Nair", patient: "Jane Smith", treatment: "Dental Cleaning", date: "26-05-2021", fees: "1500.00" },
-    { id: 3, clinic: "Nerul", doctor: "Dr.Neha S", patient: "Bob Johnson", treatment: "Consultation", date: "04-01-2021", fees: "500.00" },
-    { id: 4, clinic: "GOREGAON East", doctor: "Dr.Prajakta Durgawale", patient: "Alice Brown", treatment: "X-Ray", date: "04-01-2021", fees: "800.00" },
-    { id: 5, clinic: "VADODARA", doctor: "Dr.Khushbu Ranva", patient: "Charlie Davis", treatment: "Filling", date: "04-01-2021", fees: "1200.00" },
-    { id: 6, clinic: "Virar", doctor: "Dr.RUCHI BHANSALI", patient: "Eva White", treatment: "Extraction", date: "04-01-2021", fees: "3000.00" },
-    { id: 7, clinic: "Camp,pune", doctor: "Dr.Anagha Patil Chavan", patient: "Frank Miller", treatment: "Braces Adjustment", date: "01-09-2020", fees: "2000.00" },
-    { id: 8, clinic: "Andheri East (takshila)", doctor: "Dr.Riddhi Rathi", patient: "Grace Wilson", treatment: "Whitening", date: "10-09-2020", fees: "5000.00" },
-    { id: 9, clinic: "Andheri West (Juhu)", doctor: "Dr.Tejal shah", patient: "Henry Moore", treatment: "Consultation", date: "02-01-2021", fees: "500.00" },
-    { id: 10, clinic: "Aundh", doctor: "Dr.Anagha Patil Chavan", patient: "Ivy Taylor", treatment: "Root Canal", date: "29-12-2020", fees: "2500.00" },
-  ];
+  const [reportData, setReportData] = useState([
+    { id: 1, clinic: "Nerul", doctor: "Dr.Riddhi Rathi", patient: "John Doe", treatment: "Root Canal", date: "2021-05-26", fees: "2500.00" },
+    { id: 2, clinic: "ELECTRONIC CITY", doctor: "Dr.Akhil Nair", patient: "Jane Smith", treatment: "Dental Cleaning", date: "2021-05-26", fees: "1500.00" },
+    { id: 3, clinic: "Nerul", doctor: "Dr.Neha S", patient: "Bob Johnson", treatment: "Consultation", date: "2021-01-04", fees: "500.00" },
+    { id: 4, clinic: "GOREGAON East", doctor: "Dr.Prajakta Durgawale", patient: "Alice Brown", treatment: "X-Ray", date: "2021-01-04", fees: "800.00" },
+    { id: 5, clinic: "VADODARA", doctor: "Dr.Khushbu Ranva", patient: "Charlie Davis", treatment: "Filling", date: "2021-01-04", fees: "1200.00" },
+    { id: 6, clinic: "Virar", doctor: "Dr.RUCHI BHANSALI", patient: "Eva White", treatment: "Extraction", date: "2021-01-04", fees: "3000.00" },
+    { id: 7, clinic: "Camp,pune", doctor: "Dr.Anagha Patil Chavan", patient: "Frank Miller", treatment: "Braces Adjustment", date: "2020-09-01", fees: "2000.00" },
+    { id: 8, clinic: "Andheri East (takshila)", doctor: "Dr.Riddhi Rathi", patient: "Grace Wilson", treatment: "Whitening", date: "2020-09-10", fees: "5000.00" },
+    { id: 9, clinic: "Andheri West (Juhu)", doctor: "Dr.Tejal shah", patient: "Henry Moore", treatment: "Consultation", date: "2021-01-02", fees: "500.00" },
+    { id: 10, clinic: "Aundh", doctor: "Dr.Anagha Patil Chavan", patient: "Ivy Taylor", treatment: "Root Canal", date: "2020-12-29", fees: "2500.00" },
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(reportData, "Treatments_Report");
+  };
+
+  // Filter Data
+  const filteredData = reportData.filter((item) => {
+    const matchesClinic = !clinic || clinic === "all" || item.clinic.toLowerCase().includes(clinic.toLowerCase());
+    const matchesDoctor = item.doctor.toLowerCase().includes(doctorName.toLowerCase());
+    const matchesTreatment = item.treatment.toLowerCase().includes(treatmentName.toLowerCase());
+
+    let matchesDate = true;
+    if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+    if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
+
+    return matchesClinic && matchesDoctor && matchesTreatment && matchesDate;
+});
+
+// Pagination Logic
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -55,13 +82,15 @@ export default function TreatmentsReportPage() {
       <div className="space-y-4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
-            <Select value={clinic} onValueChange={setClinic}>
+             <Select value={clinic} onValueChange={setClinic}>
               <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
                 <SelectValue placeholder="-- Select Clinic --" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">All Clinics</SelectItem>
                 <SelectItem value="nerul">Nerul</SelectItem>
                 <SelectItem value="electronic-city">ELECTRONIC CITY</SelectItem>
+                 <SelectItem value="GOREGAON East">GOREGAON East</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -75,10 +104,8 @@ export default function TreatmentsReportPage() {
           </div>
            <div className="flex-1">
             <Input
-              type="text"
+              type="date"
               placeholder="From Date"
-               onFocus={(e) => (e.target.type = "date")}
-               onBlur={(e) => (e.target.type = "text")}
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
               className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -86,10 +113,8 @@ export default function TreatmentsReportPage() {
           </div>
            <div className="flex-1">
             <Input
-              type="text"
+              type="date"
               placeholder="To Date"
-               onFocus={(e) => (e.target.type = "date")}
-               onBlur={(e) => (e.target.type = "text")}
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
               className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -111,6 +136,11 @@ export default function TreatmentsReportPage() {
             </Button>
         </div>
       </div>
+      
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
+      </div>
 
       {/* Table */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
@@ -127,9 +157,9 @@ export default function TreatmentsReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reportData.map((item, index) => (
+            {currentItems.map((item, index) => (
               <TableRow key={item.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{index + 1}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.clinic}</TableCell>
                  <TableCell className="dark:text-gray-300">{item.doctor}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.patient}</TableCell>
@@ -138,18 +168,29 @@ export default function TreatmentsReportPage() {
                 <TableCell className="dark:text-gray-300 text-right pr-6">{item.fees}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={7} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
 
-      {/* Footer / Pagination Placeholder */}
+       {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
-         <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
-             <FileSpreadsheet className="w-8 h-8" />
-        </Button>
-        <div className="text-xs text-blue-500 hover:underline cursor-pointer">
-          1, 2, 3 ... &gt;&gt;
-        </div>
+         {/* Excel Export Icon */}
+          <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
+              <FileSpreadsheet className="w-6 h-6" />
+         </Button>
+
+          {/* Pagination component */}
+          <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
       </div>
     </div>
   );

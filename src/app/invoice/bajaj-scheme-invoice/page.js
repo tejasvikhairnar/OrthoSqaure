@@ -19,7 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, Settings } from "lucide-react";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function BajajSchemeInvoicePage() {
   const [filters, setFilters] = useState({
@@ -28,9 +29,12 @@ export default function BajajSchemeInvoicePage() {
     fromDate: "2025-12-07",
     toDate: "2025-12-22",
   });
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  // Mock Data matching the screenshot
-  const mockData = [
+  // Mock Data
+  const [mockData, setMockData] = useState([
     {
       id: 1,
       clinicName: "Secunderabad",
@@ -127,7 +131,12 @@ export default function BajajSchemeInvoicePage() {
       approvedLoanAmount: "60,000.00",
       schemeName: "10/1",
     },
-  ];
+     // Adding more mock data to demonstrate pagination if needed
+     { id: 9, clinicName: "Ambernath", patientCode: "P113888", patientName: "Rahul Dravid", invoiceNo: "AMB001", paymentDate: "22-Dec-2025", revenueAmount: "10,000.00", downpayment: "1,000.00", approvedLoanAmount: "11,000.00", schemeName: "10/1"},
+     { id: 10, clinicName: "Ambernath", patientCode: "P113999", patientName: "Sachin T", invoiceNo: "AMB002", paymentDate: "22-Dec-2025", revenueAmount: "20,000.00", downpayment: "2,000.00", approvedLoanAmount: "22,000.00", schemeName: "10/1"},
+     { id: 11, clinicName: "Ambernath", patientCode: "P114000", patientName: "Virat K", invoiceNo: "AMB003", paymentDate: "23-Dec-2025", revenueAmount: "15,000.00", downpayment: "1,500.00", approvedLoanAmount: "16,500.00", schemeName: "10/2"},
+  ]);
+
 
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({
@@ -145,23 +154,39 @@ export default function BajajSchemeInvoicePage() {
     });
   };
 
+  // Filter Data
+  const filteredData = mockData.filter((item) => {
+      const matchClinic = !filters.clinicName || item.clinicName.toLowerCase().includes(filters.clinicName.toLowerCase());
+      const matchInvoice = !filters.invoiceNo || item.invoiceNo.toLowerCase().includes(filters.invoiceNo.toLowerCase());
+      // Date logic would go here if dates were standard objects
+      return matchClinic && matchInvoice;
+  });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
-        BAJAJ SCHEME INVOICE REPORT
-      </h1>
+      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
+        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
+        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+            BAJAJ SCHEME INVOICE REPORT
+        </h1>
+      </div>
 
       {/* Filters Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end bg-white dark:bg-gray-900 rounded-lg">
         {/* Clinic Name */}
         <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500">Clinic Name</Label>
+          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Clinic Name</Label>
           <Select
             value={filters.clinicName}
             onValueChange={(val) => handleFilterChange("clinicName", val)}
           >
-            <SelectTrigger className="h-9 bg-white border-gray-300">
+            <SelectTrigger className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
               <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
@@ -176,9 +201,9 @@ export default function BajajSchemeInvoicePage() {
 
         {/* Invoice No */}
         <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500">Invoice No</Label>
+          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Invoice No</Label>
           <Input
-            className="h-9 bg-white border-gray-300"
+            className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
             placeholder="Invoice No"
             value={filters.invoiceNo}
             onChange={(e) => handleFilterChange("invoiceNo", e.target.value)}
@@ -192,7 +217,7 @@ export default function BajajSchemeInvoicePage() {
         <div className="md:col-span-3">
           <Input
             type="date"
-            className="h-9 bg-white border-gray-300"
+            className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
             value={filters.fromDate}
             onChange={(e) => handleFilterChange("fromDate", e.target.value)}
           />
@@ -202,7 +227,7 @@ export default function BajajSchemeInvoicePage() {
         <div className="md:col-span-3">
           <Input
             type="date"
-            className="h-9 bg-white border-gray-300"
+            className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
             value={filters.toDate}
             onChange={(e) => handleFilterChange("toDate", e.target.value)}
           />
@@ -212,14 +237,14 @@ export default function BajajSchemeInvoicePage() {
         <div className="md:col-span-3 flex gap-2">
           <Button
             size="sm"
-            className="bg-[#C04000] hover:bg-[#A03000] text-white px-6 h-9 rounded-md"
+            className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
           >
             Search
           </Button>
           <Button
             size="sm"
             onClick={clearFilters}
-            className="bg-[#C04000] hover:bg-[#A03000] text-white px-6 h-9 rounded-md"
+            className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
           >
             Clear
           </Button>
@@ -227,43 +252,48 @@ export default function BajajSchemeInvoicePage() {
 
         {/* Total Count */}
         <div className="md:col-span-3 flex justify-end pb-2">
-          <span className="text-sm text-gray-600 font-medium">Total : 19</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total : {filteredData.length}</span>
         </div>
       </div>
 
       {/* Table Section */}
-      <div className="border border-gray-200 rounded-sm overflow-hidden bg-white shadow-sm">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-[#E6FFCC] hover:bg-[#E6FFCC]">
-              <TableRow className="border-b border-gray-100 hover:bg-[#E6FFCC]">
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Sr. No.</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Clinic Name</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Patient Code</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Patient Name</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Invoice No.</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Payment Date</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Revenue Amount</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Downpayment</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Approved Loan Amount</TableHead>
-                <TableHead className="text-xs font-bold text-gray-700 h-10">Scheme Name</TableHead>
+            <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Sr. No.</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Clinic Name</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Patient Code</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Patient Name</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Payment Date</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Revenue Amount</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Downpayment</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Approved Loan Amount</TableHead>
+                <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Scheme Name</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockData.map((row) => (
-                <TableRow key={row.id} className="border-b border-gray-50 hover:bg-gray-50 text-xs">
-                  <TableCell className="py-2 text-gray-600">{row.id}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.clinicName}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.patientCode}</TableCell>
-                  <TableCell className="py-2 text-gray-600 uppercase">{row.patientName}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.invoiceNo}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.paymentDate}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.revenueAmount}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.downpayment}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.approvedLoanAmount}</TableCell>
-                  <TableCell className="py-2 text-gray-600">{row.schemeName}</TableCell>
+              {currentItems.map((row, index) => (
+                <TableRow key={row.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 text-xs">
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.clinicName}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.patientCode}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.patientName}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.invoiceNo}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.paymentDate}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.revenueAmount}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.downpayment}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.approvedLoanAmount}</TableCell>
+                  <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.schemeName}</TableCell>
                 </TableRow>
               ))}
+               {currentItems.length === 0 && (
+                  <TableRow>
+                     <TableCell colSpan={10} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>
@@ -278,15 +308,13 @@ export default function BajajSchemeInvoicePage() {
         >
           <FileSpreadsheet className="h-5 w-5" />
         </Button>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 text-blue-500 font-normal hover:bg-transparent px-1"
-          >
-            12345678910...&gt;&gt;
-          </Button>
-        </div>
+        
+         <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
       </div>
     </div>
   );

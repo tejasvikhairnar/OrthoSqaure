@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Settings, FilePenLine } from "lucide-react";
+import { Settings, FilePenLine, FileSpreadsheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,25 +14,89 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function LoginDetailsPage() {
   const [loginType, setLoginType] = useState("clinic");
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  
+  // Edit Mode States
+  const [isView, setIsView] = useState("list"); // 'list' or 'form'
+  const [editingId, setEditingId] = useState(null);
+  const [formData, setFormData] = useState({
+      name: "",
+      username: "",
+      password: "",
+      type: "clinic" // Default type
+  });
+
 
   // Mock data matching the image
-  const loginData = [
-    { id: 1, name: "Borivali", username: "admin_br", password: "admin" },
-    { id: 2, name: "DADAR West", username: "Admin_ddr", password: "Admin" },
-    { id: 3, name: "bandra west", username: "Admin_bd", password: "Admin" },
-    { id: 4, name: "Andheri West (Juhu)", username: "Admin_Andheri", password: "Admin" },
-    { id: 5, name: "GOREGAON East", username: "Admin_gg", password: "Admin" },
-    { id: 6, name: "MALAD West", username: "Admin_ml", password: "Admin" },
-    { id: 7, name: "BYCULLA West", username: "Admin_by", password: "Admin" },
-    { id: 8, name: "GHATKOPAR East", username: "Ghatkopar@orthosquare", password: "Admin-2#" },
-    { id: 9, name: "MULUND", username: "Admin_mu", password: "Admin" },
-    { id: 10, name: "CHEMBUR East", username: "Admin_Chembur", password: "chem-1#" },
-  ];
+  const [loginData, setLoginData] = useState([
+    { id: 1, name: "Borivali", username: "admin_br", password: "admin", type: "clinic" },
+    { id: 2, name: "DADAR West", username: "Admin_ddr", password: "Admin", type: "clinic" },
+    { id: 3, name: "bandra west", username: "Admin_bd", password: "Admin", type: "clinic" },
+    { id: 4, name: "Andheri West (Juhu)", username: "Admin_Andheri", password: "Admin", type: "clinic" },
+    { id: 5, name: "GOREGAON East", username: "Admin_gg", password: "Admin", type: "clinic" },
+    { id: 6, name: "MALAD West", username: "Admin_ml", password: "Admin", type: "clinic" },
+    { id: 7, name: "BYCULLA West", username: "Admin_by", password: "Admin", type: "clinic" },
+    { id: 8, name: "GHATKOPAR East", username: "Ghatkopar@orthosquare", password: "Admin-2#", type: "clinic" },
+    { id: 9, name: "MULUND", username: "Admin_mu", password: "Admin", type: "clinic" },
+    { id: 10, name: "CHEMBUR East", username: "Admin_Chembur", password: "chem-1#", type: "clinic" },
+    { id: 11, name: "Dr. Smith", username: "doc_smith", password: "password123", type: "doctor" },
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(loginData, "Login_Details");
+  };
+
+    // Edit Handlers
+    const handleEdit = (item) => {
+        setIsView("form");
+        setEditingId(item.id);
+        setFormData({
+            name: item.name,
+            username: item.username,
+            password: item.password,
+            type: item.type
+        });
+    };
+
+    const handleCancel = () => {
+        setIsView("list");
+        setEditingId(null);
+        setFormData({ name: "", username: "", password: "", type: "clinic" });
+    };
+
+    const handleSubmit = () => {
+        if (editingId) {
+            setLoginData(loginData.map(item => 
+                item.id === editingId ? { ...item, ...formData } : item
+            ));
+        }
+        setIsView("list");
+        setEditingId(null);
+        setFormData({ name: "", username: "", password: "", type: "clinic" });
+    };
+
+
+  // Filter Data
+  const filteredData = loginData.filter((item) => {
+      const matchesType = item.type === loginType;
+      const matchesName = item.name.toLowerCase().includes(name.toLowerCase());
+      // Mock data doesn't have mobile, assuming name/username filter for now or skipping if mobile logic not essential for mock
+      const matchesMobile = true; 
+      return matchesType && matchesName && matchesMobile;
+  });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -44,86 +108,146 @@ export default function LoginDetailsPage() {
         </h1>
       </div>
 
-      {/* Filters */}
-      <div className="space-y-4">
-         <RadioGroup defaultValue="clinic" onValueChange={setLoginType} className="flex gap-6">
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="clinic" id="clinic" className="text-blue-600 border-blue-600" />
-              <Label htmlFor="clinic" className="text-gray-700 dark:text-gray-300 font-medium">Clinic</Label>
+    {isView === "list" ? (
+        <>
+            {/* Filters */}
+            <div className="space-y-4">
+                <RadioGroup value={loginType} onValueChange={setLoginType} className="flex gap-6">
+                    <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="clinic" id="clinic" className="text-blue-600 border-blue-600" />
+                    <Label htmlFor="clinic" className="text-gray-700 dark:text-gray-300 font-medium">Clinic</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="doctor" id="doctor" className="border-gray-400" />
+                    <Label htmlFor="doctor" className="text-gray-700 dark:text-gray-300 font-medium">Doctor</Label>
+                    </div>
+                </RadioGroup>
+
+                <div className="flex flex-col md:flex-row gap-4 items-end">
+                <div className="w-full md:w-1/3">
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
+                    <Input
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                    />
+                </div>
+                <div className="w-full md:w-1/3">
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mobile No</label>
+                    <Input
+                    placeholder="Mobile No"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                    />
+                </div>
+
+                <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
+                    Search
+                </Button>
+                </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="doctor" id="doctor" className="border-gray-400" />
-              <Label htmlFor="doctor" className="text-gray-700 dark:text-gray-300 font-medium">Doctor</Label>
+
+            {/* Total Count */}
+            <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+                Total : {filteredData.length}
             </div>
-        </RadioGroup>
 
-        <div className="flex flex-col md:flex-row gap-4 items-end">
-          <div className="w-full md:w-1/3">
-            <Input
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-            />
-          </div>
-          <div className="w-full md:w-1/3">
-            <Input
-              placeholder="Mobile No"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-            />
-          </div>
+            {/* Table */}
+            <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
+                <Table>
+                <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+                    <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
+                    <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
+                    <TableHead className="font-bold text-gray-700 dark:text-gray-300">Name</TableHead>
+                    <TableHead className="font-bold text-gray-700 dark:text-gray-300">User Name</TableHead>
+                    <TableHead className="font-bold text-gray-700 dark:text-gray-300">Password</TableHead>
+                    <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[50px]"></TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {currentItems.map((item, index) => (
+                    <TableRow key={item.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
+                        <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                        <TableCell className="dark:text-gray-300">{item.name}</TableCell>
+                        <TableCell className="dark:text-gray-300">{item.username}</TableCell>
+                        <TableCell className="dark:text-gray-300">{item.password}</TableCell>
+                        <TableCell className="text-right">
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-8 w-8 text-black dark:text-white border border-black dark:border-white rounded-md p-1"
+                                onClick={() => handleEdit(item)}
+                            >
+                                <FilePenLine className="w-4 h-4" />
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    ))}
+                    {currentItems.length === 0 && (
+                    <TableRow>
+                        <TableCell colSpan={5} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                    </TableRow>
+                    )}
+                </TableBody>
+                </Table>
+            </div>
 
-          <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
-            Search
-          </Button>
+            {/* Footer / Pagination */}
+            <div className="flex justify-between items-center pt-2">
+                {/* Excel Export Icon */}
+                <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
+                    <FileSpreadsheet className="w-6 h-6" />
+                </Button>
+
+                {/* Pagination component */}
+                <CustomPagination 
+                    totalItems={filteredData.length} 
+                    itemsPerPage={itemsPerPage} 
+                    currentPage={currentPage} 
+                    onPageChange={setCurrentPage} 
+                />
+            </div>
+      </>
+    ) : (
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm space-y-6 max-w-2xl mx-auto">
+             <div className="space-y-4">
+                 <h3 className="font-bold text-lg text-red-500 border-b pb-2">EDIT LOGIN DETAILS</h3>
+                 
+                 <div className="space-y-2">
+                    <Label>Name</Label>
+                    <Input 
+                        value={formData.name} 
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    />
+                 </div>
+                 
+                 <div className="space-y-2">
+                    <Label>Username</Label>
+                    <Input 
+                         value={formData.username} 
+                        onChange={(e) => setFormData({...formData, username: e.target.value})}
+                    />
+                 </div>
+
+                 <div className="space-y-2">
+                    <Label>Password</Label>
+                    <Input 
+                         value={formData.password} 
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    />
+                 </div>
+             </div>
+
+             <div className="flex justify-end gap-4 pt-4">
+                <Button onClick={handleCancel} variant="outline" className="min-w-[100px]">Cancel</Button>
+                <Button onClick={handleSubmit} className="bg-[#1E6B8C] hover:bg-[#15526d] text-white min-w-[100px]">
+                    Update
+                </Button>
+             </div>
         </div>
-      </div>
-
-      {/* Total Count Placeholder */}
-       <div className="flex justify-end">
-           <div className="text-gray-500 text-sm">
-               Total :
-           </div>
-       </div>
-
-      {/* Table */}
-      <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
-        <Table>
-          <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
-            <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
-              <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
-              <TableHead className="font-bold text-gray-700 dark:text-gray-300">Name</TableHead>
-              <TableHead className="font-bold text-gray-700 dark:text-gray-300">User Name</TableHead>
-              <TableHead className="font-bold text-gray-700 dark:text-gray-300">Password</TableHead>
-              <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[50px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loginData.map((item, index) => (
-              <TableRow key={item.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{index + 1}</TableCell>
-                <TableCell className="dark:text-gray-300">{item.name}</TableCell>
-                <TableCell className="dark:text-gray-300">{item.username}</TableCell>
-                <TableCell className="dark:text-gray-300">{item.password}</TableCell>
-                <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-black dark:text-white border border-black dark:border-white rounded-md p-1">
-                        <FilePenLine className="w-4 h-4" />
-                    </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Footer / Pagination Placeholder */}
-       <div className="flex justify-end items-center pt-2">
-        <div className="text-xs text-blue-500 hover:underline cursor-pointer">
-          12345678910... &gt;&gt;
-        </div>
-      </div>
+    )}
     </div>
   );
 }

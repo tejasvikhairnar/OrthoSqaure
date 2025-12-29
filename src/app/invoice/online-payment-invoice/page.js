@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search, X, FileSpreadsheet, Settings } from "lucide-react";
+import { FileSpreadsheet } from "lucide-react";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function OnlinePaymentInvoicePage() {
   const [filters, setFilters] = useState({
@@ -30,8 +30,11 @@ export default function OnlinePaymentInvoicePage() {
     toDate: "2025-12-22",
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // Mock Data matching the screenshot
-  const mockData = [
+  const [mockData, setMockData] = useState([
     {
       id: 1,
       clinicName: "Dehradun",
@@ -142,7 +145,18 @@ export default function OnlinePaymentInvoicePage() {
       paymentMode: "UPI",
       transactionNo: "570918396580",
     },
-  ];
+    {
+        id: 11,
+        clinicName: "ADYAR",
+        patientCode: "P105306",
+        patientName: "Another Patient",
+        invoiceNo: "TAN000832527",
+        paymentDate: "11-Dec-2025",
+        revenueAmount: "100.00",
+        paymentMode: "UPI",
+        transactionNo: "570918396581",
+    }
+  ]);
 
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({
@@ -160,6 +174,18 @@ export default function OnlinePaymentInvoicePage() {
     });
   };
 
+  // Filter Data
+  const filteredData = mockData.filter((item) => {
+      const matchClinic = !filters.clinicName || item.clinicName.toLowerCase().includes(filters.clinicName.toLowerCase());
+      const matchInvoice = !filters.invoiceNo || item.invoiceNo.toLowerCase().includes(filters.invoiceNo.toLowerCase());
+      return matchClinic && matchInvoice;
+  });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
@@ -171,12 +197,12 @@ export default function OnlinePaymentInvoicePage() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end bg-white dark:bg-gray-900 rounded-lg">
         {/* Clinic Name */}
         <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500">Clinic Name</Label>
+          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Clinic Name</Label>
           <Select
             value={filters.clinicName}
             onValueChange={(val) => handleFilterChange("clinicName", val)}
           >
-            <SelectTrigger className="h-9 bg-white border-gray-300">
+            <SelectTrigger className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
               <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
@@ -192,9 +218,9 @@ export default function OnlinePaymentInvoicePage() {
 
         {/* Invoice No */}
         <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500">Invoice No</Label>
+          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Invoice No</Label>
           <Input
-             className="h-9 bg-white border-gray-300"
+             className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
              placeholder="Invoice No"
              value={filters.invoiceNo}
              onChange={(e) => handleFilterChange("invoiceNo", e.target.value)}
@@ -206,36 +232,38 @@ export default function OnlinePaymentInvoicePage() {
 
          {/* From Date */}
          <div className="md:col-span-3">
+           <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">From Date</Label>
            <Input
-              type="date"
-              className="h-9 bg-white border-gray-300"
-              value={filters.fromDate}
-              onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-           />
+               type="date"
+               className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+               value={filters.fromDate}
+               onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+            />
          </div>
 
           {/* To Date */}
           <div className="md:col-span-3">
-           <Input
-              type="date"
-              className="h-9 bg-white border-gray-300"
-              value={filters.toDate}
-              onChange={(e) => handleFilterChange("toDate", e.target.value)}
-           />
-         </div>
+            <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">To Date</Label>
+            <Input
+               type="date"
+               className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+               value={filters.toDate}
+               onChange={(e) => handleFilterChange("toDate", e.target.value)}
+            />
+          </div>
 
         {/* Buttons */}
         <div className="md:col-span-3 flex gap-2">
             <Button
                 size="sm"
-                className="bg-[#C04000] hover:bg-[#A03000] text-white px-6 h-9 rounded-md"
+                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
             >
                 Search
             </Button>
             <Button
                 size="sm"
                 onClick={handleClear}
-                className="bg-[#C04000] hover:bg-[#A03000] text-white px-6 h-9 rounded-md"
+                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
             >
                 Clear
             </Button>
@@ -243,41 +271,46 @@ export default function OnlinePaymentInvoicePage() {
         
         {/* Total Count */}
         <div className="md:col-span-3 flex justify-end pb-2">
-             <span className="text-sm text-gray-600 font-medium">Total : 1012</span>
+             <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total : {filteredData.length}</span>
         </div>
       </div>
 
       {/* Table Section */}
-      <div className="border border-gray-200 rounded-sm overflow-hidden bg-white shadow-sm">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E6FFCC] hover:bg-[#E6FFCC]">
-                <TableRow className="border-b border-gray-100 hover:bg-[#E6FFCC]">
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Sr. No.</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Clinic Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Patient Code</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Patient Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Invoice No.</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Payment Date</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Revenue Amount</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Payment Mode</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Transaction No.</TableHead>
+              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+                <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10 w-12">Sr. No.</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Clinic Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Patient Code</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Patient Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Payment Date</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Revenue Amount</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Payment Mode</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Transaction No.</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockData.map((row) => (
-                    <TableRow key={row.id} className="border-b border-gray-50 hover:bg-gray-50 text-xs">
-                      <TableCell className="py-2 text-gray-600">{row.id}</TableCell>
-                      <TableCell className="py-2 text-gray-600 uppercase">{row.clinicName}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.patientCode}</TableCell>
-                      <TableCell className="py-2 text-gray-600 uppercase">{row.patientName}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.invoiceNo}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.paymentDate}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.revenueAmount}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.paymentMode}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.transactionNo}</TableCell>
+                {currentItems.map((row, index) => (
+                    <TableRow key={row.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 text-xs">
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.clinicName}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.patientCode}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.patientName}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.invoiceNo}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.paymentDate}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.revenueAmount}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.paymentMode}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.transactionNo}</TableCell>
                     </TableRow>
                 ))}
+                 {currentItems.length === 0 && (
+                  <TableRow>
+                     <TableCell colSpan={9} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
         </div>
@@ -289,11 +322,12 @@ export default function OnlinePaymentInvoicePage() {
                 <FileSpreadsheet className="h-5 w-5" />
             </Button>
 
-            <div className="flex items-center gap-1">
-                 <Button variant="ghost" size="sm" className="h-8 text-blue-500 font-normal hover:bg-transparent px-1">
-                    12345678910...&gt;&gt;
-                 </Button>
-            </div>
+            <CustomPagination 
+                totalItems={filteredData.length} 
+                itemsPerPage={itemsPerPage} 
+                currentPage={currentPage} 
+                onPageChange={setCurrentPage} 
+            />
        </div>
     </div>
   );

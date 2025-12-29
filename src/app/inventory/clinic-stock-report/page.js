@@ -33,7 +33,7 @@ export default function ClinicStockReportPage() {
   const [reportData, setReportData] = useState([
     {
       id: 1,
-      date: "01-01-2024",
+      date: "2024-01-01",
       clinicName: "Clinic A",
       itemName: "Paracetamol",
       openingStock: 100,
@@ -43,7 +43,7 @@ export default function ClinicStockReportPage() {
     },
     {
       id: 2,
-      date: "02-01-2024",
+      date: "2024-01-02",
       clinicName: "Clinic B",
       itemName: "Ibuprofen",
       openingStock: 80,
@@ -53,7 +53,7 @@ export default function ClinicStockReportPage() {
     },
     {
       id: 3,
-      date: "03-01-2024",
+      date: "2024-01-03",
       clinicName: "Clinic A",
       itemName: "Cough Syrup",
       openingStock: 50,
@@ -63,7 +63,7 @@ export default function ClinicStockReportPage() {
     },
      {
       id: 4,
-      date: "03-01-2024",
+      date: "2024-01-03",
       clinicName: "Clinic C",
       itemName: "Bandage",
       openingStock: 200,
@@ -71,27 +71,28 @@ export default function ClinicStockReportPage() {
       outward: 50,
       closingStock: 250,
     },
-    // Add more mock data as needed
   ]);
-
-  const handleSearch = () => {
-    // Implement search logic here
-    console.log("Searching with:", {
-      filterClinic,
-      filterItemName,
-      fromDate,
-      toDate,
-    });
-  };
 
   const handleExport = () => {
     exportToExcel(reportData, "Clinic_Stock_Report");
   };
 
+  // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesClinic = !filterClinic || filterClinic === "all" || item.clinicName === filterClinic;
+      const matchesItem = item.itemName.toLowerCase().includes(filterItemName.toLowerCase());
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
+
+      return matchesClinic && matchesItem && matchesDate;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -115,9 +116,10 @@ export default function ClinicStockReportPage() {
                 <SelectValue placeholder="Select Clinic" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="clinic_a">Clinic A</SelectItem>
-                <SelectItem value="clinic_b">Clinic B</SelectItem>
-                {/* Add more clinics */}
+                <SelectItem value="all">All Clinics</SelectItem>
+                <SelectItem value="Clinic A">Clinic A</SelectItem>
+                <SelectItem value="Clinic B">Clinic B</SelectItem>
+                <SelectItem value="Clinic C">Clinic C</SelectItem>
             </SelectContent>
             </Select>
         </div>
@@ -158,13 +160,17 @@ export default function ClinicStockReportPage() {
         {/* Search Button */}
         <div>
           <Button
-            onClick={handleSearch}
             className="w-full bg-[#D35400] hover:bg-[#ba4a00] text-white h-10 transition-colors"
           >
             <Search className="w-4 h-4 mr-2" />
             SEARCH
           </Button>
         </div>
+      </div>
+      
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -199,27 +205,26 @@ export default function ClinicStockReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{indexOfFirstItem + index + 1}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.date}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.clinicName}</TableCell>
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.itemName}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.openingStock}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.inward}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.outward}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3">{row.closingStock}</TableCell>
-              </TableRow>
-            ))}
-            {reportData.length === 0 && (
-              <TableRow>
-                 <TableCell colSpan={8} className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    No records found
-                 </TableCell>
-              </TableRow>
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{indexOfFirstItem + index + 1}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.date}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.clinicName}</TableCell>
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.itemName}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.openingStock}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.inward}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">{row.outward}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3">{row.closingStock}</TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={8} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
             )}
           </TableBody>
         </Table>
@@ -236,7 +241,7 @@ export default function ClinicStockReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

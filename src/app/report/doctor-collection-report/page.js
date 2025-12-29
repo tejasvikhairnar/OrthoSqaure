@@ -19,26 +19,55 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function DoctorCollectionReportPage() {
   const [clinic, setClinic] = useState("");
   const [doctorName, setDoctorName] = useState("");
-  const [fromDate, setFromDate] = useState("2025-12-08");
+  const [fromDate, setFromDate] = useState("2024-12-08"); // Set default to realistic date
   const [toDate, setToDate] = useState("2025-12-23");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data matching the image
-  const reportData = [
-    { id: 1, clinic: "DADAR West", doctor: "Dr.Harshada Mane", treatmentAmount: "1025000.00", medicineAmount: "0.00" },
-    { id: 2, clinic: "MALAD West", doctor: "Dr.Swapnali Nachnekar", treatmentAmount: "66173.00", medicineAmount: "1173.04" },
-    { id: 3, clinic: "ELECTRONIC CITY", doctor: "Dr.Shaheda Manjothi", treatmentAmount: "0.00", medicineAmount: "0.00" },
-    { id: 4, clinic: "TRICHY", doctor: "Dr.SUVETHA ASHOK", treatmentAmount: "32500.00", medicineAmount: "0.00" },
-    { id: 5, clinic: "BTM", doctor: "Dr.Hajara V K", treatmentAmount: "16800.00", medicineAmount: "0.00" },
-    { id: 6, clinic: "Andheri East (takshila)", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00" },
-    { id: 7, clinic: "Andheri West (Juhu)", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00" },
-    { id: 8, clinic: "bandra west", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00" },
-    { id: 9, clinic: "Goregaon West", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00" },
-    { id: 10, clinic: "GOREGAON East", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00" },
-  ];
+  const [reportData, setReportData] = useState([
+    { id: 1, clinic: "DADAR West", doctor: "Dr.Harshada Mane", treatmentAmount: "1025000.00", medicineAmount: "0.00", date: "2025-12-10" },
+    { id: 2, clinic: "MALAD West", doctor: "Dr.Swapnali Nachnekar", treatmentAmount: "66173.00", medicineAmount: "1173.04", date: "2025-12-12" },
+    { id: 3, clinic: "ELECTRONIC CITY", doctor: "Dr.Shaheda Manjothi", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-15" },
+    { id: 4, clinic: "TRICHY", doctor: "Dr.SUVETHA ASHOK", treatmentAmount: "32500.00", medicineAmount: "0.00", date: "2025-12-18" },
+    { id: 5, clinic: "BTM", doctor: "Dr.Hajara V K", treatmentAmount: "16800.00", medicineAmount: "0.00", date: "2025-12-20" },
+    { id: 6, clinic: "Andheri East (takshila)", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-21" },
+    { id: 7, clinic: "Andheri West (Juhu)", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-21" },
+    { id: 8, clinic: "bandra west", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-21" },
+    { id: 9, clinic: "Goregaon West", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-21" },
+    { id: 10, clinic: "GOREGAON East", doctor: "Dr.A Samad Tanwar", treatmentAmount: "0.00", medicineAmount: "0.00", date: "2025-12-21" },
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(reportData, "Doctor_Collection_Report");
+  };
+
+  // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesClinic = !clinic || clinic === "all" || item.clinic.toLowerCase().includes(clinic.toLowerCase()); 
+      const matchesDoctor = item.doctor.toLowerCase().includes(doctorName.toLowerCase());
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
+
+      return matchesClinic && matchesDoctor && matchesDate;
+  });
+
+  // Calculate Total
+  const totalAmount = filteredData.reduce((acc, curr) => acc + parseFloat(curr.treatmentAmount) + parseFloat(curr.medicineAmount), 0).toFixed(2);
+
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -53,22 +82,29 @@ export default function DoctorCollectionReportPage() {
       {/* Filters */}
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Select value={clinic} onValueChange={setClinic}>
-            <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
-              <SelectValue placeholder="--- Select Clinic ---" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="dadar">DADAR West</SelectItem>
-              <SelectItem value="malad">MALAD West</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Input
-            placeholder="Doctor Name"
-            value={doctorName}
-            onChange={(e) => setDoctorName(e.target.value)}
-            className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-          />
+            <div className="space-y-1">
+                 <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Clinic Name</label>
+                <Select value={clinic} onValueChange={setClinic}>
+                    <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
+                    <SelectValue placeholder="--- Select Clinic ---" />
+                    </SelectTrigger>
+                    <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="dadar">DADAR West</SelectItem>
+                    <SelectItem value="malad">MALAD West</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            
+            <div className="space-y-1">
+                 <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Doctor Name</label>
+                 <Input
+                    placeholder="Doctor Name"
+                    value={doctorName}
+                    onChange={(e) => setDoctorName(e.target.value)}
+                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                />
+            </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 items-end">
@@ -86,12 +122,12 @@ export default function DoctorCollectionReportPage() {
             className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full md:w-auto"
           />
 
-          <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all">
+          <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all md:w-auto w-full">
             Search
           </Button>
 
           <div className="ml-auto text-sm font-medium text-gray-700 dark:text-gray-300">
-            Total Amount : 26402160.35
+            Total Amount : {totalAmount}
           </div>
         </div>
       </div>
@@ -109,27 +145,38 @@ export default function DoctorCollectionReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reportData.map((item, index) => (
+            {currentItems.map((item, index) => (
               <TableRow key={item.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{index + 1}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.clinic}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.doctor}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.treatmentAmount}</TableCell>
                 <TableCell className="dark:text-gray-300">{item.medicineAmount}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={5} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
 
       {/* Footer */}
-      <div className="flex justify-between items-center pt-2">
-        <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
-          <FileSpreadsheet className="w-8 h-8" />
-        </Button>
-        <div className="text-xs text-blue-500 hover:underline cursor-pointer">
-          12345678910... &gt;&gt;
-        </div>
+       <div className="flex justify-between items-center pt-2">
+         {/* Excel Export Icon */}
+         <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
+              <FileSpreadsheet className="w-6 h-6" />
+         </Button>
+         
+          {/* Pagination component */}
+            <CustomPagination 
+                totalItems={filteredData.length} 
+                itemsPerPage={itemsPerPage} 
+                currentPage={currentPage} 
+                onPageChange={setCurrentPage} 
+            />
       </div>
     </div>
   );

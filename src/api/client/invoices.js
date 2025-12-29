@@ -12,7 +12,7 @@ import axiosClient from "@/lib/axiosClient";
  */
 export const getAllInvoices = async (params = {}) => {
   try {
-    const response = await axiosClient.get("/Invoice/GetAllInvoices", {
+    const response = await axiosClient.get("/api/Invoice/GetAllInvoices", {
       params,
     });
     return response.data;
@@ -29,7 +29,7 @@ export const getAllInvoices = async (params = {}) => {
  */
 export const deleteInvoice = async (invoiceId) => {
   try {
-    await axiosClient.delete(`/Invoice/DeleteInvoice/${invoiceId}`);
+    await axiosClient.delete(`/api/Invoice/DeleteInvoice/${invoiceId}`);
     return true;
   } catch (error) {
     console.error("[Invoice API] Error deleting invoice:", error);
@@ -44,7 +44,7 @@ export const deleteInvoice = async (invoiceId) => {
  */
 export const getChequeDetails = async (params = {}) => {
   try {
-    const response = await axiosClient.get("/Invoice/GetChequeDetails", {
+    const response = await axiosClient.get("/api/Invoice/GetChequeDetails", {
       params,
     });
     return response.data;

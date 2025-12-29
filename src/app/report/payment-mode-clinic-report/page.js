@@ -24,7 +24,7 @@ import CustomPagination from "@/components/ui/custom-pagination";
 export default function PaymentModeClinicReportPage() {
   const [clinicName, setClinicName] = useState("");
   const [doctorName, setDoctorName] = useState("");
-  const [year, setYear] = useState("2025");
+  const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -32,14 +32,11 @@ export default function PaymentModeClinicReportPage() {
   const itemsPerPage = 10;
 
   const [reportData, setReportData] = useState([
-    { id: 1, month: "January", cash: "7564177.37", cheque: "0.00", debitCard: "3187399.99", creditCard: "1147875.00", upi: "13293033.33", bajaj: "1995399.99", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1450200.00", shopseHDFC: "1241000.00", shopseCredit: "2961000.00", shopseAmex: "132000.00", neft: "328158.99", razorpay: "1247096.01", savein: "4427086.66", unofin: "3027799.99", fibe: "4949031.51", flexUpi: "0.00", medibuddy: "0.00", total: "46951236.84" },
-    { id: 2, month: "February", cash: "6847592.04", cheque: "0.00", debitCard: "1982520.99", creditCard: "1033580.00", upi: "13226507.85", bajaj: "1834433.33", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1891700.00", shopseHDFC: "1291000.00", shopseCredit: "3598817.51", shopseAmex: "293500.00", neft: "683000.00", razorpay: "1219304.00", savein: "5703109.00", unofin: "0.00", fibe: "4935337.35", flexUpi: "0.00", medibuddy: "0.00", total: "44550402.07" },
-    { id: 3, month: "March", cash: "7804950.87", cheque: "0.00", debitCard: "1723236.70", creditCard: "1977288.00", upi: "14244699.58", bajaj: "1881520.00", creditFair: "0.00", liquid: "0.00", shopse: "0.00", shopseDebit: "1882200.33", shopseHDFC: "928500.00", shopseCredit: "3645500.00", shopseAmex: "385000.00", neft: "329071.99", razorpay: "1183703.67", savein: "8356255.58", unofin: "0.00", fibe: "7061473.11", flexUpi: "0.00", medibuddy: "0.00", total: "51201399.83" },
-    {
+     {
       id: 1,
       clinic: "Vashi",
       city: "Navi Mumbai",
-      year: "2019",
+      year: "2024",
       month: "March",
       bankDeposit: "5000",
       cash: "2000",
@@ -47,12 +44,14 @@ export default function PaymentModeClinicReportPage() {
       paytm: "500",
       bajajFinance: "0",
       total: "8500",
+      doctor: "Dr. Smith", // Added for filtering
+      date: "2024-03-15" // Added for date filtering
     },
      {
       id: 2,
       clinic: "Andheri",
       city: "Mumbai",
-      year: "2019",
+      year: "2024",
       month: "March",
       bankDeposit: "4000",
       cash: "3000",
@@ -60,12 +59,14 @@ export default function PaymentModeClinicReportPage() {
       paytm: "1000",
       bajajFinance: "500",
       total: "10500",
+      doctor: "Dr. Jones",
+      date: "2024-03-20"
     },
     {
         id: 3,
         clinic: "Borivali",
         city: "Mumbai",
-        year: "2019",
+        year: "2024",
         month: "April",
         bankDeposit: "6000",
         cash: "4000",
@@ -73,6 +74,23 @@ export default function PaymentModeClinicReportPage() {
         paytm: "0",
         bajajFinance: "0",
         total: "10000",
+        doctor: "Dr. Smith",
+        date: "2024-04-10"
+      },
+       {
+        id: 4,
+        clinic: "Vashi",
+        city: "Navi Mumbai",
+        year: "2023",
+        month: "December",
+        bankDeposit: "5500",
+        cash: "2500",
+        card: "1500",
+        paytm: "500",
+        bajajFinance: "0",
+        total: "10000",
+        doctor: "Dr. Wilson",
+        date: "2023-12-05"
       },
   ]);
 
@@ -85,7 +103,7 @@ export default function PaymentModeClinicReportPage() {
   const handleSearch = () => {
         let result = reportData;
 
-        if (clinicName) {
+        if (clinicName && clinicName !== "all") {
             const searchStr = clinicName.toLowerCase().replace(/_/g, " ");
             result = result.filter(item => {
                  const cVal = item.clinic.toLowerCase();
@@ -95,16 +113,14 @@ export default function PaymentModeClinicReportPage() {
         }
         
         if (doctorName) {
-            // Note: Data doesn't have doctor name column, but typically reports filter by doctor association.
-            // Since mock data lacks it, we skip filtering by doctor for now or assume it triggers a backend filter.
-             console.log("Filtering by doctor not locally supported in this mock data structure");
+            result = result.filter(item => item.doctor.toLowerCase().includes(doctorName.toLowerCase()));
         }
 
-        if (year) {
+        if (year && year !== "all") {
              result = result.filter(item => item.year === year);
         }
 
-        if (month) {
+        if (month && month !== "all") {
              const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
              const selectedMonthIndex = parseInt(month) - 1;
              if (selectedMonthIndex >= 0 && selectedMonthIndex < 12) {
@@ -114,11 +130,11 @@ export default function PaymentModeClinicReportPage() {
         }
 
         if (fromDate) {
-           // Placeholder for date logic
+           result = result.filter(item => new Date(item.date) >= new Date(fromDate));
         }
         
         if (toDate) {
-           // Placeholder for date logic
+             result = result.filter(item => new Date(item.date) <= new Date(toDate));
         }
 
         setFilteredReportData(result);
@@ -178,6 +194,7 @@ export default function PaymentModeClinicReportPage() {
                 <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
+                <SelectItem value="all">All Clinics</SelectItem>
                 <SelectItem value="vashi">Vashi</SelectItem>
                 <SelectItem value="andheri">Andheri</SelectItem>
                 <SelectItem value="borivali">Borivali</SelectItem>
@@ -208,6 +225,7 @@ export default function PaymentModeClinicReportPage() {
                 <SelectValue placeholder="-- Select --" />
             </SelectTrigger>
             <SelectContent>
+                <SelectItem value="all">All Years</SelectItem>
                 <SelectItem value="2019">2019</SelectItem>
                 <SelectItem value="2020">2020</SelectItem>
                 <SelectItem value="2021">2021</SelectItem>
@@ -229,6 +247,7 @@ export default function PaymentModeClinicReportPage() {
                 <SelectValue placeholder="-- Select --" />
             </SelectTrigger>
             <SelectContent>
+                <SelectItem value="all">All Months</SelectItem>
                 <SelectItem value="1">January</SelectItem>
                 <SelectItem value="2">February</SelectItem>
                 <SelectItem value="3">March</SelectItem>
@@ -337,69 +356,77 @@ export default function PaymentModeClinicReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {indexOfFirstItem + index + 1}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.clinic}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.city}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.year}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.month}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.bankDeposit}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.cash}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.card}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.paytm}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.bajajFinance}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3 text-right">
-                  {row.total}
-                </TableCell>
-              </TableRow>
-            ))}
-             <TableRow className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
-                 <TableCell colSpan={5} className="border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4 font-bold text-gray-700 dark:text-gray-300">
-                    Total
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalBankDeposit.toFixed(0)}
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalCash.toFixed(0)}
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalCard.toFixed(0)}
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalPaytm.toFixed(0)}
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalBajaj.toFixed(0)}
-                 </TableCell>
-                  <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalAmount.toFixed(0)}
-                 </TableCell>
-             </TableRow>
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {indexOfFirstItem + index + 1}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.clinic}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.city}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.year}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.month}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.bankDeposit}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.cash}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.card}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.paytm}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.bajajFinance}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3 text-right">
+                    {row.total}
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={11} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
+             {currentItems.length > 0 && (
+                <TableRow className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
+                    <TableCell colSpan={5} className="border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4 font-bold text-gray-700 dark:text-gray-300">
+                        Total
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalBankDeposit.toFixed(0)}
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalCash.toFixed(0)}
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalCard.toFixed(0)}
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalPaytm.toFixed(0)}
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalBajaj.toFixed(0)}
+                    </TableCell>
+                     <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalAmount.toFixed(0)}
+                    </TableCell>
+                </TableRow>
+             )}
           </TableBody>
         </Table>
       </div>

@@ -35,7 +35,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 1,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Spreader",
       price: "618.00",
       receivedQty: 0,
@@ -44,7 +44,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 2,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Paper Point-4%",
       price: "1580.00",
       receivedQty: 1,
@@ -53,7 +53,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 3,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "GP-Assorted 2%",
       price: "200.00",
       receivedQty: 0,
@@ -62,7 +62,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 4,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "GP#25 - 4%",
       price: "715.00",
       receivedQty: 1,
@@ -71,7 +71,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 5,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "GP#20-4%",
       price: "1515.00",
       receivedQty: 1,
@@ -80,7 +80,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 6,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Tissue",
       price: "99.00",
       receivedQty: 0,
@@ -89,7 +89,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 7,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Saline",
       price: "409.14",
       receivedQty: 2,
@@ -98,7 +98,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 8,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Sanitizer",
       price: "0.00",
       receivedQty: 0,
@@ -107,7 +107,7 @@ export default function ClinicRequestStockSendReportPage() {
       id: 9,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Rotary file",
       price: "2392.00",
       receivedQty: 1,
@@ -116,25 +116,33 @@ export default function ClinicRequestStockSendReportPage() {
       id: 10,
       orderNo: "CORD2235",
       clinicName: "Chakan",
-      sendOrderDate: "09-Oct-2024",
+      sendOrderDate: "2024-10-09",
       materialName: "Bur-Polishing",
       price: "135.00",
       receivedQty: 0,
     },
   ]);
 
-  const handleSearch = () => {
-    console.log("Searching with:", { orderNo, clinicName, fromDate, toDate });
-  };
-
   const handleExport = () => {
     exportToExcel(reportData, "Clinic_Request_Stock_Send_Report");
   };
 
+  // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesOrder = item.orderNo.toLowerCase().includes(orderNo.toLowerCase());
+      const matchesClinic = !clinicName || clinicName === "all" || item.clinicName === clinicName;
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.sendOrderDate) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.sendOrderDate) <= new Date(toDate);
+
+      return matchesOrder && matchesClinic && matchesDate;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = reportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -169,7 +177,8 @@ export default function ClinicRequestStockSendReportPage() {
                 <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="chakan">Chakan</SelectItem>
+                <SelectItem value="all">All Clinics</SelectItem>
+                <SelectItem value="Chakan">Chakan</SelectItem>
                 <SelectItem value="clinic2">Clinic 2</SelectItem>
             </SelectContent>
             </Select>
@@ -202,12 +211,16 @@ export default function ClinicRequestStockSendReportPage() {
         {/* Search Button */}
         <div className="w-full md:w-auto">
           <Button
-            onClick={handleSearch}
             className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto transition-colors"
           >
             Search
           </Button>
         </div>
+      </div>
+
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -242,37 +255,43 @@ export default function ClinicRequestStockSendReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {indexOfFirstItem + index + 1}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.orderNo}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.clinicName}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.sendOrderDate}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.materialName}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.price}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.receivedQty}
-                </TableCell>
-                 <TableCell className="text-gray-600 dark:text-gray-300 py-3">
-                  {row.clinicName}
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {indexOfFirstItem + index + 1}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.orderNo}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.clinicName}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.sendOrderDate}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.materialName}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.price}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.receivedQty}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3">
+                    {row.clinicName}
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={8} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -288,7 +307,7 @@ export default function ClinicRequestStockSendReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={reportData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

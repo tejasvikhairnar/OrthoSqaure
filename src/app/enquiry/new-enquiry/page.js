@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { getLeads } from "@/api/client/leads";
+import { Pagination } from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,9 +42,10 @@ export default function NewLeadPage() {
   const [pageSize, setPageSize] = useState(20);
 
   // Fetch leads on component mount and when page changes
+  // Fetch leads on component mount and when filters change (not on page change)
   useEffect(() => {
     fetchLeads();
-  }, [currentPage, pageSize]); // Add dependencies
+  }, []);
 
   const fetchLeads = async (searchFilters = filters) => {
     try {
@@ -56,9 +58,8 @@ export default function NewLeadPage() {
       // Add pagination params
       const queryParams = {
         ...cleanFilters,
-        PageNumber: currentPage,
-        PageSize: pageSize,
-
+        PageNumber: 1, // Always fetch from page 1
+        PageSize: 1000, // Fetch large batch for client-side pagination
       };
 
       const data = await getLeads(queryParams);
@@ -67,7 +68,7 @@ export default function NewLeadPage() {
       
       // Transform API data to match table structure
       const transformedLeads = Array.isArray(data) ? data.map((lead, index) => ({
-        srNo: (currentPage - 1) * pageSize + index + 1, // Calculate correct Sr No based on page
+        srNo: index + 1, // Absolute index for client-side list
         leadNo: lead.enquiryNo || "-",
         name: `${lead.firstName || ""} ${lead.lastName || ""}`.trim() || "-",
         mobileNo: lead.mobile || "-",
@@ -110,6 +111,17 @@ export default function NewLeadPage() {
 
   const handleAddNewLead = () => {
     router.push("/enquiry/add-enquiry-form");
+  };
+
+  // Client-side Pagination Logic
+  const indexOfLastItem = currentPage * pageSize;
+  const indexOfFirstItem = indexOfLastItem - pageSize;
+  const currentItems = leads.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(leads.length / pageSize);
+
+  const handlePageChangeWrapper = (newPage) => {
+    setCurrentPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -221,7 +233,8 @@ export default function NewLeadPage() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                leads.map((lead, index) => (
+                leads.length > 0 ? (
+                  currentItems.map((lead, index) => (
                   <TableRow
                     key={index}
                     className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
@@ -254,7 +267,15 @@ export default function NewLeadPage() {
                       </div>
                     </TableCell>
                   </TableRow>
-                )))}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={9} className="h-24 text-center text-gray-500">
+                     No leads found.
+                  </TableCell>
+                </TableRow>
+              )
+            )}
               </TableBody>
             </Table>
           </div>
@@ -262,6 +283,15 @@ export default function NewLeadPage() {
 
         </CardContent>
       </Card>
+
+      {/* Pagination Controls */}
+      {!isLoading && leads.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChangeWrapper}
+        />
+      )}
     </div>
   );
 }

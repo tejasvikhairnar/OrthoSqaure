@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,7 +35,7 @@ export default function PatientwiseCollectionReportPage() {
     {
       id: 1,
       clinic: "Vashi",
-      date: "01/03/2019",
+      date: "2019-03-01",
       receiptNo: "RNO/VSH/18-19/669",
       patientName: "mr. vijay",
       mobile: "9988998899",
@@ -47,7 +47,7 @@ export default function PatientwiseCollectionReportPage() {
     {
       id: 2,
       clinic: "Vashi",
-      date: "02/03/2019",
+      date: "2019-03-02",
       receiptNo: "RNO/VSH/18-19/670",
       patientName: "Mrs. smita",
       mobile: "7766554433",
@@ -59,7 +59,7 @@ export default function PatientwiseCollectionReportPage() {
     {
         id: 3,
         clinic: "Andheri",
-        date: "03/03/2019",
+        date: "2019-03-03",
         receiptNo: "RNO/AND/18-19/671",
         patientName: "mr. rahul",
         mobile: "9988776655",
@@ -70,47 +70,18 @@ export default function PatientwiseCollectionReportPage() {
     },
   ]);
 
-  const [filteredReportData, setFilteredReportData] = useState(reportData);
+  // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesClinic = !clinicName || clinicName === "all" || item.clinic.toLowerCase() === clinicName.toLowerCase();
+      const matchesDoctor = item.doctor.toLowerCase().includes(doctorName.toLowerCase());
+      const matchesPatient = item.patientName.toLowerCase().includes(patientName.toLowerCase());
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
 
-    useEffect(() => {
-        setFilteredReportData(reportData);
-    }, [reportData]);
-
-  const handleSearch = () => {
-        let result = reportData;
-
-        if (clinicName) {
-            const searchStr = clinicName.toLowerCase().replace(/_/g, " ");
-            result = result.filter(item => {
-                 const cVal = item.clinic.toLowerCase();
-                 const selectedNormalized = clinicName.toLowerCase().replace(/_/g, " ");
-                 return cVal.includes(selectedNormalized) || selectedNormalized.includes(cVal);
-            });
-        }
-        
-        if (doctorName) {
-            result = result.filter(item => 
-                item.doctor.toLowerCase().includes(doctorName.toLowerCase())
-            );
-        }
-
-        if (patientName) {
-             result = result.filter(item => 
-                item.patientName.toLowerCase().includes(patientName.toLowerCase())
-            );
-        }
-
-        if (fromDate) {
-           // Placeholder for date logic
-        }
-        
-        if (toDate) {
-           // Placeholder for date logic
-        }
-
-        setFilteredReportData(result);
-        setCurrentPage(1);
-  };
+      return matchesClinic && matchesDoctor && matchesPatient && matchesDate;
+  });
     
     const handleClear = () => {
       setClinicName("");
@@ -118,20 +89,19 @@ export default function PatientwiseCollectionReportPage() {
       setPatientName("");
       setFromDate("");
       setToDate("");
-      setFilteredReportData(reportData);
       setCurrentPage(1);
     }
 
   const handleExport = () => {
-    exportToExcel(filteredReportData, "Patientwise_Collection_Report");
+    exportToExcel(filteredData, "Patientwise_Collection_Report");
   };
 
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredReportData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalAmount = filteredReportData.reduce((acc, curr) => acc + parseFloat(curr.paidAmount || 0), 0);
+  const totalAmount = filteredData.reduce((acc, curr) => acc + parseFloat(curr.paidAmount || 0), 0);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -157,6 +127,7 @@ export default function PatientwiseCollectionReportPage() {
                 <SelectValue placeholder="-- Select Clinic --" />
             </SelectTrigger>
             <SelectContent>
+                <SelectItem value="all">All Clinics</SelectItem>
                 <SelectItem value="vashi">Vashi</SelectItem>
                 <SelectItem value="andheri">Andheri</SelectItem>
                 <SelectItem value="borivali">Borivali</SelectItem>
@@ -220,10 +191,7 @@ export default function PatientwiseCollectionReportPage() {
 
         {/* Buttons */}
         <div className="flex gap-2 w-full md:w-auto">
-          <Button
-             onClick={handleSearch}
-            className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-6 h-10 w-full md:w-auto transition-colors"
-          >
+          <Button className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-6 h-10 w-full md:w-auto transition-colors">
             Search
           </Button>
            <Button
@@ -236,7 +204,7 @@ export default function PatientwiseCollectionReportPage() {
       </div>
 
        {/* Total Count */}
-      <div className="flex justify-end pr-2">
+       <div className="flex justify-end pr-2">
          <span className="font-semibold text-gray-600 dark:text-gray-400 text-sm">Amount : {totalAmount.toFixed(2)}</span>
       </div>
 
@@ -278,52 +246,60 @@ export default function PatientwiseCollectionReportPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow
-                key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
-              >
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {indexOfFirstItem + index + 1}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.clinic}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.date}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.receiptNo}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.patientName}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.mobile}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.treatment}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
-                  {row.doctor}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
-                  {row.paidAmount}
-                </TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 py-3">
-                  {row.mode}
-                </TableCell>
-              </TableRow>
-            ))}
-             <TableRow className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
-                 <TableCell colSpan={8} className="border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4 font-bold text-gray-700 dark:text-gray-300">
-                    Total
-                 </TableCell>
-                 <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
-                    {totalAmount.toFixed(2)}
-                 </TableCell>
-                 <TableCell></TableCell>
-             </TableRow>
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow
+                    key={row.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700"
+                >
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {indexOfFirstItem + index + 1}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.clinic}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.date}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.receiptNo}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.patientName}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.mobile}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.treatment}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3">
+                    {row.doctor}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700 py-3 text-right">
+                    {row.paidAmount}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 py-3">
+                    {row.mode}
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={10} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
+             {currentItems.length > 0 && (
+                <TableRow className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
+                    <TableCell colSpan={8} className="border-r border-gray-200 dark:border-gray-700 py-3 text-right pr-4 font-bold text-gray-700 dark:text-gray-300">
+                        Total
+                    </TableCell>
+                    <TableCell className="font-bold text-gray-700 dark:text-gray-300 py-3 text-right">
+                        {totalAmount.toFixed(2)}
+                    </TableCell>
+                    <TableCell></TableCell>
+                </TableRow>
+             )}
           </TableBody>
         </Table>
       </div>
@@ -339,7 +315,7 @@ export default function PatientwiseCollectionReportPage() {
         
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={filteredReportData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

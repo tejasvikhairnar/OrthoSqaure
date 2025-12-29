@@ -37,7 +37,7 @@ export default function ViewOrderHistory() {
     {
       id: 1,
       clinicName: "Mansarovar",
-      date: "04-Dec-2025",
+      date: "2025-12-04",
       orderRequested: "CORD9451",
       order: "CORD9451",
       status: "Request Pending",
@@ -45,7 +45,7 @@ export default function ViewOrderHistory() {
     {
       id: 2,
       clinicName: "Mansarovar",
-      date: "04-Dec-2025",
+      date: "2025-12-04",
       orderRequested: "CORD9901",
       order: "CORD9901",
       status: "Request Pending",
@@ -53,67 +53,67 @@ export default function ViewOrderHistory() {
     {
       id: 3,
       clinicName: "Dombivali East",
-      date: "23-Jun-2025",
+      date: "2025-06-23",
       orderRequested: "CORD7208",
       order: "CORD7208",
       status: "Request Pending",
     },
     {
-      id: 4,
-      clinicName: "Vasai west",
-      date: "06-Nov-2024",
-      orderRequested: "CORD1801",
-      order: "CORD1801",
-      status: "Request Pending",
-    },
-    {
-      id: 5,
-      clinicName: "MADHAPUR",
-      date: "31-Oct-2024",
-      orderRequested: "CORD6067",
-      order: "CORD6067",
-      status: "Request Pending",
-    },
-    {
-      id: 6,
-      clinicName: "MAMBALAM",
-      date: "22-Oct-2024",
-      orderRequested: "CORD8953",
-      order: "CORD8953",
-      status: "Request Pending",
-    },
-    {
-      id: 7,
-      clinicName: "Market Yard",
-      date: "20-Sep-2024",
-      orderRequested: "CORD1559",
-      order: "CORD1559",
-      status: "Dispatched",
-    },
-    {
-      id: 8,
-      clinicName: "Hadapsar",
-      date: "20-Sep-2024",
-      orderRequested: "CORD7050",
-      order: "CORD7050",
-      status: "Dispatched",
-    },
-    {
-      id: 9,
-      clinicName: "Nigdi",
-      date: "20-Sep-2024",
-      orderRequested: "CORD9650",
-      order: "CORD9650",
-      status: "Request Pending",
-    },
-     {
-      id: 10,
-      clinicName: "Chakan",
-      date: "19-Sep-2024",
-      orderRequested: "CORD2235",
-      order: "CORD2235",
-      status: "Dispatched",
-    },
+        id: 4,
+        clinicName: "Vasai west",
+        date: "2024-11-06",
+        orderRequested: "CORD1801",
+        order: "CORD1801",
+        status: "Request Pending",
+      },
+      {
+        id: 5,
+        clinicName: "MADHAPUR",
+        date: "2024-10-31",
+        orderRequested: "CORD6067",
+        order: "CORD6067",
+        status: "Request Pending",
+      },
+      {
+        id: 6,
+        clinicName: "MAMBALAM",
+        date: "2024-10-22",
+        orderRequested: "CORD8953",
+        order: "CORD8953",
+        status: "Request Pending",
+      },
+      {
+        id: 7,
+        clinicName: "Market Yard",
+        date: "2024-09-20",
+        orderRequested: "CORD1559",
+        order: "CORD1559",
+        status: "Dispatched",
+      },
+      {
+        id: 8,
+        clinicName: "Hadapsar",
+        date: "2024-09-20",
+        orderRequested: "CORD7050",
+        order: "CORD7050",
+        status: "Dispatched",
+      },
+      {
+        id: 9,
+        clinicName: "Nigdi",
+        date: "2024-09-20",
+        orderRequested: "CORD9650",
+        order: "CORD9650",
+        status: "Request Pending",
+      },
+       {
+        id: 10,
+        clinicName: "Chakan",
+        date: "2024-09-19",
+        orderRequested: "CORD2235",
+        order: "CORD2235",
+        status: "Dispatched",
+      },
   ]);
 
   const getStatusBadge = (status) => {
@@ -135,10 +135,24 @@ export default function ViewOrderHistory() {
     exportToExcel(tableData, "View_Order_History");
   };
 
+  // Filter Data
+  const filteredData = tableData.filter((item) => {
+      const matchesClinic = !clinicName || clinicName === "all" || item.clinicName === clinicName; // In real app, IDs would be used
+      // Note: Inventory Type and Item Name are not in the top-level mock data shown in table (except maybe implied by order number or hidden). 
+      // Assuming for now we just filter what we have. If Item Name filter is required, data structure needs to support it. 
+      // I'll filter by Clinic Name and Date for now as they are visible.
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
+
+      return matchesClinic && matchesDate;
+  });
+
   // Pagination Logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
@@ -163,8 +177,10 @@ export default function ViewOrderHistory() {
               </SelectTrigger>
               <SelectContent>
                  <SelectItem value="all">All Clinics</SelectItem>
-                <SelectItem value="clinic1">Mansarovar</SelectItem>
-                <SelectItem value="clinic2">Dombivali East</SelectItem>
+                <SelectItem value="Mansarovar">Mansarovar</SelectItem>
+                <SelectItem value="Dombivali East">Dombivali East</SelectItem>
+                <SelectItem value="Vasai west">Vasai west</SelectItem>
+                <SelectItem value="MADHAPUR">MADHAPUR</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -224,7 +240,7 @@ export default function ViewOrderHistory() {
 
       {/* Summary Count */}
       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
-        Total : {tableData.length}
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -241,18 +257,24 @@ export default function ViewOrderHistory() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentItems.map((row, index) => (
-              <TableRow key={row.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{indexOfFirstItem + index + 1}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.clinicName}</TableCell>
-                <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.date}</TableCell>
-                <TableCell className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer font-medium border-r border-gray-200 dark:border-gray-700">{row.orderRequested}</TableCell>
-                <TableCell className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer font-medium border-r border-gray-200 dark:border-gray-700">{row.order}</TableCell>
-                <TableCell>
-                    {getStatusBadge(row.status)}
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentItems.length > 0 ? (
+                currentItems.map((row, index) => (
+                <TableRow key={row.id} className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                    <TableCell className="font-medium text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{indexOfFirstItem + index + 1}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.clinicName}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-300 border-r border-gray-200 dark:border-gray-700">{row.date}</TableCell>
+                    <TableCell className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer font-medium border-r border-gray-200 dark:border-gray-700">{row.orderRequested}</TableCell>
+                    <TableCell className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer font-medium border-r border-gray-200 dark:border-gray-700">{row.order}</TableCell>
+                    <TableCell>
+                        {getStatusBadge(row.status)}
+                    </TableCell>
+                </TableRow>
+                ))
+            ) : (
+                <TableRow>
+                     <TableCell colSpan={6} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -268,7 +290,7 @@ export default function ViewOrderHistory() {
 
         {/* Pagination component */}
         <CustomPagination 
-            totalItems={tableData.length} 
+            totalItems={filteredData.length} 
             itemsPerPage={itemsPerPage} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage} 

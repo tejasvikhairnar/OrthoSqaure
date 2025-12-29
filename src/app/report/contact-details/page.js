@@ -12,12 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function ContactDetailsPage() {
   const [name, setName] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data matching the image
-  const contacts = [
+  const [contacts, setContacts] = useState([
     { id: 1, name: "APP DENTAL EQUIPMENTS", mobile: "9385854891" },
     { id: 2, name: "ORTHODENTCO", mobile: "9944223424" },
     { id: 3, name: "VINAYAGA", mobile: "7550066982" },
@@ -28,7 +32,22 @@ export default function ContactDetailsPage() {
     { id: 8, name: "Mahek", mobile: "7700011473" },
     { id: 9, name: "mamta", mobile: "9067895507" },
     { id: 10, name: "unicorn lab", mobile: "7405707611" },
-  ];
+    { id: 11, name: "Dental World", mobile: "9876543210" },
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(contacts, "Contact_Details");
+  };
+
+  // Filter Data
+  const filteredData = contacts.filter((item) =>
+    item.name.toLowerCase().includes(name.toLowerCase())
+  );
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -42,16 +61,24 @@ export default function ContactDetailsPage() {
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 items-end">
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full md:w-1/3"
-        />
+        <div className="w-full md:w-1/3">
+             <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
+            <Input
+            placeholder="Search Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+            />
+        </div>
 
         <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
           Search
         </Button>
+      </div>
+
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -65,25 +92,35 @@ export default function ContactDetailsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {contacts.map((contact, index) => (
+            {currentItems.map((contact, index) => (
               <TableRow key={contact.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{index + 1}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300 uppercase">{contact.name}</TableCell>
                 <TableCell className="dark:text-gray-300 text-right pr-12">{contact.mobile}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={3} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
 
       {/* Footer */}
       <div className="flex justify-between items-center pt-2">
-        <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
+        <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
           <FileSpreadsheet className="w-8 h-8" />
         </Button>
-        <div className="text-xs text-blue-500 hover:underline cursor-pointer">
-          12345678910... &gt;&gt;
-        </div>
+        
+        {/* Pagination component */}
+        <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
       </div>
     </div>
   );

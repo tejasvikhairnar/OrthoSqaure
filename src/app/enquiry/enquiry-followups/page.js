@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { getLeads } from "@/api/client/leads";
+import { Pagination } from "@/components/Pagination";
+
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +40,8 @@ export default function EnquiryFollowupsPage() {
     toDate: "",
   });
   const [followups, setFollowups] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(20); // Show 20 items per page
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -48,11 +54,7 @@ export default function EnquiryFollowupsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/Leads/getLeads');
-      if (!response.ok) {
-        throw new Error('Failed to fetch followups');
-      }
-      const data = await response.json();
+      const data = await getLeads({ PageSize: 1000 });
       console.log('Fetched leads data:', data);
 
       // Transform API data to followup format
@@ -151,6 +153,17 @@ export default function EnquiryFollowupsPage() {
     }
     return true;
   });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredFollowups.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredFollowups.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Action handlers
   const handleCall = (followup) => {
@@ -346,12 +359,11 @@ export default function EnquiryFollowupsPage() {
 
       {/* Followups List */}
       {!isLoading && !error && filteredFollowups.length > 0 && (
-        <Virtuoso
-          useWindowScroll
-          data={filteredFollowups}
-          itemContent={(index, followup) => (
-            <div className="pb-4">
-              <Card key={followup.srNo} className="border-gray-200 dark:border-gray-800">
+        <div className="space-y-6">
+          <div className="space-y-4">
+            {currentItems.map((followup, index) => (
+            <div key={followup.srNo} className="pb-4">
+              <Card className="border-gray-200 dark:border-gray-800">
                 <CardContent className="p-0">
                   <div className="grid grid-cols-1 lg:grid-cols-12">
                     {/* Sr. No. Column */}
@@ -516,8 +528,15 @@ export default function EnquiryFollowupsPage() {
                 </CardContent>
               </Card>
             </div>
-          )}
-        />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       )}
     </div>
   );

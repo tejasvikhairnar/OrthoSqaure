@@ -20,7 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Loader2, Settings, FileText, Search, X } from "lucide-react";
+import { Loader2, Settings, Search, X, FileSpreadsheet } from "lucide-react"; 
+import CustomPagination from "@/components/ui/custom-pagination";
 
 // Hooks
 import { useInvoices } from "@/hooks/useInvoices";
@@ -32,9 +33,12 @@ export default function ViewInvoicePage() {
     doctorName: "",
     patientName: "",
     invoiceNo: "",
-    fromDate: new Date().toISOString().split("T")[0], // Default to today
-    toDate: new Date().toISOString().split("T")[0],   // Default to today
+    fromDate: new Date().toISOString().split("T")[0], 
+    toDate: new Date().toISOString().split("T")[0],
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Fetch Data
   const { data: invoices = [], isLoading, error, refetch } = useInvoices(filters);
@@ -49,6 +53,7 @@ export default function ViewInvoicePage() {
 
   const handleSearch = () => {
     refetch();
+    setCurrentPage(1); // Reset to first page on search
   };
 
   const handleClear = () => {
@@ -60,18 +65,22 @@ export default function ViewInvoicePage() {
       fromDate: "",
       toDate: "",
     });
+    // Optional: automatic refetch on clear or wait for search
   };
 
-
+  // Client-side pagination logic (assuming API returns all data for now as per previous patterns)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = invoices.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="w-full p-4 space-y-6 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-gray-800">
         <div className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20">
-             <FileText className="w-5 h-5 text-red-600 dark:text-red-400" />
+             <Settings className="w-5 h-5 text-red-600 dark:text-red-400 animate-spin-slow" />
         </div>
-        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">
+        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
           View Invoices
         </h1>
       </div>
@@ -119,6 +128,7 @@ export default function ViewInvoicePage() {
                         {doc.name}
                         </SelectItem>
                     ))}
+                    {!doctors.length && <SelectItem value="dr-mock">Dr. Mock</SelectItem>}
                     </SelectContent>
                 </Select>
                 </div>
@@ -172,7 +182,7 @@ export default function ViewInvoicePage() {
                 <div className="flex gap-3 w-full md:w-auto">
                     <Button
                     onClick={handleSearch}
-                    className="flex-1 md:flex-none bg-primary hover:bg-primary/90 text-primary-foreground h-10 px-6 shadow-sm"
+                    className="flex-1 md:flex-none bg-[#D35400] hover:bg-[#A04000] text-white h-10 px-6 shadow-sm"
                     >
                     <Search className="w-4 h-4 mr-2" />
                     Search
@@ -187,10 +197,13 @@ export default function ViewInvoicePage() {
                     </Button>
                 </div>
             </div>
+            
+             {/* Total Count */}
+             <div className="flex justify-end pt-2">
+                 <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Records: {invoices.length}</span>
+             </div>
         </CardContent>
       </Card>
-
-
 
       {/* Table Section */}
       <Card className="border-border shadow-sm bg-card overflow-hidden">
@@ -203,38 +216,38 @@ export default function ViewInvoicePage() {
                </div>
             ) : (
             <Table>
-              <TableHeader className="bg-muted/50 dark:bg-muted/10">
-                <TableRow className="border-b border-border hover:bg-transparent">
-                  <TableHead className="font-semibold text-foreground/80 h-12">Sr. No.</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12">Invoice No.</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12">Clinic</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12">Pt. Code</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12">Patient Name</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12">Mobile</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12 text-right">Total</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12 text-right">Paid</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12 text-right">Pending</TableHead>
-                  <TableHead className="font-semibold text-foreground/80 h-12 text-center">Actions</TableHead>
+              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+                <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Sr. No.</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Clinic</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Pt. Code</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Patient Name</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Mobile</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10 text-right">Total</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10 text-right">Paid</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10 text-right">Pending</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {invoices.length > 0 ? (
-                  invoices.map((inv, index) => (
-                    <TableRow key={inv.invoiceID || index} className="border-b border-border hover:bg-muted/30 transition-colors">
-                      <TableCell className="font-medium text-muted-foreground">{index + 1}</TableCell>
-                      <TableCell className="font-medium text-primary cursor-pointer hover:underline">{inv.invoiceNo}</TableCell>
-                      <TableCell>{inv.clinicName}</TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground">{inv.patientCode}</TableCell>
-                      <TableCell className="font-medium">{inv.patientName}</TableCell>
-                      <TableCell>{inv.mobileNo}</TableCell>
-                      <TableCell className="text-right font-medium">₹{Number(inv.grandTotal).toLocaleString('en-IN')}</TableCell>
-                      <TableCell className="text-right text-green-600 dark:text-green-400">₹{Number(inv.paidAmount).toLocaleString('en-IN')}</TableCell>
-                      <TableCell className="text-right text-orange-600 dark:text-orange-400">₹{Number(inv.pendingAmount || 0).toLocaleString('en-IN')}</TableCell>
-                      <TableCell className="text-center">
+                {currentItems.length > 0 ? (
+                  currentItems.map((inv, index) => (
+                    <TableRow key={inv.invoiceID || index} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 text-xs">
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                      <TableCell className="py-2 font-medium text-[#D35400] cursor-pointer hover:underline">{inv.invoiceNo}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{inv.clinicName}</TableCell>
+                      <TableCell className="py-2 text-xs font-mono text-gray-500">{inv.patientCode}</TableCell>
+                      <TableCell className="py-2 font-medium text-gray-700 dark:text-gray-200 uppercase">{inv.patientName}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{inv.mobileNo}</TableCell>
+                      <TableCell className="py-2 text-right font-medium text-gray-700 dark:text-gray-300">₹{Number(inv.grandTotal).toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="py-2 text-right text-green-600 dark:text-green-400 font-semibold">₹{Number(inv.paidAmount).toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="py-2 text-right text-orange-600 dark:text-orange-400 font-semibold">₹{Number(inv.pendingAmount || 0).toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="py-2 text-center">
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-8 text-xs hover:bg-primary hover:text-primary-foreground border-primary/20 text-primary"
+                          className="h-7 text-xs hover:bg-[#D35400] hover:text-white border-[#D35400]/20 text-[#D35400]"
                         >
                           Print
                         </Button>
@@ -257,30 +270,25 @@ export default function ViewInvoicePage() {
             )}
           </div>
           
-          {/* Pagination Mockup */}
-          {invoices.length > 0 && (
-              <div className="flex items-center justify-end p-4 border-t border-border gap-2">
-                 <Button variant="outline" size="sm" className="h-8 w-8 p-0" disabled>
-                    &lt;
-                 </Button>
-                 <Button variant="secondary" size="sm" className="h-8 w-8 p-0 bg-primary/10 text-primary border-primary/20">
-                    1
-                 </Button>
-                 <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                    2
-                 </Button>
-                 <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                    3
-                 </Button>
-                 <span className="text-muted-foreground text-xs mx-1">...</span>
-                 <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                    10
-                 </Button>
-                 <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                    &gt;
-                 </Button>
-              </div>
-          )}
+           {/* Pagination */}
+            <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+                 <div className="hidden sm:flex w-[100px]">
+                    <span className="text-xs text-gray-500">
+                        Page {currentPage} of {Math.ceil(invoices.length / itemsPerPage)}
+                    </span>
+                 </div>
+                 <CustomPagination 
+                    totalItems={invoices.length} 
+                    itemsPerPage={itemsPerPage} 
+                    currentPage={currentPage} 
+                    onPageChange={setCurrentPage} 
+                 />
+                 <div className="flex w-[100px] justify-end">
+                    <Button variant="outline" size="sm" className="h-8 w-8 text-green-700 border-green-700 hover:bg-green-50 p-0">
+                        <FileSpreadsheet className="h-4 w-4" />
+                    </Button>
+                 </div>
+           </div>
         </CardContent>
       </Card>
     </div>

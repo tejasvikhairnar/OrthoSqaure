@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FileSpreadsheet, Settings } from "lucide-react";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function ChequeInvoicePage() {
   const [filters, setFilters] = useState({
@@ -22,8 +22,11 @@ export default function ChequeInvoicePage() {
     toPaymentDate: "",
   });
 
-  // Mock data based on the screenshot
-  const mockData = [
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Mock data
+  const [mockData, setMockData] = useState([
     { id: 1, invoiceNo: "INV173797", clinic: "Borivali", patient: "BHARAT JOSHI", bank: "Central Bank of India", branch: "DAHISAR", ifsc: "CBIN0282739", chequeNo: "771176", date: "30-Dec-2026", amount: "20000.00", clearDate: "", status: "Pending" },
     { id: 2, invoiceNo: "INV173797", clinic: "Borivali", patient: "BHARAT JOSHI", bank: "Central Bank of India", branch: "DAHISAR", ifsc: "CBIN0282739", chequeNo: "771179", date: "03-Mar-2026", amount: "20000.00", clearDate: "", status: "Pending" },
     { id: 3, invoiceNo: "INV173797", clinic: "Borivali", patient: "BHARAT JOSHI", bank: "Central Bank of India", branch: "DAHISAR", ifsc: "CBIN0282739", chequeNo: "771175", date: "30-Dec-2025", amount: "20000.00", clearDate: "", status: "Pending" },
@@ -34,7 +37,7 @@ export default function ChequeInvoicePage() {
     { id: 8, invoiceNo: "INV186017", clinic: "Dombivali East", patient: "SHWETA MHATRE", bank: "BANK OF BARODA", branch: "NILJE GURAVALI", ifsc: "BARB0NILJEX", chequeNo: "000022", date: "15-Dec-2025", amount: "25000.00", clearDate: "19-Dec-2025", status: "Cheque Clear" },
     { id: 9, invoiceNo: "INV147856", clinic: "Mysore", patient: "VEENA INNANJI", bank: "STATE BANK OF INDIA", branch: "SRIRAMPURA 2ND STAGE", ifsc: "SBIN0017797", chequeNo: "797011", date: "13-Dec-2025", amount: "10000.00", clearDate: "18-Dec-2025", status: "Cheque Clear" },
     { id: 10, invoiceNo: "GUJ001812526", clinic: "Shahibaug", patient: "Bhawarlal Doshi", bank: "icici bank", branch: "shahibaug branch", ifsc: "ICIC0000294", chequeNo: "023227", date: "13-Dec-2025", amount: "10000.00", clearDate: "15-Dec-2025", status: "Cheque Clear" },
-  ];
+  ]);
 
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({
@@ -43,10 +46,22 @@ export default function ChequeInvoicePage() {
     }));
   };
 
+   // Filter Data
+  const filteredData = mockData.filter((item) => {
+      const matchPatient = !filters.patientName || item.patient.toLowerCase().includes(filters.patientName.toLowerCase());
+      return matchPatient;
+  });
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+
   return (
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
          <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
          <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
             CHEQUE INVOICE
@@ -58,8 +73,9 @@ export default function ChequeInvoicePage() {
         
         {/* Patient Name */}
         <div className="md:col-span-3 space-y-1">
+          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Patient Name</Label>
           <Input
-             className="h-9 bg-white border-gray-300"
+             className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
              placeholder="Patient Name"
              value={filters.patientName}
              onChange={(e) => handleFilterChange("patientName", e.target.value)}
@@ -68,10 +84,10 @@ export default function ChequeInvoicePage() {
 
          {/* From Date */}
          <div className="md:col-span-3">
+           <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">From Date</Label>
           <Input
              type="date"
-             className="h-9 bg-white border-gray-300"
-             placeholder="From Payment Date"
+             className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
              value={filters.fromPaymentDate}
              onChange={(e) => handleFilterChange("fromPaymentDate", e.target.value)}
           />
@@ -79,10 +95,10 @@ export default function ChequeInvoicePage() {
 
          {/* To Date */}
          <div className="md:col-span-3">
+           <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">To Date</Label>
           <Input
              type="date"
-             className="h-9 bg-white border-gray-300"
-             placeholder="To Payment Date"
+             className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
              value={filters.toPaymentDate}
              onChange={(e) => handleFilterChange("toPaymentDate", e.target.value)}
           />
@@ -92,50 +108,60 @@ export default function ChequeInvoicePage() {
         <div className="md:col-span-3 flex gap-2">
             <Button
                 size="sm"
-                className="bg-[#C04000] hover:bg-[#A03000] text-white px-6 h-9 rounded-md"
+                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
             >
                 Search
             </Button>
         </div>
       </div>
+      
+       {/* Total Count */}
+        <div className="flex justify-end pb-2">
+          <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total : {filteredData.length}</span>
+        </div>
 
       {/* Table Section */}
-      <div className="border border-gray-200 rounded-sm overflow-hidden bg-white shadow-sm">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E6FFCC] hover:bg-[#E6FFCC]">
-                <TableRow className="border-b border-gray-100 hover:bg-[#E6FFCC]">
-                  <TableHead className="text-xs font-bold text-gray-700 h-10 w-12">Sr. No.</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Invoice No.</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Clinic Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Patient Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Bank Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Branch Name</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">IFSC</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Cheque No</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Date</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Amount</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Cheque Clear Date</TableHead>
-                  <TableHead className="text-xs font-bold text-gray-700 h-10">Status</TableHead>
+              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+                <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10 w-12">Sr. No.</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Clinic Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Patient Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Bank Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Branch Name</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">IFSC</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Cheque No</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Date</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Amount</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Cheque Clear Date</TableHead>
+                  <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {mockData.map((row, index) => (
-                    <TableRow key={row.id} className="border-b border-gray-50 hover:bg-gray-50 text-xs">
-                      <TableCell className="py-2 text-gray-600">{row.id}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.invoiceNo}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.clinic}</TableCell>
-                      <TableCell className="py-2 text-gray-600 uppercase">{row.patient}</TableCell>
-                      <TableCell className="py-2 text-gray-600 uppercase">{row.bank}</TableCell>
-                      <TableCell className="py-2 text-gray-600 uppercase">{row.branch}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.ifsc}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.chequeNo}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.date}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.amount}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.clearDate}</TableCell>
-                      <TableCell className="py-2 text-gray-600">{row.status}</TableCell>
+                {currentItems.map((row, index) => (
+                    <TableRow key={row.id} className="border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 text-xs">
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.invoiceNo}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.clinic}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.patient}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.bank}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300 uppercase">{row.branch}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.ifsc}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.chequeNo}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.date}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.amount}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.clearDate}</TableCell>
+                      <TableCell className="py-2 text-gray-600 dark:text-gray-300">{row.status}</TableCell>
                     </TableRow>
                 ))}
+                {currentItems.length === 0 && (
+                  <TableRow>
+                     <TableCell colSpan={12} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
         </div>
@@ -147,11 +173,12 @@ export default function ChequeInvoicePage() {
                 <FileSpreadsheet className="h-5 w-5" />
             </Button>
 
-            <div className="flex items-center gap-1">
-                 <Button variant="ghost" size="sm" className="h-8 text-blue-500 font-normal hover:bg-transparent px-1">
-                    12345678910...&gt;&gt;
-                 </Button>
-            </div>
+            <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+            />
        </div>
     </div>
   );

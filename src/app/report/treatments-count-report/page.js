@@ -21,16 +21,21 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function TreatmentsCountReport() {
-  const [fromDate, setFromDate] = useState("2025-12-08");
-  const [toDate, setToDate] = useState("2025-12-23");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [clinic, setClinic] = useState("");
   const [group, setGroup] = useState("");
   const [patientName, setPatientName] = useState("");
+  const [isNewPatient, setIsNewPatient] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data as per previous implementation
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
       id: 1,
       groupName: "Implant",
@@ -39,6 +44,8 @@ export default function TreatmentsCountReport() {
       patientName: "Ghanshyam Patel",
       invoiceNo: "47589",
       grandTotal: "75000.00",
+      date: "2025-12-15",
+      isNew: false
     },
     {
       id: 2,
@@ -48,6 +55,8 @@ export default function TreatmentsCountReport() {
       patientName: "Mahesh patel",
       invoiceNo: "47513",
       grandTotal: "75000.00",
+      date: "2025-12-16",
+      isNew: true
     },
     {
       id: 3,
@@ -57,6 +66,8 @@ export default function TreatmentsCountReport() {
       patientName: "Pallavi Naykodi",
       invoiceNo: "185090",
       grandTotal: "200.00",
+      date: "2025-12-18",
+      isNew: false
     },
     {
       id: 4,
@@ -66,6 +77,8 @@ export default function TreatmentsCountReport() {
       patientName: "Sahil Sayyed",
       invoiceNo: "165089",
       grandTotal: "18000.00",
+      date: "2025-12-20",
+      isNew: true
     },
     {
       id: 5,
@@ -75,6 +88,8 @@ export default function TreatmentsCountReport() {
       patientName: "pratiksha sontakke",
       invoiceNo: "165088",
       grandTotal: "2400.00",
+      date: "2025-12-21",
+      isNew: false
     },
     {
       id: 6,
@@ -84,6 +99,8 @@ export default function TreatmentsCountReport() {
       patientName: "amar g khandare",
       invoiceNo: "185087",
       grandTotal: "20000.00",
+      date: "2025-12-22",
+      isNew: false
     },
     {
       id: 7,
@@ -93,6 +110,8 @@ export default function TreatmentsCountReport() {
       patientName: "Om Baraskar",
       invoiceNo: "165086",
       grandTotal: "1000.00",
+      date: "2025-12-23",
+      isNew: false
     },
     {
       id: 8,
@@ -102,6 +121,8 @@ export default function TreatmentsCountReport() {
       patientName: "Om Baraskar",
       invoiceNo: "185085",
       grandTotal: "20000.00",
+      date: "2025-12-23",
+      isNew: false
     },
     {
       id: 9,
@@ -111,6 +132,8 @@ export default function TreatmentsCountReport() {
       patientName: "Lalit Nagvekar",
       invoiceNo: "165084",
       grandTotal: "4000.00",
+      date: "2025-12-23",
+      isNew: false
     },
     {
       id: 10,
@@ -120,8 +143,36 @@ export default function TreatmentsCountReport() {
       patientName: "Gilroy DSouza",
       invoiceNo: "185083",
       grandTotal: "100000.00",
+      date: "2025-12-23",
+      isNew: false
     },
-  ];
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(tableData, "Treatments_Count_Report");
+  };
+
+   // Filter Data
+   const filteredData = tableData.filter((item) => {
+    const matchesClinic = !clinic || clinic === "all" || item.clinicName.toLowerCase().includes(clinic.toLowerCase());
+    const matchesGroup = !group || group === "all" || item.groupName.toLowerCase() === group.toLowerCase();
+    const matchesPatient = item.patientName.toLowerCase().includes(patientName.toLowerCase());
+    const matchesNewPatient = !isNewPatient || item.isNew === true; // If checked, only show new.
+
+    let matchesDate = true;
+    if (fromDate) matchesDate = matchesDate && new Date(item.date) >= new Date(fromDate);
+    if (toDate) matchesDate = matchesDate && new Date(item.date) <= new Date(toDate);
+
+    return matchesClinic && matchesGroup && matchesPatient && matchesDate && matchesNewPatient;
+  });
+
+  const totalAmount = filteredData.reduce((acc, curr) => acc + parseFloat(curr.grandTotal || 0), 0).toFixed(2);
+
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -143,6 +194,8 @@ export default function TreatmentsCountReport() {
             <SelectContent>
               <SelectItem value="all">All Clinics</SelectItem>
               <SelectItem value="vile-parle">Vile-Parle east</SelectItem>
+               <SelectItem value="GHATKOPAR East">GHATKOPAR East</SelectItem>
+               <SelectItem value="Thane West (RamMarutiRoad)">Thane West</SelectItem>
             </SelectContent>
           </Select>
 
@@ -153,6 +206,8 @@ export default function TreatmentsCountReport() {
             <SelectContent>
               <SelectItem value="all">All Groups</SelectItem>
               <SelectItem value="implant">Implant</SelectItem>
+               <SelectItem value="general">General</SelectItem>
+               <SelectItem value="braces">Braces</SelectItem>
             </SelectContent>
           </Select>
 
@@ -164,7 +219,7 @@ export default function TreatmentsCountReport() {
           />
 
           <div className="flex items-center space-x-2">
-            <Checkbox id="newPatients" />
+            <Checkbox id="newPatients" checked={isNewPatient} onCheckedChange={setIsNewPatient} />
             <Label htmlFor="newPatients" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-gray-300">
               New Patients
             </Label>
@@ -175,6 +230,7 @@ export default function TreatmentsCountReport() {
             <div className="flex-1 max-w-xs">
                 <Input
                     type="date"
+                    placeholder="From Date"
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -183,6 +239,7 @@ export default function TreatmentsCountReport() {
             <div className="flex-1 max-w-xs">
                  <Input
                     type="date"
+                    placeholder="To Date"
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -198,10 +255,10 @@ export default function TreatmentsCountReport() {
        {/* Summary Details */}
          <div className="flex flex-col md:flex-row justify-between items-center text-sm font-medium pt-2 px-1 text-gray-700 dark:text-gray-300">
             <div>
-                <span>Total Count : <span className="font-bold text-black dark:text-white">1327</span></span>
+                <span>Total Count : <span className="font-bold text-black dark:text-white">{filteredData.length}</span></span>
             </div>
             <div>
-                 <span>Grand Total: <span className="font-bold text-black dark:text-white">28609172.50</span></span>
+                 <span>Grand Total: <span className="font-bold text-black dark:text-white">{totalAmount}</span></span>
             </div>
         </div>
 
@@ -220,9 +277,9 @@ export default function TreatmentsCountReport() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableData.map((row) => (
+            {currentItems.map((row, index) => (
               <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{row.id}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.groupName}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.clinicName}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.patientCode}</TableCell>
@@ -231,6 +288,11 @@ export default function TreatmentsCountReport() {
                 <TableCell className="text-right dark:text-gray-300">{row.grandTotal}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={7} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -238,19 +300,17 @@ export default function TreatmentsCountReport() {
        {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
          {/* Excel Export Icon */}
-          <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
+          <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
               <FileSpreadsheet className="w-6 h-6" />
          </Button>
 
 
-          <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <span key={num} className="cursor-pointer hover:underline p-1">
-                {num}
-              </span>
-            ))}
-            <span className="cursor-pointer hover:underline p-1">... &gt;&gt;</span>
-          </div>
+         <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
         </div>
     </div>
   );

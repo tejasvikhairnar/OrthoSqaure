@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function RevenueReport() {
   const [fromDate, setFromDate] = useState("");
@@ -28,14 +30,17 @@ export default function RevenueReport() {
   const [clinic, setClinic] = useState("");
   const [group, setGroup] = useState("");
   const [patientName, setPatientName] = useState("");
+  const [isNewPatient, setIsNewPatient] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data matching the image
-  const tableData = [
+  const [reportData, setReportData] = useState([
     {
       id: 1,
       invoiceNo: "88332",
       paidAmount: "13333.00",
-      paidDate: "31-03-2024 00:00:00",
+      paidDate: "2024-03-31",
       patientName: "DORASWAMY NAIDU",
       clinicName: "Andheri East (takshila)",
       model: "Lite",
@@ -44,12 +49,13 @@ export default function RevenueReport() {
       designation: "",
       treatmentName: "DENTAL IMPLANTS - OSSTEM",
       groupName: "Implant",
+      isNew: false
     },
     {
       id: 2,
       invoiceNo: "88332",
       paidAmount: "1905.00",
-      paidDate: "31-03-2024 00:00:00",
+      paidDate: "2024-03-31",
       patientName: "DORASWAMY NAIDU",
       clinicName: "Andheri East (takshila)",
       model: "Lite",
@@ -58,12 +64,13 @@ export default function RevenueReport() {
       designation: "",
       treatmentName: "ROOT CANAL - HAND-POST",
       groupName: "General",
+      isNew: false
     },
     {
       id: 3,
       invoiceNo: "88332",
       paidAmount: "4762.00",
-      paidDate: "31-03-2024 00:00:00",
+      paidDate: "2024-03-31",
       patientName: "DORASWAMY NAIDU",
       clinicName: "Andheri East (takshila)",
       model: "Lite",
@@ -72,106 +79,65 @@ export default function RevenueReport() {
       designation: "",
       treatmentName: "CROWN - PFM",
       groupName: "General",
+      isNew: false
     },
     {
-      id: 4,
-      invoiceNo: "88332",
-      paidAmount: "3333.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "DORASWAMY NAIDU",
-      clinicName: "Andheri East (takshila)",
-      model: "Lite",
-      state: "Maharashtra",
-      doctorName: "Dr.isha jain",
-      designation: "",
-      treatmentName: "DENTAL IMPLANTS - OSSTEM",
-      groupName: "Implant",
-    },
-    {
-      id: 5,
-      invoiceNo: "88332",
-      paidAmount: "476.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "DORASWAMY NAIDU",
-      clinicName: "Andheri East (takshila)",
-      model: "Lite",
-      state: "Maharashtra",
-      doctorName: "Dr.isha jain",
-      designation: "",
-      treatmentName: "ROOT CANAL - HAND-POST",
-      groupName: "General",
-    },
-    {
-      id: 6,
-      invoiceNo: "88332",
-      paidAmount: "1190.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "DORASWAMY NAIDU",
-      clinicName: "Andheri East (takshila)",
-      model: "Lite",
-      state: "Maharashtra",
-      doctorName: "Dr.isha jain",
-      designation: "",
-      treatmentName: "CROWN - PFM",
-      groupName: "General",
-    },
-    {
-      id: 7,
-      invoiceNo: "90495",
-      paidAmount: "86667.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "giridhar bhagat",
-      clinicName: "BADLAPUR",
-      model: "Premium",
-      state: "Maharashtra",
-      doctorName: "Dr.Kunal Shet",
-      designation: "",
-      treatmentName: "DENTAL IMPLANTS - BIOLINE",
-      groupName: "Implant",
-    },
-    {
-      id: 8,
-      invoiceNo: "90508",
-      paidAmount: "2000.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "PARINA DESAI",
-      clinicName: "Vile-Parle east",
-      model: "Exclusive",
-      state: "Maharashtra",
-      doctorName: "Dr.isha jain",
-      designation: "",
-      treatmentName: "CROWN - PFM",
-      groupName: "General",
-    },
-    {
-      id: 9,
-      invoiceNo: "90508",
-      paidAmount: "3000.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "PARINA DESAI",
-      clinicName: "Vile-Parle east",
-      model: "Exclusive",
-      state: "Maharashtra",
-      doctorName: "Dr.isha jain",
-      designation: "",
-      treatmentName: "CROWN - PFM",
-      groupName: "General",
-    },
-    {
-      id: 10,
-      invoiceNo: "90518",
-      paidAmount: "1000.00",
-      paidDate: "31-03-2024 00:00:00",
-      patientName: "Mangal Honure",
-      clinicName: "Market Yard",
-      model: "Exclusive",
-      state: "Maharashtra",
-      doctorName: "Dr.Divya Navsariwala",
-      designation: "",
-      treatmentName: "ROOT CANAL - HAND-ANT",
-      groupName: "General",
-    },
-  ];
+        id: 4,
+        invoiceNo: "90495",
+        paidAmount: "86667.00",
+        paidDate: "2024-03-31",
+        patientName: "giridhar bhagat",
+        clinicName: "BADLAPUR",
+        model: "Premium",
+        state: "Maharashtra",
+        doctorName: "Dr.Kunal Shet",
+        designation: "",
+        treatmentName: "DENTAL IMPLANTS - BIOLINE",
+        groupName: "Implant",
+        isNew: true
+      },
+       {
+        id: 5,
+        invoiceNo: "90508",
+        paidAmount: "2000.00",
+        paidDate: "2024-03-31",
+        patientName: "PARINA DESAI",
+        clinicName: "Vile-Parle east",
+        model: "Exclusive",
+        state: "Maharashtra",
+        doctorName: "Dr.isha jain",
+        designation: "",
+        treatmentName: "CROWN - PFM",
+        groupName: "General",
+        isNew: false
+      },
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(reportData, "Revenue_Report");
+  };
+
+   // Filter Data
+  const filteredData = reportData.filter((item) => {
+      const matchesClinic = !clinic || clinic === "all" || item.clinicName === clinic;
+      const matchesGroup = !group || group === "all" || item.groupName === group;
+      const matchesPatient = item.patientName.toLowerCase().includes(patientName.toLowerCase());
+      const matchesNewPatient = !isNewPatient || item.isNew === true; // If checked, only show new. If unchecked, show all (or could differ depending on use case) - assume unchecked = all.
+      
+      let matchesDate = true;
+      if (fromDate) matchesDate = matchesDate && new Date(item.paidDate) >= new Date(fromDate);
+      if (toDate) matchesDate = matchesDate && new Date(item.paidDate) <= new Date(toDate);
+
+      return matchesClinic && matchesGroup && matchesPatient && matchesDate && matchesNewPatient;
+  });
+
+  const totalAmount = filteredData.reduce((acc, curr) => acc + parseFloat(curr.paidAmount || 0), 0).toFixed(2);
+
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -192,7 +158,9 @@ export default function RevenueReport() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Clinics</SelectItem>
-              <SelectItem value="clinic1">Clinic 1</SelectItem>
+              <SelectItem value="Andheri East (takshila)">Andheri East (takshila)</SelectItem>
+              <SelectItem value="BADLAPUR">BADLAPUR</SelectItem>
+              <SelectItem value="Vile-Parle east">Vile-Parle east</SelectItem>
             </SelectContent>
           </Select>
 
@@ -202,7 +170,8 @@ export default function RevenueReport() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Groups</SelectItem>
-              <SelectItem value="group1">Group 1</SelectItem>
+              <SelectItem value="Implant">Implant</SelectItem>
+               <SelectItem value="General">General</SelectItem>
             </SelectContent>
           </Select>
 
@@ -214,7 +183,7 @@ export default function RevenueReport() {
           />
 
            <div className="flex items-center space-x-2">
-            <Checkbox id="newPatients" />
+            <Checkbox id="newPatients" checked={isNewPatient} onCheckedChange={setIsNewPatient} />
             <Label htmlFor="newPatients" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-gray-300">
               New Patients
             </Label>
@@ -224,10 +193,8 @@ export default function RevenueReport() {
         <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="flex-1 max-w-xs">
                 <Input
-                    type="text"
+                    type="date"
                     placeholder="From Date"
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -235,10 +202,8 @@ export default function RevenueReport() {
             </div>
             <div className="flex-1 max-w-xs">
                  <Input
-                    type="text"
+                    type="date"
                     placeholder="To Date"
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -254,10 +219,10 @@ export default function RevenueReport() {
        {/* Summary Details */}
        <div className="flex flex-col md:flex-row justify-between items-center text-sm font-medium pt-2 px-1 text-gray-700 dark:text-gray-300">
             <div>
-                <span>Total Count : <span className="font-bold text-black dark:text-white">4015</span></span>
+                <span>Total Count : <span className="font-bold text-black dark:text-white">{filteredData.length}</span></span>
             </div>
             <div>
-                 <span>Grand Total: <span className="font-bold text-black dark:text-white">40741888.00</span></span>
+                 <span>Grand Total: <span className="font-bold text-black dark:text-white">{totalAmount}</span></span>
             </div>
         </div>
 
@@ -281,9 +246,9 @@ export default function RevenueReport() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableData.map((row) => (
+            {currentItems.map((row, index) => (
               <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{row.id}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.invoiceNo}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.paidAmount}</TableCell>
                 <TableCell className="dark:text-gray-300 whitespace-nowrap">{row.paidDate}</TableCell>
@@ -297,6 +262,11 @@ export default function RevenueReport() {
                 <TableCell className="dark:text-gray-300">{row.groupName}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={12} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -304,18 +274,17 @@ export default function RevenueReport() {
        {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
          {/* Excel Export Icon */}
-         <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
+         <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
               <FileSpreadsheet className="w-6 h-6" />
          </Button>
 
-          <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <span key={num} className="cursor-pointer hover:underline p-1">
-                {num}
-              </span>
-            ))}
-            <span className="cursor-pointer hover:underline p-1">... &gt;&gt;</span>
-          </div>
+         {/* Pagination component */}
+          <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
         </div>
     </div>
   );

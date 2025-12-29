@@ -19,15 +19,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { exportToExcel } from "@/utils/exportToExcel";
+import CustomPagination from "@/components/ui/custom-pagination";
 
 export default function TransactionReport() {
-  const [fromDate, setFromDate] = useState("2025-12-22");
-  const [toDate, setToDate] = useState("2025-12-23");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [clinic, setClinic] = useState("");
   const [patient, setPatient] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Mock data matching the image
-  const tableData = [
+  const [tableData, setTableData] = useState([
     {
       id: 1,
       invoiceNo: "MAH008112526",
@@ -36,7 +40,7 @@ export default function TransactionReport() {
       age: "0",
       paidAmount: "2,400.00",
       paymentMode: "UPI",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "COMPOSITE RESIN RESTORATION-G1",
       groupName: "General",
     },
@@ -48,7 +52,7 @@ export default function TransactionReport() {
       age: "35",
       paidAmount: "18,000.00",
       paymentMode: "FIBE",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "CROWN - Z-5YW",
       groupName: "General",
     },
@@ -60,7 +64,7 @@ export default function TransactionReport() {
       age: "22",
       paidAmount: "5,000.00",
       paymentMode: "UPI",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "DENTAL IMPLANTS - NR-LINE",
       groupName: "Implant",
     },
@@ -72,7 +76,7 @@ export default function TransactionReport() {
       age: "27",
       paidAmount: "5,000.00",
       paymentMode: "Cash",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "ALIGNER - EXCLUSIVE",
       groupName: "Damon",
     },
@@ -84,7 +88,7 @@ export default function TransactionReport() {
       age: "0",
       paidAmount: "2,000.00",
       paymentMode: "Cash",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "CERAMIC BRACES - CLASSIC",
       groupName: "Braces",
     },
@@ -96,7 +100,7 @@ export default function TransactionReport() {
       age: "32",
       paidAmount: "30,000.00",
       paymentMode: "UPI",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "ALIGNER-PREMIUM",
       groupName: "Damon",
     },
@@ -108,7 +112,7 @@ export default function TransactionReport() {
       age: "21",
       paidAmount: "100.00",
       paymentMode: "UPI",
-      paidDate: "23-12-2025",
+      paidDate: "2025-12-23",
       treatmentName: "Consultation Charges",
       groupName: "General",
     },
@@ -120,35 +124,40 @@ export default function TransactionReport() {
       age: "29",
       paidAmount: "500.00",
       paymentMode: "UPI",
-      paidDate: "22-12-2025",
+      paidDate: "2025-12-22",
       treatmentName: "Consultation Charges",
       groupName: "General",
     },
-    {
-      id: 9,
-      invoiceNo: "INV194156",
-      clinicName: "Kalyan",
-      patientName: "Kavita Ghodke",
-      age: "48",
-      paidAmount: "450.00",
-      paymentMode: "UPI",
-      paidDate: "22-12-2025",
-      treatmentName: "Consultation Charges",
-      groupName: "General",
-    },
-    {
-      id: 10,
-      invoiceNo: "INV194182",
-      clinicName: "Margao",
-      patientName: "Aylon Fernandes",
-      age: "40",
-      paidAmount: "2,850.00",
-      paymentMode: "Cash",
-      paidDate: "22-12-2025",
-      treatmentName: "Consultation Charges",
-      groupName: "General",
-    },
-  ];
+  ]);
+
+  const handleExport = () => {
+    exportToExcel(tableData, "Transaction_Report");
+  };
+
+   // Filter Data
+   const filteredData = tableData.filter((item) => {
+    const matchesClinic = !clinic || clinic === "all" || item.clinicName.toLowerCase().includes(clinic.toLowerCase());
+    const matchesPatient = item.patientName.toLowerCase().includes(patient.toLowerCase());
+    
+    let matchesDate = true;
+    if (fromDate) matchesDate = matchesDate && new Date(item.paidDate) >= new Date(fromDate);
+    if (toDate) matchesDate = matchesDate && new Date(item.paidDate) <= new Date(toDate);
+
+    return matchesClinic && matchesPatient && matchesDate;
+});
+
+const handleClear = () => {
+    setClinic("");
+    setPatient("");
+    setFromDate("");
+    setToDate("");
+    setCurrentPage(1);
+}
+
+// Pagination Logic
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
@@ -171,7 +180,9 @@ export default function TransactionReport() {
                     </SelectTrigger>
                     <SelectContent>
                     <SelectItem value="all">All Clinics</SelectItem>
-                    <SelectItem value="clinic1">Clinic 1</SelectItem>
+                    <SelectItem value="dhanori">Dhanori</SelectItem>
+                     <SelectItem value="MANGALORE">Mangalore</SelectItem>
+                     <SelectItem value="Camp.pune">Camp Pune</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -189,10 +200,8 @@ export default function TransactionReport() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
             <div>
                  <Input
-                    type="text"
+                    type="date"
                     placeholder="From Date"
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
                     value={fromDate}
                     onChange={(e) => setFromDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
@@ -200,24 +209,27 @@ export default function TransactionReport() {
             </div>
             <div>
                  <Input
-                    type="text"
+                    type="date"
                     placeholder="To Date"
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
                 />
             </div>
             <div className="flex gap-2">
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all">
+                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all" onClick={() => setCurrentPage(1)}>
                     Search
                 </Button>
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all">
+                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all" onClick={handleClear}>
                     Clear
                 </Button>
             </div>
         </div>
+      </div>
+
+       {/* Total Count */}
+       <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
+        Total : {filteredData.length}
       </div>
 
       {/* Table */}
@@ -238,9 +250,9 @@ export default function TransactionReport() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableData.map((row) => (
+            {currentItems.map((row, index) => (
               <TableRow key={row.id} className="border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800/50">
-                <TableCell className="dark:text-gray-300">{row.id}</TableCell>
+                <TableCell className="dark:text-gray-300">{indexOfFirstItem + index + 1}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.invoiceNo}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.clinicName}</TableCell>
                 <TableCell className="dark:text-gray-300">{row.patientName}</TableCell>
@@ -252,6 +264,11 @@ export default function TransactionReport() {
                 <TableCell className="dark:text-gray-300">{row.groupName}</TableCell>
               </TableRow>
             ))}
+             {currentItems.length === 0 && (
+              <TableRow>
+                 <TableCell colSpan={10} className="text-center py-4 text-gray-500">No matching records found</TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -259,18 +276,17 @@ export default function TransactionReport() {
        {/* Footer / Pagination */}
        <div className="flex justify-between items-center pt-2">
          {/* Excel Export Icon */}
-         <Button variant="ghost" size="icon" className="text-green-600 hover:text-green-700">
+         <Button variant="ghost" size="icon" onClick={handleExport} className="text-green-600 hover:text-green-700">
               <FileSpreadsheet className="w-6 h-6" />
          </Button>
 
-          <div className="flex gap-2 text-sm text-blue-600 dark:text-blue-400">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <span key={num} className="cursor-pointer hover:underline p-1">
-                {num}
-              </span>
-            ))}
-            <span className="cursor-pointer hover:underline p-1">... &gt;&gt;</span>
-          </div>
+          {/* Pagination component */}
+          <CustomPagination 
+            totalItems={filteredData.length} 
+            itemsPerPage={itemsPerPage} 
+            currentPage={currentPage} 
+            onPageChange={setCurrentPage} 
+        />
         </div>
     </div>
   );

@@ -11,8 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Settings } from "lucide-react";
+import { Settings, CreditCard, User, Calendar, Stethoscope } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function GenerateInvoicePage() {
   const [formData, setFormData] = useState({
@@ -33,118 +34,152 @@ export default function GenerateInvoicePage() {
   return (
     <div className="w-full p-6 space-y-8 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
+      <div className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+        <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+             <Settings className="w-6 h-6 text-red-500 animate-spin-slow" />
+        </div>
         <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
           GENERATE INVOICE
         </h1>
       </div>
 
-      {/* Form Section */}
-      <div className="space-y-6">
-        {/* Row 1: Inputs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Patient Name */}
-          <div className="space-y-2">
-            <Label className="text-xs font-semibold text-gray-700">Patient Name</Label>
-            <Input
-              className="h-10 bg-white border-gray-300"
-              placeholder="Patient Name"
-              value={formData.patientName}
-              onChange={(e) => handleInputChange("patientName", e.target.value)}
-            />
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Form Section */}
+        <div className="lg:col-span-2 space-y-6">
+            <Card className="border border-gray-200 shadow-sm bg-white dark:bg-gray-800">
+                <CardContent className="p-6 space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Patient Name */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                <User className="w-4 h-4 text-gray-500" /> Patient Name
+                            </Label>
+                            <Input
+                            className="h-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-red-500 focus:border-red-500"
+                            placeholder="Enter patient name"
+                            value={formData.patientName}
+                            onChange={(e) => handleInputChange("patientName", e.target.value)}
+                            />
+                        </div>
 
-          {/* Clinic Name */}
-          <div className="space-y-2">
-            <Label className="text-xs font-semibold text-gray-700">Clinic Name</Label>
-            <Select
-              value={formData.clinicName}
-              onValueChange={(val) => handleInputChange("clinicName", val)}
-            >
-              <SelectTrigger className="h-10 bg-white border-gray-300">
-                <SelectValue placeholder="-- Select Clinic --" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dehradun">Dehradun</SelectItem>
-                <SelectItem value="mumabi">Mumbai</SelectItem>
-                <SelectItem value="pune">Pune</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                         {/* Payment Date */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                <Calendar className="w-4 h-4 text-gray-500" /> Payment Date
+                            </Label>
+                            <Input
+                            type="date"
+                            className="h-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-red-500 focus:border-red-500"
+                            value={formData.paymentDate}
+                            onChange={(e) => handleInputChange("paymentDate", e.target.value)}
+                            />
+                        </div>
 
-          {/* Doctor Name */}
-          <div className="space-y-2">
-            <Label className="text-xs font-semibold text-gray-700">Doctor Name</Label>
-            <Select
-              value={formData.doctorName}
-              onValueChange={(val) => handleInputChange("doctorName", val)}
-            >
-              <SelectTrigger className="h-10 bg-white border-gray-300">
-                <SelectValue placeholder="--- Select ---" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="dr-smith">Dr. Smith</SelectItem>
-                <SelectItem value="dr-jones">Dr. Jones</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+                        {/* Clinic Name */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                <Stethoscope className="w-4 h-4 text-gray-500" /> Clinic Name
+                            </Label>
+                            <Select
+                            value={formData.clinicName}
+                            onValueChange={(val) => handleInputChange("clinicName", val)}
+                            >
+                            <SelectTrigger className="h-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-red-500 focus:border-red-500">
+                                <SelectValue placeholder="Select Clinic" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="dehradun">Dehradun</SelectItem>
+                                <SelectItem value="mumabi">Mumbai</SelectItem>
+                                <SelectItem value="pune">Pune</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
 
-          {/* Payment Date */}
-          <div className="space-y-2">
-            <Label className="text-xs font-semibold text-gray-700">Payment Date</Label>
-            <Input
-              type="date"
-              className="h-10 bg-slate-100 border-gray-300" 
-              value={formData.paymentDate}
-              onChange={(e) => handleInputChange("paymentDate", e.target.value)}
-            />
-          </div>
+                        {/* Doctor Name */}
+                        <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                                <User className="w-4 h-4 text-gray-500" /> Doctor Name
+                            </Label>
+                            <Select
+                            value={formData.doctorName}
+                            onValueChange={(val) => handleInputChange("doctorName", val)}
+                            >
+                            <SelectTrigger className="h-10 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-red-500 focus:border-red-500">
+                                <SelectValue placeholder="Select Doctor" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="dr-smith">Dr. Smith</SelectItem>
+                                <SelectItem value="dr-jones">Dr. Jones</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+
+                    {/* Treatment Type */}
+                    <div className="space-y-3 pt-2">
+                       <Label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                            <CreditCard className="w-4 h-4 text-gray-500" /> Treatment Type
+                       </Label>
+                       <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                            <RadioGroup 
+                                    defaultValue="Other" 
+                                    className="flex items-center gap-8"
+                                    onValueChange={(val) => handleInputChange("treatmentType", val)}
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="Aligner" id="r1" className="text-red-500 border-gray-400" />
+                                        <Label htmlFor="r1" className="font-medium text-gray-700 dark:text-gray-300 cursor-pointer">Aligner</Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="Other" id="r2" className="text-red-500 border-gray-400" />
+                                        <Label htmlFor="r2" className="font-medium text-gray-700 dark:text-gray-300 cursor-pointer">Other</Label>
+                                    </div>
+                                </RadioGroup>
+                       </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
 
-        {/* Row 2: Treatment Type */}
-        <div className="space-y-2">
-           <Label className="text-xs font-semibold text-gray-700">Treatment Type</Label>
-           <RadioGroup 
-                defaultValue="Other" 
-                className="flex items-center gap-6"
-                onValueChange={(val) => handleInputChange("treatmentType", val)}
-            >
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Aligner" id="r1" className="text-blue-600 border-gray-400" />
-                    <Label htmlFor="r1" className="font-normal text-gray-700">Aligner</Label>
+        {/* Summary / Totals Section */}
+        <div className="lg:col-span-1 space-y-6">
+            <Card className="bg-[#E8F8F5] dark:bg-gray-800 border-none shadow-sm relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-5">
+                    <CreditCard className="w-24 h-24 text-teal-900" />
                 </div>
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="Other" id="r2" className="text-blue-600 border-blue-600" />
-                    <Label htmlFor="r2" className="font-normal text-gray-700">Other</Label>
-                </div>
-            </RadioGroup>
+                <CardContent className="p-6 space-y-6 relative z-10">
+                   <h3 className="text-lg font-bold text-teal-800 dark:text-teal-400 border-b border-teal-200 dark:border-teal-900 pb-2 mb-4">Invoice Summary</h3>
+                   
+                   <div className="space-y-4">
+                        <div className="flex justify-between items-center text-teal-900 dark:text-gray-300 text-sm font-medium">
+                            <span>Total Cost</span>
+                            <span className="font-mono text-base">₹ 0.00</span>
+                        </div>
+                        <div className="flex justify-between items-center text-teal-900 dark:text-gray-300 text-sm font-medium">
+                            <span>Total Discount</span>
+                            <span className="font-mono text-red-600 dark:text-red-400 text-base">- ₹ 0.00</span>
+                        </div>
+                         <div className="flex justify-between items-center text-teal-900 dark:text-gray-300 text-sm font-medium">
+                            <span>Total Tax (18%)</span>
+                            <span className="font-mono text-base">₹ 0.00</span>
+                        </div>
+                   </div>
+
+                   <div className="pt-4 border-t border-teal-200 dark:border-teal-900 mt-4">
+                        <div className="flex justify-between items-end">
+                            <span className="text-sm font-bold text-teal-900 dark:text-gray-100 uppercase tracking-wider">Grand Total</span>
+                            <span className="text-3xl font-bold text-teal-700 dark:text-teal-400">₹ 0.00</span>
+                        </div>
+                   </div>
+
+                   <Button 
+                        className="w-full bg-[#D35400] hover:bg-[#A04000] text-white font-bold py-3 mt-6 shadow-md transition-all active:scale-95"
+                    >
+                        GENERATE INVOICE
+                    </Button>
+                </CardContent>
+            </Card>
         </div>
-      </div>
-
-      {/* Totals Section */}
-      <div className="grid grid-cols-4 gap-4 py-8">
-           <div>
-               <p className="text-xs font-semibold text-gray-600 uppercase">TOTAL COST (₹)</p>
-           </div>
-           <div>
-               <p className="text-xs font-semibold text-gray-600 uppercase">TOTAL DISCOUNT (₹)</p>
-           </div>
-           <div>
-               <p className="text-xs font-semibold text-gray-600 uppercase">TOTAL TAX (₹)</p>
-           </div>
-           <div>
-               <p className="text-xs font-semibold text-gray-600 uppercase">GRAND TOTAL(₹)</p>
-           </div>
-      </div>
-
-      {/* Footer / Submit Button */}
-      <div className="flex justify-center pt-4 border-t border-gray-100 bg-gray-50/50 -mx-6 px-6 pb-6">
-        <Button 
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-2 h-10 rounded shadow-sm"
-        >
-            Submit
-        </Button>
       </div>
     </div>
   );
