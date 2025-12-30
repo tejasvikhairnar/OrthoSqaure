@@ -1,0 +1,22 @@
+
+> medivardaan-app@1.0.0 build D:\Ortho-Square\OrthoSquare
+> next build
+
+   ▲ Next.js 16.0.8 (Turbopack)
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 43s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+   Generating static pages using 7 workers (0/118) ...
+   Generating static pages using 7 workers (29/118) 
+   Generating static pages using 7 workers (58/118) 
+   Generating static pages using 7 workers (88/118) 
+Error occurred prerendering page "/user-settings/area-manager". Read more: https://nextjs.org/docs/messages/prerender-error
+ReferenceError: MapPin is not defined
+    at <unknown> (D:\Ortho-Square\OrthoSquare\.next\server\chunks\ssr\_6048a4e9._.js:5:4092) {
+  digest: '1737218857'
+}
+Export encountered an error on /user-settings/area-manager/page: /user-settings/area-manager, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.
