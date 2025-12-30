@@ -80,73 +80,57 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-[#f0fdfa] via-white to-[#f0f9ff] p-4">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-[#0f7396]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#14b8a6]/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-[#0f7396]/3 to-[#14b8a6]/3 rounded-full blur-3xl"></div>
-      </div>
-
-      <Card className="w-full max-w-md relative z-10 border border-slate-100 shadow-2xl shadow-slate-300/50 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden">
-        {/* Decorative Top Border */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0f7396] via-[#14b8a6] to-[#0f7396]"></div>
-
-        <CardHeader className="space-y-6 pb-6 pt-10 px-8 text-center">
-          {/* Logo with Background Circle */}
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <Card className="w-full max-w-md shadow-lg border-slate-200 bg-white">
+        <CardHeader className="space-y-6 pb-6 text-center">
+          {/* Logo */}
           <div className="flex justify-center">
-            <div className="relative w-36 h-36">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0f7396]/10 to-[#14b8a6]/10 rounded-full blur-xl"></div>
-              <div className="relative bg-white rounded-full p-6 shadow-lg w-full h-full flex items-center justify-center">
-                <Image
-                  src="/orthosquare-logo.png"
-                  width={100}
-                  height={50}
-                  alt="OrthoSquare Logo"
-                  className="object-contain"
-                />
-              </div>
+            <div className="w-28 h-28 bg-white rounded-full shadow-md flex items-center justify-center border border-slate-100">
+              <Image
+                src="/orthosquare-logo.png"
+                width={90}
+                height={45}
+                alt="OrthoSquare Logo"
+                className="object-contain"
+              />
             </div>
           </div>
 
-          <div className="space-y-3">
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-[#0f7396] to-[#14b8a6] bg-clip-text text-transparent">
+          <div className="space-y-2">
+            <CardTitle className="text-2xl font-bold text-slate-900">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-base text-slate-600">
+            <CardDescription className="text-slate-600">
               Sign in to access your OrthoSquare account
             </CardDescription>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6 px-8 pb-8">
-          <form onSubmit={handleSignIn} className="space-y-5">
+        <CardContent className="space-y-6">
+          <form onSubmit={handleSignIn} className="space-y-4">
             {/* Error Alert */}
             {loginError && (
-              <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-red-50 to-red-50/50 border border-red-200 rounded-2xl text-red-700 animate-in slide-in-from-top-2 duration-300 shadow-sm">
-                <div className="mt-0.5 p-1 bg-red-100 rounded-full">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                </div>
-                <p className="text-sm leading-relaxed">{loginError}</p>
+              <div className="flex items-start gap-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                <p className="text-sm">{loginError}</p>
               </div>
             )}
 
             {/* Username Field */}
-            <div className="space-y-2.5">
-              <Label htmlFor="username" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <User size={16} className="text-[#0f7396]" />
+            <div className="space-y-2">
+              <Label htmlFor="username" className="text-sm font-medium text-slate-700">
                 Username
               </Label>
-              <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#0f7396] transition-all duration-300">
-                  <User size={20} />
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <User size={18} />
                 </div>
                 <Input
                   id="username"
                   type="text"
                   placeholder="Enter your username"
-                  className={`pl-12 h-13 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-[#0f7396] focus:ring-4 focus:ring-[#0f7396]/10 transition-all duration-300 text-base shadow-sm ${
-                    errors.UserId ? "border-red-300 focus:border-red-500 focus:ring-red-500/20" : ""
+                  className={`pl-10 h-11 border-slate-300 focus:border-[#0f7396] focus:ring-2 focus:ring-[#0f7396]/20 ${
+                    errors.UserId ? "border-red-300" : ""
                   }`}
                   value={form.UserId}
                   onChange={(e) => handleInputChange("UserId", e.target.value)}
@@ -154,7 +138,7 @@ export default function LoginPage() {
                 />
               </div>
               {errors.UserId && (
-                <p className="text-sm text-red-600 flex items-center gap-1.5 animate-in slide-in-from-top-1 duration-200">
+                <p className="text-sm text-red-600 flex items-center gap-1">
                   <AlertCircle size={14} />
                   {errors.UserId}
                 </p>
@@ -162,21 +146,20 @@ export default function LoginPage() {
             </div>
 
             {/* Password Field */}
-            <div className="space-y-2.5">
-              <Label htmlFor="password" className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <Lock size={16} className="text-[#0f7396]" />
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm font-medium text-slate-700">
                 Password
               </Label>
-              <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#0f7396] transition-all duration-300">
-                  <Lock size={20} />
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <Lock size={18} />
                 </div>
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className={`pl-12 pr-12 h-13 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-[#0f7396] focus:ring-4 focus:ring-[#0f7396]/10 transition-all duration-300 text-base shadow-sm ${
-                    errors.UserPassword ? "border-red-300 focus:border-red-500 focus:ring-red-500/20" : ""
+                  className={`pl-10 pr-10 h-11 border-slate-300 focus:border-[#0f7396] focus:ring-2 focus:ring-[#0f7396]/20 ${
+                    errors.UserPassword ? "border-red-300" : ""
                   }`}
                   value={form.UserPassword}
                   onChange={(e) => handleInputChange("UserPassword", e.target.value)}
@@ -185,15 +168,15 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0f7396] transition-all duration-300 focus:outline-none focus:text-[#0f7396] p-1 rounded-lg hover:bg-slate-100"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   disabled={isPending}
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
               {errors.UserPassword && (
-                <p className="text-sm text-red-600 flex items-center gap-1.5 animate-in slide-in-from-top-1 duration-200">
+                <p className="text-sm text-red-600 flex items-center gap-1">
                   <AlertCircle size={14} />
                   {errors.UserPassword}
                 </p>
@@ -204,7 +187,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               variant="ghost"
-              className="w-full h-13 !bg-gradient-to-r from-[#0f7396] to-[#0d6582] hover:from-[#0d6582] hover:to-[#0f7396] text-white font-semibold rounded-xl shadow-lg shadow-[#0f7396]/30 hover:shadow-xl hover:shadow-[#0f7396]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-6"
+              className="w-full h-11 !bg-[#0f7396] hover:!bg-[#0d6582] text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all mt-2"
               disabled={isPending}
             >
               {isPending ? (
@@ -213,22 +196,17 @@ export default function LoginPage() {
                   <span>Signing in...</span>
                 </div>
               ) : (
-                <span className="flex items-center gap-2">
-                  Sign In
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </span>
+                "Sign In"
               )}
             </Button>
           </form>
 
           {/* Footer */}
-          <div className="pt-6 text-center">
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-500 bg-gradient-to-r from-slate-50 to-white rounded-lg py-3 px-4 border border-slate-100">
-              <Lock size={16} className="text-[#14b8a6]" />
-              <span>Secure healthcare management platform</span>
-            </div>
+          <div className="pt-4 text-center border-t border-slate-100">
+            <p className="text-sm text-slate-500 flex items-center justify-center gap-2">
+              <Lock size={14} className="text-[#0f7396]" />
+              Secure healthcare management platform
+            </p>
           </div>
         </CardContent>
       </Card>
