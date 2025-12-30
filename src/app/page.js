@@ -95,13 +95,13 @@ export default function LoginPage() {
         <CardHeader className="space-y-6 pb-6 pt-10 px-8 text-center">
           {/* Logo with Background Circle */}
           <div className="flex justify-center">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0f7396]/10 to-[#14b8a6]/10 rounded-2xl blur-xl"></div>
-              <div className="relative bg-white rounded-2xl p-4 shadow-lg">
+            <div className="relative w-36 h-36">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0f7396]/10 to-[#14b8a6]/10 rounded-full blur-xl"></div>
+              <div className="relative bg-white rounded-full p-6 shadow-lg w-full h-full flex items-center justify-center">
                 <Image
                   src="/orthosquare-logo.png"
-                  width={140}
-                  height={70}
+                  width={100}
+                  height={50}
                   alt="OrthoSquare Logo"
                   className="object-contain"
                 />
