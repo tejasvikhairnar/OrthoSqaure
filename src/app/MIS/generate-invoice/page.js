@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Settings, Trash2, Plus } from "lucide-react"
+import { Settings, Trash2, Plus, Receipt } from "lucide-react"
 
 const TREATMENT_OPTIONS = [
     { id: "t1", name: "Consultation", cost: 500 },

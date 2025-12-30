@@ -1,0 +1,19 @@
+
+> medivardaan-app@1.0.0 build D:\Ortho-Square\OrthoSquare
+> next build
+
+   ▲ Next.js 16.0.8 (Turbopack)
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 40s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+   Generating static pages using 7 workers (0/118) ...
+Error occurred prerendering page "/inventory-settings/item-master". Read more: https://nextjs.org/docs/messages/prerender-error
+ReferenceError: Package is not defined
+    at k (D:\Ortho-Square\OrthoSquare\.next\server\chunks\ssr\_2a6f99ae._.js:1:6378) {
+  digest: '1625696094'
+}
+Export encountered an error on /inventory-settings/item-master/page: /inventory-settings/item-master, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.
