@@ -85,15 +85,13 @@ export default function LoginPage() {
         <CardHeader className="space-y-6 pb-6 text-center">
           {/* Logo */}
           <div className="flex justify-center">
-            <div className="w-28 h-28 bg-white rounded-full shadow-md flex items-center justify-center border border-slate-100">
-              <Image
-                src="/orthosquare-logo.png"
-                width={90}
-                height={45}
-                alt="OrthoSquare Logo"
-                className="object-contain"
-              />
-            </div>
+            <Image
+              src="/orthosquare-logo.png"
+              width={120}
+              height={60}
+              alt="OrthoSquare Logo"
+              className="object-contain"
+            />
           </div>
 
           <div className="space-y-2">
