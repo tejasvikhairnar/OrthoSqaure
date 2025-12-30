@@ -92,47 +92,41 @@ export default function ClinicStock() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Package className="w-5 h-5 text-red-500" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
-          CLINIC STOCK
+        <Package className="w-5 h-5 text-medivardaan-blue" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
+          Clinic Stock
         </h1>
       </div>
 
       {/* Filters */}
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-            <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Clinic Name</label>
-                <Select value={clinic} onValueChange={setClinic}>
-                    <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
-                    <SelectValue placeholder="-- Select Clinic --" />
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto flex-1">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+                 <Select value={clinic} onValueChange={setClinic}>
+                    <SelectTrigger className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                        <SelectValue placeholder="Select Clinic" />
                     </SelectTrigger>
                     <SelectContent>
-                    <SelectItem value="all">All Clinics</SelectItem>
-                    <SelectItem value="Borivali">Borivali</SelectItem>
-                    <SelectItem value="Kalyan Nagar">Kalyan Nagar</SelectItem>
-                    <SelectItem value="Shahibaug">Shahibaug</SelectItem>
+                        <SelectItem value="all">All Clinics</SelectItem>
+                        <SelectItem value="Borivali">Borivali</SelectItem>
+                        <SelectItem value="Kalyan Nagar">Kalyan Nagar</SelectItem>
+                        <SelectItem value="Shahibaug">Shahibaug</SelectItem>
                     </SelectContent>
                 </Select>
+                    <Input 
+                        placeholder="Search Item..." 
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                        className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                    />
+                </div>
             </div>
-
-            <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Item Name</label>
-                <Input
-                    placeholder="Search Item Name"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
-                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-                />
-            </div>
-
-            <div className="flex gap-2">
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all md:w-auto w-full">
+            <div className="flex gap-2 w-full md:w-auto mt-4 md:mt-0">
+                 <Button className="px-6 font-medium shadow-sm transition-all md:w-auto w-full bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white">
                     Search
                 </Button>
             </div>
         </div>
-      </div>
       
        {/* Total Count */}
        <div className="flex justify-end text-sm text-gray-600 dark:text-gray-400 font-medium">
@@ -140,10 +134,10 @@ export default function ClinicStock() {
       </div>
 
       {/* Table */}
-       <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden overflow-x-auto">
+       <div className="card-premium overflow-hidden overflow-x-auto">
         <Table>
-          <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
-            <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
+          <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
+            <TableRow className="hover:bg-slate-50 dark:hover:bg-slate-700/50 border-slate-100 dark:border-slate-700">
               <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
               <TableHead className="font-bold text-gray-700 dark:text-gray-300">Clinic Name</TableHead>
               <TableHead className="font-bold text-gray-700 dark:text-gray-300">Item Name</TableHead>

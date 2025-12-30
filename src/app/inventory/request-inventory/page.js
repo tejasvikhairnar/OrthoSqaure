@@ -85,10 +85,10 @@ export default function RequestInventory() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-            <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+            <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500 uppercase">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-medivardaan-blue uppercase">
           CLINIC REQUEST STOCK
         </h1>
       </div>
@@ -213,7 +213,7 @@ export default function RequestInventory() {
         <div className="flex justify-end p-2">
             <Button
                 onClick={handleAddRow}
-                className="bg-[#D35400] hover:bg-[#A04000] text-white font-medium shadow-sm transition-all"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white font-medium shadow-sm transition-all"
             >
                 Add New
             </Button>

@@ -101,8 +101,8 @@ export default function LabMaster() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           LAB MASTER
         </h1>
       </div>
@@ -122,7 +122,7 @@ export default function LabMaster() {
             
             <Button 
                 onClick={handleAdd}
-                className="bg-[#1E6B8C] hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
+                className="bg-medivardaan-blue hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
             >
                 Add New Lab
             </Button>
@@ -131,11 +131,11 @@ export default function LabMaster() {
           {/* Table */}
            <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300">Lab Name</TableHead>
-                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[100px] text-center">#</TableHead>
+                  <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[100px] text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -197,7 +197,7 @@ export default function LabMaster() {
                         variant={currentPage === page ? "default" : "outline"}
                         size="sm"
                         onClick={() => handlePageChange(page)}
-                        className={currentPage === page ? "bg-[#1E6B8C] hover:bg-[#15526d] text-white" : ""}
+                        className={currentPage === page ? "bg-medivardaan-blue hover:bg-[#15526d] text-white" : ""}
                     >
                         {page}
                     </Button>
@@ -227,10 +227,10 @@ export default function LabMaster() {
             </div>
           
           <div className="flex justify-center gap-4 pt-4">
-            <Button onClick={handleSubmit} className="bg-green-700 hover:bg-green-800 text-white min-w-[100px]">
+            <Button onClick={handleSubmit} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white min-w-[100px]">
               Submit
             </Button>
-            <Button onClick={handleCancel} variant="destructive" className="bg-red-700 hover:bg-red-800 min-w-[100px]">
+            <Button onClick={handleCancel} variant="destructive" className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark min-w-[100px]">
               Cancel
             </Button>
           </div>

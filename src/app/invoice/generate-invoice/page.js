@@ -35,10 +35,10 @@ export default function GenerateInvoicePage() {
     <div className="w-full p-6 space-y-8 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
       <div className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
-             <Settings className="w-6 h-6 text-red-500 animate-spin-slow" />
+        <div className="p-2 bg-[#0f7396]/10 dark:bg-[#0f7396]/20 rounded-lg">
+             <Settings className="w-6 h-6 text-[#0f7396] animate-spin-slow" />
         </div>
-        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+        <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
           GENERATE INVOICE
         </h1>
       </div>
@@ -173,7 +173,7 @@ export default function GenerateInvoicePage() {
                    </div>
 
                    <Button 
-                        className="w-full bg-[#D35400] hover:bg-[#A04000] text-white font-bold py-3 mt-6 shadow-md transition-all active:scale-95"
+                        className="w-full bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white font-bold py-3 mt-6 shadow-md transition-all active:scale-95"
                     >
                         GENERATE INVOICE
                     </Button>

@@ -42,11 +42,11 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))',
         },
         medivardaan: {
-          teal: '#4DB8AC',
-          'teal-dark': '#3A9A8F',
-          blue: '#1E6B8C',
-          'blue-dark': '#154E6B',
-          'blue-light': '#2887B3',
+          teal: '#00A896', // Premium Turquoise
+          'teal-dark': '#008F80',
+          blue: '#023047', // Deep Slate Blue
+          'blue-dark': '#011F2E',
+          'blue-light': '#219EBC',
         },
       },
       borderRadius: {

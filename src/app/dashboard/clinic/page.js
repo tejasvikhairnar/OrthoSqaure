@@ -65,13 +65,13 @@ function page() {
           title: "Patients",
           value: Number(cardsData?.patients),
           key: "patients",
-          icon: <Users className="w-5 h-5 text-[#4DB8AC] dark:text-[#4DB8AC]/80" />,
+          icon: <Users className="w-5 h-5 text-medivardaan-teal dark:text-medivardaan-teal/80" />,
         },
         {
           title: "Procedures",
           value: Number(cardsData?.procedures),
           key: "procedures",
-          icon: <Activity className="w-5 h-5 text-[#4DB8AC] dark:text-[#4DB8AC]/80" />,
+          icon: <Activity className="w-5 h-5 text-medivardaan-teal dark:text-medivardaan-teal/80" />,
         },
         {
           title: "Revenue",
@@ -83,13 +83,13 @@ function page() {
           title: "Revenue / Patient",
           value: Number(cardsData?.revenuePatient),
           key: "revenuePatient",
-          icon: <DivideSquare className="w-5 h-5 text-[#1E6B8C] dark:text-[#1E6B8C]/80" />,
+          icon: <DivideSquare className="w-5 h-5 text-medivardaan-blue dark:text-medivardaan-blue/80" />,
         },
         {
           title: "Revenue / Procedure",
           value: Number(cardsData?.revenueProcedure),
           key: "revenueProcedure",
-          icon: <DivideCircle className="w-5 h-5 text-[#1E6B8C] dark:text-[#1E6B8C]/80" />,
+          icon: <DivideCircle className="w-5 h-5 text-medivardaan-blue dark:text-medivardaan-blue/80" />,
         },
       ];
 
@@ -242,8 +242,8 @@ function page() {
 
   return (
    <>
-    <div className="min-h-screen bg-gradient-to-br from-[#4DB8AC]/5 to-[#1E6B8C]/5 dark:from-gray-900 dark:to-gray-950 p-6 space-y-8 transition-colors duration-300">
-   <header className="w-full bg-gradient-to-r from-[#4DB8AC]/10 via-[#1E6B8C]/10 to-[#4DB8AC]/10 dark:bg-gradient-to-r dark:from-[#1E6B8C]/20 dark:via-[#4DB8AC]/20 dark:to-[#1E6B8C]/20 border border-[#4DB8AC]/20 dark:border-[#4DB8AC]/30 rounded-lg shadow-sm px-6 py-4 mb-2 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 p-6 space-y-8 transition-colors duration-300">
+   <header className="w-full glass-header px-8 py-4 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       {/* Left Section */}
       {/* <div className="flex items-center gap-2">
         <LayoutDashboard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -375,7 +375,7 @@ function page() {
 
 
     <div className="pt-4 space-y-8">
-              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {statCards.map((item) =>
         
         {
@@ -385,21 +385,22 @@ function page() {
       ? `₹ ${Number(rawValue || 0).toLocaleString("en-IN")}`
       : Number(rawValue || 0).toLocaleString("en-IN");
           return (  
-          <Card key={item.title} className="bg-gradient-to-br from-[#4DB8AC]/5 via-white/50 to-[#1E6B8C]/5 dark:bg-gradient-to-br dark:from-[#1E6B8C]/20 dark:via-[#4DB8AC]/10 dark:to-[#1E6B8C]/20 text-center shadow-md hover:shadow-xl transition-all border border-[#4DB8AC]/20">
-            <CardContent className="p-5 flex flex-col items-center space-y-2">
-              <div>{item.icon}</div>
-              <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                {item.title}
-              </p>
-              <h2 className="text-l whitespace-nowrap font-bold text-gray-900 dark:text-white"> {formattedValue}
-</h2>
+          <Card key={item.title} className="card-premium text-center p-6 h-full flex flex-col justify-center items-center hover:-translate-y-1 transition-transform duration-300">
+            <CardContent className="p-0 flex flex-col items-center space-y-3">
+              <div className="p-3 rounded-full bg-slate-50 dark:bg-slate-800">{item.icon}</div>
+              <div className="space-y-1">
+                <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                    {item.title}
+                </p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white"> {formattedValue}</h2>
+              </div>
             </CardContent>
           </Card>
         )})}
       </section>
 
 <section className='grid grid-cols-2 gap-4'>
-<Card className="bg-gradient-to-br from-[#4DB8AC]/10 via-white/60 to-[#1E6B8C]/10 dark:bg-gradient-to-br dark:from-[#1E6B8C]/25 dark:via-[#4DB8AC]/15 dark:to-[#1E6B8C]/25 backdrop-blur-sm border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 p-0 transition-all">
+<Card className="card-medical p-0">
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4">
                     Last 3 days Summary
@@ -408,7 +409,7 @@ function page() {
                  <GenericTable data={clinicData?.[0]?.daysSummarylist} columns={columns}  showSorting={false} showPagination={false} />
     </CardContent>
     </Card>
-<Card className="bg-gradient-to-br from-[#4DB8AC]/10 via-white/60 to-[#1E6B8C]/10 dark:bg-gradient-to-br dark:from-[#1E6B8C]/25 dark:via-[#4DB8AC]/15 dark:to-[#1E6B8C]/25 backdrop-blur-sm border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 p-0 transition-all">
+<Card className="bg-gradient-to-br from-medivardaan-teal/10 via-white/60 to-medivardaan-blue/10 dark:bg-gradient-to-br dark:from-medivardaan-blue/25 dark:via-medivardaan-teal/15 dark:to-medivardaan-blue/25 backdrop-blur-sm border border-medivardaan-teal/30 dark:border-medivardaan-teal/40 p-0 transition-all">
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4">
                     Last 3 Weeks Summary
@@ -417,7 +418,7 @@ function page() {
                  <GenericTable data={clinicData?.[0]?.weeksSummarylist} columns={columnsWeeks}  showSorting={false} showPagination={false}/>
     </CardContent>
     </Card>
-<Card className="bg-gradient-to-br from-[#4DB8AC]/10 via-white/60 to-[#1E6B8C]/10 dark:bg-gradient-to-br dark:from-[#1E6B8C]/25 dark:via-[#4DB8AC]/15 dark:to-[#1E6B8C]/25 backdrop-blur-sm border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 p-0 transition-all">
+<Card className="bg-gradient-to-br from-medivardaan-teal/10 via-white/60 to-medivardaan-blue/10 dark:bg-gradient-to-br dark:from-medivardaan-blue/25 dark:via-medivardaan-teal/15 dark:to-medivardaan-blue/25 backdrop-blur-sm border border-medivardaan-teal/30 dark:border-medivardaan-teal/40 p-0 transition-all">
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4">
                     Last 3 Months Summary
@@ -426,7 +427,7 @@ function page() {
                  <GenericTable data={clinicData?.[0]?.monthsSummarylist} columns={columnsMonths}  showSorting={false} showPagination={false}/>
     </CardContent>
     </Card>
-<Card className="bg-gradient-to-br from-[#4DB8AC]/10 via-white/60 to-[#1E6B8C]/10 dark:bg-gradient-to-br dark:from-[#1E6B8C]/25 dark:via-[#4DB8AC]/15 dark:to-[#1E6B8C]/25 backdrop-blur-sm border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 p-0 transition-all">
+<Card className="bg-gradient-to-br from-medivardaan-teal/10 via-white/60 to-medivardaan-blue/10 dark:bg-gradient-to-br dark:from-medivardaan-blue/25 dark:via-medivardaan-teal/15 dark:to-medivardaan-blue/25 backdrop-blur-sm border border-medivardaan-teal/30 dark:border-medivardaan-teal/40 p-0 transition-all">
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4">
                     Last 3 Quarters Summary
@@ -435,7 +436,7 @@ function page() {
                  <GenericTable data={clinicData?.[0]?.quartersSummarylist} columns={columnsQuarters}  showSorting={false} showPagination={false}/>
     </CardContent>
     </Card>
-<Card className="bg-gradient-to-br from-[#4DB8AC]/10 via-white/60 to-[#1E6B8C]/10 dark:bg-gradient-to-br dark:from-[#1E6B8C]/25 dark:via-[#4DB8AC]/15 dark:to-[#1E6B8C]/25 backdrop-blur-sm border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 p-0 transition-all">
+<Card className="bg-gradient-to-br from-medivardaan-teal/10 via-white/60 to-medivardaan-blue/10 dark:bg-gradient-to-br dark:from-medivardaan-blue/25 dark:via-medivardaan-teal/15 dark:to-medivardaan-blue/25 backdrop-blur-sm border border-medivardaan-teal/30 dark:border-medivardaan-teal/40 p-0 transition-all">
                 <CardContent className="p-4">
                   <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4">
                     Last 3 Years Summary

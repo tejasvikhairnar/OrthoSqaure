@@ -22,6 +22,12 @@ export const API_CONFIG = {
       GET_ALL: "/DoctorRegistration/GetAllDoctors",
       UPSERT: "/DoctorRegistration/UpsertDoctor",
     },
+    CLINIC: {
+      GET_ALL: "/ClinicRegistration/GetAllClinics",
+    },
+    DASHBOARD: {
+      GET_ALL: "/Dashboard/GetAllGrouped",
+    },
   },
 
   // Feature Flags

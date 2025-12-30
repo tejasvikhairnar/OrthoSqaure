@@ -1,0 +1,150 @@
+
+> orthosquare@1.0.0 build D:\Ortho-Square\MediVardan
+> next build
+
+   ▲ Next.js 16.0.8 (Turbopack)
+
+   Creating an optimized production build ...
+Turbopack build encountered 1 warnings:
+./src/utils/exportToExcel.js:8:24
+Module not found: Can't resolve 'xlsx'
+[0m [90m  6 |[39m   [36mtry[39m {
+ [90m  7 |[39m     [90m// Dynamic import to support client-side only usage[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [36mconst[39m [33mXLSX[39m [33m=[39m [36mawait[39m [36mimport[39m([32m'xlsx'[39m)[33m;[39m
+ [90m    |[39m                        [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m  9 |[39m
+ [90m 10 |[39m     [36mconst[39m worksheet [33m=[39m [33mXLSX[39m[33m.[39mutils[33m.[39mjson_to_sheet(data)[33m;[39m
+ [90m 11 |[39m     [36mconst[39m workbook [33m=[39m [33mXLSX[39m[33m.[39mutils[33m.[39mbook_new()[33m;[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/utils/exportToExcel.js [Client Component Browser]
+    ./src/app/accounts/area-manager-collection-report/page.js [Client Component Browser]
+    ./src/app/accounts/area-manager-collection-report/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/utils/exportToExcel.js [Client Component SSR]
+    ./src/app/accounts/area-manager-collection-report/page.js [Client Component SSR]
+    ./src/app/accounts/area-manager-collection-report/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ✓ Compiled successfully in 46s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+   Generating static pages using 7 workers (0/101) ...
+   Generating static pages using 7 workers (25/101) 
+   Generating static pages using 7 workers (50/101) 
+   Generating static pages using 7 workers (75/101) 
+ ✓ Generating static pages using 7 workers (101/101) in 5.9s
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /accounts/accountant-expense
+├ ○ /accounts/area-manager-collection-report
+├ ○ /accounts/area-manager-report
+├ ○ /accounts/clinic-collection-report
+├ ○ /accounts/clinic-expense-report
+├ ○ /accounts/clinic-medicines-collection-report
+├ ○ /accounts/expense-entry
+├ ○ /accounts/expense-report
+├ ○ /accounts/patients-medicines-collection-report
+├ ƒ /api/auth/login
+├ ƒ /api/doctors
+├ ƒ /api/doctors/mock
+├ ƒ /api/doctors/upsert
+├ ƒ /api/Leads/getLeads
+├ ƒ /api/Leads/upsertLeads
+├ ○ /appointments/ALL-appointments
+├ ○ /appointments/all-appointments-list
+├ ○ /appointments/appointments-report
+├ ○ /appointments/Book-Appointments
+├ ○ /appointments/book-form
+├ ○ /appointments/new-appointment
+├ ○ /appointments/view-todays-confirmed-appointment
+├ ○ /dashboard/admin
+├ ○ /dashboard/admin-improved
+├ ƒ /dashboard/admin/parameters/[typeId]
+├ ○ /dashboard/clinic
+├ ○ /doctor/add-doctor
+├ ○ /doctor/doctor-registration
+├ ○ /doctor/doctor-registration-new
+├ ○ /enquiry-settings
+├ ○ /enquiry/add-enquiry-form
+├ ○ /enquiry/area-manager-leads
+├ ○ /enquiry/enquiry-followups
+├ ○ /enquiry/follow-up-report
+├ ○ /enquiry/followup-details
+├ ○ /enquiry/new-enquiry
+├ ○ /enquiry/non-converted-leads
+├ ○ /enquiry/pending-followups
+├ ○ /enquiry/upload-leads
+├ ○ /help
+├ ○ /inventory-settings/brand
+├ ○ /inventory-settings/item-master
+├ ○ /inventory-settings/packaging-type
+├ ○ /inventory-settings/vendor
+├ ○ /inventory/clinic-request-stock-send-report
+├ ○ /inventory/clinic-stock
+├ ○ /inventory/clinic-stock-report
+├ ○ /inventory/head-office-stock
+├ ○ /inventory/purchase-order
+├ ○ /inventory/purchase-order-receive-report
+├ ○ /inventory/purchase-order-received
+├ ○ /inventory/request-inventory
+├ ○ /inventory/view-order-history
+├ ○ /inventory/view-request-inventory
+├ ○ /invoice/bajaj-scheme-invoice
+├ ○ /invoice/cancellation-treatment
+├ ○ /invoice/cheque-invoice
+├ ○ /invoice/finance-reconciliation
+├ ○ /invoice/generate-invoice
+├ ○ /invoice/online-payment-invoice
+├ ○ /invoice/payment-collection
+├ ○ /invoice/upgradation
+├ ○ /invoice/view-invoice
+├ ○ /MIS/consent
+├ ○ /MIS/consultation
+├ ○ /MIS/generate-invoice
+├ ○ /MIS/new-patient-report
+├ ○ /MIS/patient-clinic-transfer
+├ ○ /MIS/patient-edit
+├ ○ /MIS/patient-merge-delete
+├ ○ /MIS/patient-search
+├ ○ /MIS/patient-visit-report
+├ ○ /MIS/repeat-patient-report
+├ ○ /MIS/treatment-updates
+├ ○ /MIS/visitor
+├ ○ /patient/registration
+├ ○ /patient/reports/clinic-wise
+├ ○ /patient/reports/date-wise
+├ ○ /patient/reports/patient-wise
+├ ○ /patient/reports/treatment-wise
+├ ○ /report/cheque-report
+├ ○ /report/contact-details
+├ ○ /report/doctor-attendance-report
+├ ○ /report/doctor-collection-report
+├ ○ /report/login-details
+├ ○ /report/medicines-collection-report
+├ ○ /report/order-history
+├ ○ /report/patientwise-collection-report
+├ ○ /report/payment-mode-clinic-report
+├ ○ /report/payment-mode-report
+├ ○ /report/payment-mode-report-refactored
+├ ○ /report/revenue-report
+├ ○ /report/transaction-report
+├ ○ /report/treatments-count-report
+├ ○ /report/treatments-report
+├ ○ /user-settings/area-manager
+├ ○ /user-settings/employee
+└ ○ /user-settings/user-access
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

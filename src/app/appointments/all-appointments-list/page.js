@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Settings, Check, X } from 'lucide-react'
+import { Settings, Check, X, Calendar, Search, RefreshCw } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -21,6 +21,10 @@ export default function AllAppointmentsListPage() {
   const [selectedDoctor, setSelectedDoctor] = useState('')
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  
+  // Missing states fixed
+  const [filterDate, setFilterDate] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   // Mock appointments data with approval status
   const [appointments, setAppointments] = useState([
@@ -57,6 +61,10 @@ export default function AllAppointmentsListPage() {
     console.log('Searching with filters:', { visitorName, mobileNo, selectedClinic, selectedDoctor, fromDate, toDate, approvalFilter })
   }
 
+  // Handlers for top bar
+  const handleDateChange = (e) => setFilterDate(e.target.value)
+  const handleSearchChange = (e) => setSearchTerm(e.target.value)
+
   // Filter appointments based on approval status
   const filteredAppointments = appointments.filter(apt => {
     if (approvalFilter === 'all') return true
@@ -69,145 +77,192 @@ export default function AllAppointmentsListPage() {
   const searchFilteredAppointments = filteredAppointments.filter(apt => {
     const matchName = visitorName ? apt.name.toLowerCase().includes(visitorName.toLowerCase()) : true
     const matchMobile = mobileNo ? true : true // Add mobile matching logic when data available
-    return matchName && matchMobile
+    
+    // Also filter by top bar search term if present (checking name or doctor)
+    const topBarMatch = searchTerm 
+      ? (apt.name.toLowerCase().includes(searchTerm.toLowerCase()) || apt.doctorName.toLowerCase().includes(searchTerm.toLowerCase()))
+      : true
+      
+    return matchName && matchMobile && topBarMatch
   })
 
   return (
     <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3 pb-4">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/20">
-          <Settings className="w-5 h-5 text-red-600" />
+      {/* Professional Header Action Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        {/* Left: Title */}
+        <div className="flex items-center gap-3">
+           <div className="w-10 h-10 rounded-xl bg-medivardaan-blue/10 flex items-center justify-center shadow-sm">
+             <Calendar className="w-6 h-6 text-medivardaan-blue" />
+           </div>
+           <div>
+             <h1 className="text-2xl font-bold text-[#0f7396] dark:text-[#0f7396] tracking-tight">Appointments</h1>
+             <p className="text-slate-500 text-sm">Manage patient schedules</p>
+           </div>
         </div>
-        <h1 className="text-2xl font-bold text-red-600">ALL APPOINTMENT LIST</h1>
-      </div>
 
-      {/* Search Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {/* Visitor Name */}
-        <div>
-          <Input
-            placeholder="Visitor Name"
-            value={visitorName}
-            onChange={(e) => setVisitorName(e.target.value)}
-            className="w-full"
+        {/* Right: Actions Toolbar */}
+        <div className="flex flex-wrap items-center gap-3 bg-white dark:bg-slate-900 p-2 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+           {/* Date Picker */}
+           <Input
+            type="date"
+            value={filterDate}
+            onChange={handleDateChange}
+            className="w-40 border-0 bg-transparent focus:ring-0 text-sm"
           />
-        </div>
-
-        {/* Mobile No */}
-        <div>
-          <Input
-            placeholder="Mobile No."
-            value={mobileNo}
-            onChange={(e) => setMobileNo(e.target.value)}
-            className="w-full"
-          />
-        </div>
-
-        {/* Clinic Name */}
-        <div>
-          <Select value={selectedClinic} onValueChange={setSelectedClinic}>
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Panvel">Panvel</SelectItem>
-              <SelectItem value="Mumbai">Mumbai</SelectItem>
-              <SelectItem value="Pune">Pune</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Doctor Name */}
-        <div>
-          <Select value={selectedDoctor} onValueChange={setSelectedDoctor}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="--- Select ---" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="doctor1">Dr. Kinnari Lade</SelectItem>
-              <SelectItem value="doctor2">Dr. Rajesh Kumar</SelectItem>
-              <SelectItem value="doctor3">Dr. Priya Singh</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700 mx-1"></div>
+          
+           {/* Search */}
+          <div className="relative">
+             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+             <Input
+               type="text"
+               placeholder="Search doctor..."
+               value={searchTerm}
+               onChange={handleSearchChange}
+               className="pl-9 w-60 border-0 bg-slate-50 dark:bg-slate-800 rounded-lg focus:ring-2 focus:ring-medivardaan-blue/20"
+             />
+          </div>
+          
+          <Button variant="ghost" size="icon" className="text-slate-500 hover:text-medivardaan-blue">
+            <RefreshCw className="w-4 h-4" />
+          </Button>
         </div>
       </div>
 
-      {/* Radio Buttons and Date Filters */}
-      <div className="flex flex-wrap items-center gap-6 mb-6">
-        {/* Approval Status Radio Buttons */}
-        <div className="flex gap-6 items-center">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="approvalStatus"
-              value="approve"
-              checked={approvalFilter === 'approve'}
-              onChange={(e) => setApprovalFilter(e.target.value)}
-              className="w-4 h-4 cursor-pointer"
-            />
-            <span className="text-sm font-medium">Approve</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="approvalStatus"
-              value="reject"
-              checked={approvalFilter === 'reject'}
-              onChange={(e) => setApprovalFilter(e.target.value)}
-              className="w-4 h-4 cursor-pointer"
-            />
-            <span className="text-sm font-medium">Reject</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="approvalStatus"
-              value="all"
-              checked={approvalFilter === 'all'}
-              onChange={(e) => setApprovalFilter(e.target.value)}
-              className="w-4 h-4 cursor-pointer"
-            />
-            <span className="text-sm font-medium">All</span>
-          </label>
-        </div>
+      {/* Search Filters Card */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+             {/* Visitor Name */}
+             <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Visitor Name</Label>
+                <Input
+                    placeholder="Visitor Name"
+                    value={visitorName}
+                    onChange={(e) => setVisitorName(e.target.value)}
+                    className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+                />
+             </div>
 
-        {/* From Date */}
-        <div className="space-y-1">
-          <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">From</Label>
-          <Input
-            type="date"
-            value={fromDate}
-            onChange={(e) => setFromDate(e.target.value)}
-            className="w-full"
-          />
-        </div>
+             {/* Mobile No */}
+             <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Mobile No.</Label>
+                <Input
+                    placeholder="Mobile No."
+                    value={mobileNo}
+                    onChange={(e) => setMobileNo(e.target.value)}
+                    className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+                />
+             </div>
 
-        {/* To Date */}
-        <div className="space-y-1">
-          <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">To</Label>
-          <Input
-            type="date"
-            value={toDate}
-            onChange={(e) => setToDate(e.target.value)}
-            className="w-full"
-          />
-        </div>
+             {/* Clinic Name */}
+             <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Clinic Name</Label>
+                <Select value={selectedClinic} onValueChange={setSelectedClinic}>
+                    <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full">
+                         <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Panvel">Panvel</SelectItem>
+                        <SelectItem value="Mumbai">Mumbai</SelectItem>
+                        <SelectItem value="Pune">Pune</SelectItem>
+                    </SelectContent>
+                </Select>
+             </div>
 
-        {/* Search Button */}
-        <Button
-          onClick={handleSearch}
-          className="bg-orange-600 hover:bg-orange-700 text-white px-8"
-        >
-          Search
-        </Button>
+             {/* Doctor Name */}
+             <div className="space-y-2">
+               <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Doctor Name</Label>
+               <Select value={selectedDoctor} onValueChange={setSelectedDoctor}>
+                  <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full">
+                     <SelectValue placeholder="--- Select ---" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      <SelectItem value="doctor1">Dr. Kinnari Lade</SelectItem>
+                      <SelectItem value="doctor2">Dr. Rajesh Kumar</SelectItem>
+                      <SelectItem value="doctor3">Dr. Priya Singh</SelectItem>
+                  </SelectContent>
+               </Select>
+             </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end mt-6">
+            {/* From Date */}
+            <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">From Date</Label>
+                <Input
+                    type="date"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+                />
+            </div>
+
+            {/* To Date */}
+            <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">To Date</Label>
+                <Input
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+                />
+            </div>
+
+            {/* Approval Status */}
+            <div className="lg:col-span-2 flex justify-between items-end h-10">
+                <div className="flex gap-6 items-center h-full">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                        type="radio"
+                        name="approvalStatus"
+                        value="approve"
+                        checked={approvalFilter === 'approve'}
+                        onChange={(e) => setApprovalFilter(e.target.value)}
+                        className="w-4 h-4 cursor-pointer text-medivardaan-blue focus:ring-medivardaan-blue"
+                        />
+                        <span className="text-sm font-medium">Approve</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                        type="radio"
+                        name="approvalStatus"
+                        value="reject"
+                        checked={approvalFilter === 'reject'}
+                        onChange={(e) => setApprovalFilter(e.target.value)}
+                        className="w-4 h-4 cursor-pointer text-medivardaan-blue focus:ring-medivardaan-blue"
+                        />
+                        <span className="text-sm font-medium">Reject</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                        type="radio"
+                        name="approvalStatus"
+                        value="all"
+                        checked={approvalFilter === 'all'}
+                        onChange={(e) => setApprovalFilter(e.target.value)}
+                        className="w-4 h-4 cursor-pointer text-medivardaan-blue focus:ring-medivardaan-blue"
+                        />
+                        <span className="text-sm font-medium">All</span>
+                    </label>
+                </div>
+                
+                 {/* Search Button */}
+                <Button
+                    onClick={handleSearch}
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 h-10"
+                >
+                    Search
+                </Button>
+            </div>
+        </div>
       </div>
 
       {/* Appointments Table */}
-      <div className="border border-border rounded-lg overflow-hidden">
+      <div className="card-premium overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-green-100 dark:bg-green-900/20">
+            <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
               <th className="px-4 py-3 text-left text-sm font-medium">Sr. No.</th>
               <th className="px-4 py-3 text-left text-sm font-medium">Name</th>
               <th className="px-4 py-3 text-left text-sm font-medium">Doctor Name</th>
@@ -223,7 +278,7 @@ export default function AllAppointmentsListPage() {
             {searchFilteredAppointments.map((appointment, index) => (
               <tr
                 key={appointment.id}
-                className="border-t border-border hover:bg-accent/50 transition-colors"
+                className="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
               >
                 <td className="px-4 py-3 text-sm">{index + 1}</td>
                 <td className="px-4 py-3 text-sm">{appointment.name}</td>

@@ -128,10 +128,10 @@ const EnquirySettingsPage = () => {
     <div className="w-full p-6 space-y-6 bg-background text-foreground min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600 dark:text-red-500" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396] dark:text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           ENQUIRY SOURCE
         </h1>
       </div>
@@ -152,7 +152,7 @@ const EnquirySettingsPage = () => {
                  />
                </div>
               <Button 
-                className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white dark:bg-orange-700 dark:hover:bg-orange-800"
                 onClick={handleSearch}
               >
                 Search

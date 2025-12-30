@@ -304,10 +304,10 @@ export default function DoctorRegistrationPage() {
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           DOCTOR REGISTRATION (Axios + React Query)
         </h1>
       </div>
@@ -368,19 +368,19 @@ export default function DoctorRegistrationPage() {
               <TabsList className="w-full grid grid-cols-3 bg-gray-100 dark:bg-gray-800">
                 <TabsTrigger
                   value="personal"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-medivardaan-teal data-[state=active]:text-white"
                 >
                   Personal Information
                 </TabsTrigger>
                 <TabsTrigger
                   value="education"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-medivardaan-teal data-[state=active]:text-white"
                 >
                   Education
                 </TabsTrigger>
                 <TabsTrigger
                   value="documents"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-medivardaan-teal data-[state=active]:text-white"
                 >
                   Documents
                 </TabsTrigger>
@@ -533,7 +533,7 @@ export default function DoctorRegistrationPage() {
                 <div className="flex justify-end pt-4">
                   <Button
                     onClick={handleNext}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -546,7 +546,7 @@ export default function DoctorRegistrationPage() {
                 <div className="flex justify-end pt-4">
                   <Button
                     onClick={handleNext}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -614,7 +614,7 @@ export default function DoctorRegistrationPage() {
                   <Button
                     onClick={handleFormSubmit}
                     disabled={upsertMutation.isPending}
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {upsertMutation.isPending ? (
                       <>
@@ -629,7 +629,7 @@ export default function DoctorRegistrationPage() {
                     onClick={() => setShowAddForm(false)}
                     disabled={upsertMutation.isPending}
                     variant="outline"
-                    className="bg-red-600 hover:bg-red-700 text-white border-red-600 px-8 disabled:opacity-50"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white border-medivardaan-blue px-8 disabled:opacity-50"
                   >
                     Cancel
                   </Button>
@@ -684,7 +684,7 @@ export default function DoctorRegistrationPage() {
       <div className="flex items-center justify-end gap-3">
         <Button
           onClick={handleAddNew}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white"
         >
           Add New
         </Button>
@@ -702,7 +702,7 @@ export default function DoctorRegistrationPage() {
               <p className="text-red-700 dark:text-red-300">{error.message}</p>
               <Button
                 onClick={() => refetch()}
-                className="mt-3 bg-red-600 hover:bg-red-700 text-white"
+                className="mt-3 bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white"
                 size="sm"
               >
                 Retry
@@ -726,7 +726,7 @@ export default function DoctorRegistrationPage() {
             ) : (
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-green-100 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/20">
+                  <TableRow className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border hover:bg-medivardaan-teal/20 dark:hover:bg-accent/80">
                     <TableHead className="font-semibold text-gray-900 dark:text-gray-100">
                       Sr. No.
                     </TableHead>

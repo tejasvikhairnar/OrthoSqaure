@@ -76,13 +76,13 @@ const UserAccessPage = () => {
     };
 
   return (
-    <div className="w-full p-6 space-y-6 bg-background text-foreground min-h-screen">
+    <div className="w-full p-2 space-y-6 bg-background text-foreground min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600 dark:text-red-500" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396] dark:text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           USER ACCESS
         </h1>
       </div>
@@ -91,7 +91,7 @@ const UserAccessPage = () => {
         <CardContent className="p-6 space-y-6">
           <div className="w-full max-w-sm">
             <Select value={selectedRole} onValueChange={setSelectedRole}>
-              <SelectTrigger className="w-full bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+              <SelectTrigger className="w-full bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 h-10">
                 <SelectValue placeholder="--- Select User Role ---" />
               </SelectTrigger>
               <SelectContent>
@@ -110,7 +110,7 @@ const UserAccessPage = () => {
             {selectedRole && (
                 <div className="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <Table>
-                        <TableHeader className="bg-[#E8F8F5] dark:bg-green-900/20">
+                        <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                             <TableRow className="border-b border-gray-200 dark:border-gray-700 hover:bg-transparent">
                             <TableHead className="w-[300px] text-gray-700 dark:text-gray-200 font-bold">Module Name</TableHead>
                             <TableHead className="text-center text-gray-700 dark:text-gray-200 font-bold">View</TableHead>

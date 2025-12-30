@@ -23,16 +23,14 @@ const geistMono = Geist_Mono({
 });
 
  export const metadata = {
-  title: "MEDIVARDAAN",
+  title: "OrthoSquare",
   description: "Healthcare Management System",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/orthosquare-logo.png", type: "image/png" },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/orthosquare-logo.png", type: "image/png" },
     ],
   },
   manifest: "/site.webmanifest",

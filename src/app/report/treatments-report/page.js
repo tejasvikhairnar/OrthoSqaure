@@ -69,11 +69,11 @@ const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
+    <div className="p-2 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           TREATMENTS REPORT
         </h1>
       </div>
@@ -131,7 +131,7 @@ const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
                 className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
                 />
             </div>
-             <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
+             <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
               Search
             </Button>
         </div>
@@ -145,7 +145,7 @@ const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
       {/* Table */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
         <Table>
-          <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+          <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
             <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
               <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr No.</TableHead>
               <TableHead className="font-bold text-gray-700 dark:text-gray-300">Clinic Name</TableHead>

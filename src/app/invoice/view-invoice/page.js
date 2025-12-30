@@ -77,10 +77,10 @@ export default function ViewInvoicePage() {
     <div className="w-full p-4 space-y-6 min-h-screen transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-gray-800">
-        <div className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20">
-             <Settings className="w-5 h-5 text-red-600 dark:text-red-400 animate-spin-slow" />
+        <div className="p-2 rounded-lg bg-[#0f7396]/10 dark:bg-[#0f7396]/20">
+             <Settings className="w-5 h-5 text-[#0f7396] dark:text-[#0f7396] animate-spin-slow" />
         </div>
-        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+        <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
           View Invoices
         </h1>
       </div>
@@ -88,7 +88,7 @@ export default function ViewInvoicePage() {
       {/* Filters Section */}
       <Card className="border-border shadow-sm bg-card">
         <CardContent className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
                 {/* Clinic Name */}
                 <div className="space-y-2">
                 <Label className="text-sm font-medium text-foreground/80">Clinic Name</Label>
@@ -96,7 +96,7 @@ export default function ViewInvoicePage() {
                     value={filters.clinicName}
                     onValueChange={(val) => handleFilterChange("clinicName", val)}
                 >
-                    <SelectTrigger className="h-10 bg-background border-input">
+                    <SelectTrigger className="h-10 bg-background border-input w-full">
                     <SelectValue placeholder="All Clinics" />
                     </SelectTrigger>
                     <SelectContent>
@@ -119,7 +119,7 @@ export default function ViewInvoicePage() {
                     value={filters.doctorName}
                     onValueChange={(val) => handleFilterChange("doctorName", val)}
                 >
-                    <SelectTrigger className="h-10 bg-background border-input">
+                    <SelectTrigger className="h-10 bg-background border-input w-full">
                     <SelectValue placeholder="All Doctors" />
                     </SelectTrigger>
                     <SelectContent>
@@ -137,7 +137,7 @@ export default function ViewInvoicePage() {
                 <div className="space-y-2">
                 <Label className="text-sm font-medium text-foreground/80">Patient Name</Label>
                 <Input
-                    className="h-10 bg-background border-input"
+                    className="h-10 bg-background border-input w-full"
                     placeholder="Search by name..."
                     value={filters.patientName}
                     onChange={(e) => handleFilterChange("patientName", e.target.value)}
@@ -148,41 +148,40 @@ export default function ViewInvoicePage() {
                 <div className="space-y-2">
                 <Label className="text-sm font-medium text-foreground/80">Invoice No</Label>
                 <Input
-                    className="h-10 bg-background border-input"
+                    className="h-10 bg-background border-input w-full"
                     placeholder="INV-001..."
                     value={filters.invoiceNo}
                     onChange={(e) => handleFilterChange("invoiceNo", e.target.value)}
                 />
                 </div>
-            </div>
 
-            {/* Second Row Filters & Buttons */}
-            <div className="flex flex-col md:flex-row gap-6 items-end justify-between">
-                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-                    <div className="space-y-2 w-full md:w-48">
-                        <Label className="text-sm font-medium text-foreground/80">From Date</Label>
-                        <Input
-                            type="date"
-                            className="h-10 bg-background border-input"
-                            value={filters.fromDate}
-                            onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-                        />
-                    </div>
-                    <div className="space-y-2 w-full md:w-48">
-                        <Label className="text-sm font-medium text-foreground/80">To Date</Label>
-                        <Input
-                            type="date"
-                            className="h-10 bg-background border-input"
-                            value={filters.toDate}
-                            onChange={(e) => handleFilterChange("toDate", e.target.value)}
-                        />
-                    </div>
+                {/* From Date */}
+                <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground/80">From Date</Label>
+                    <Input
+                        type="date"
+                        className="h-10 bg-background border-input w-full"
+                        value={filters.fromDate}
+                        onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+                    />
                 </div>
 
-                <div className="flex gap-3 w-full md:w-auto">
+                {/* To Date */}
+                <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground/80">To Date</Label>
+                    <Input
+                        type="date"
+                        className="h-10 bg-background border-input w-full"
+                        value={filters.toDate}
+                        onChange={(e) => handleFilterChange("toDate", e.target.value)}
+                    />
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 lg:col-span-2">
                     <Button
                     onClick={handleSearch}
-                    className="flex-1 md:flex-none bg-[#D35400] hover:bg-[#A04000] text-white h-10 px-6 shadow-sm"
+                    className="flex-none bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white h-10 px-6 shadow-sm"
                     >
                     <Search className="w-4 h-4 mr-2" />
                     Search
@@ -190,7 +189,7 @@ export default function ViewInvoicePage() {
                     <Button
                     onClick={handleClear}
                     variant="outline"
-                    className="flex-1 md:flex-none border-input hover:bg-accent hover:text-accent-foreground h-10 px-6"
+                    className="flex-none border-input hover:bg-accent hover:text-accent-foreground h-10 px-6"
                     >
                     <X className="w-4 h-4 mr-2" />
                     Clear
@@ -216,7 +215,7 @@ export default function ViewInvoicePage() {
                </div>
             ) : (
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Sr. No.</TableHead>
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>
@@ -247,7 +246,7 @@ export default function ViewInvoicePage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-7 text-xs hover:bg-[#D35400] hover:text-white border-[#D35400]/20 text-[#D35400]"
+                          className="h-7 text-xs hover:bg-medivardaan-blue hover:text-white border-[#D35400]/20 text-[#D35400]"
                         >
                           Print
                         </Button>

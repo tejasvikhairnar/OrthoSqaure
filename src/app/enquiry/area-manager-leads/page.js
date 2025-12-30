@@ -141,7 +141,7 @@ export default function AreaManagerLeadsPage() {
                     <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-8 w-8 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-900/20"
+                        className="h-8 w-8 text-gray-500 hover:text-medivardaan-blue hover:bg-medivardaan-blue/10 dark:text-gray-400 dark:hover:bg-accent"
                         onClick={() => handleDelete(item.srNo)}
                     >
                         <Trash2 className="w-4 h-4" />
@@ -166,7 +166,7 @@ export default function AreaManagerLeadsPage() {
       
       {/* Footer / Excel Icon */}
       <div>
-        <Button variant="outline" size="icon" className="h-10 w-10 text-green-600 border-green-200 hover:bg-green-50 dark:bg-slate-900 dark:border-slate-800 dark:text-green-500 dark:hover:bg-slate-800">
+        <Button variant="outline" size="icon" className="h-10 w-10 text-medivardaan-blue border-medivardaan-blue hover:bg-medivardaan-blue/10 dark:bg-slate-900 dark:border-slate-800 dark:text-medivardaan-blue dark:hover:bg-slate-800">
             <FileSpreadsheet className="w-6 h-6" />
         </Button>
       </div>

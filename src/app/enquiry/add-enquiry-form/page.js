@@ -131,10 +131,10 @@ export default function AddLeadFormPage() {
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           LEAD
         </h1>
       </div>
@@ -578,14 +578,14 @@ export default function AddLeadFormPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Submitting..." : "Submit"}
               </Button>
               <Button
                 type="button"
                 onClick={handleCancel}
-                className="bg-red-600 hover:bg-red-700 text-white px-8"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
               >
                 Cancel
               </Button>

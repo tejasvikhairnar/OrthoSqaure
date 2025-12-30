@@ -175,9 +175,12 @@ export default function ItemMaster() {
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
-      <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <Package className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
           ITEM MASTER
         </h1>
       </div>
@@ -194,7 +197,7 @@ export default function ItemMaster() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 flex-1"
                         />
-                         <Button onClick={() => setSearchTerm("")} className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+                         <Button onClick={() => setSearchTerm("")} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
                             Clear
                         </Button>
                         <Button onClick={handleAdd} className="bg-[#0e7490] hover:bg-[#0891b2] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
@@ -208,7 +211,7 @@ export default function ItemMaster() {
 
            <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden overflow-x-auto mt-4">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300">Inventory Type</TableHead>
@@ -270,12 +273,12 @@ export default function ItemMaster() {
       ) : (
          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm space-y-6 max-w-4xl mx-auto">
             <div className="space-y-4">
-               <h3 className="font-bold text-red-500 border-b pb-2 uppercase">{editingId ? 'Edit Item' : 'Add New Item'}</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <h3 className="font-bold text-[#0f7396] border-b pb-2 uppercase">{editingId ? 'Edit Item' : 'Add New Item'}</h3>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Inventory Type <span className="text-red-500">*</span></label>
                         <Select value={formData.inventoryType} onValueChange={(val) => setFormData({...formData, inventoryType: val})}>
-                            <SelectTrigger className="bg-white dark:bg-gray-800"><SelectValue placeholder="-- Select Inventory Type --" /></SelectTrigger>
+                            <SelectTrigger className="bg-white dark:bg-gray-800 h-10 w-full"><SelectValue placeholder="Select Inventory Type" /></SelectTrigger>
                             <SelectContent>
                                 {inventoryTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                                 {!inventoryTypes.includes("MATERIAL") && <SelectItem value="MATERIAL">MATERIAL</SelectItem>}
@@ -288,13 +291,13 @@ export default function ItemMaster() {
                             placeholder="Enter Item Name" 
                             value={formData.itemName} 
                             onChange={(e) => setFormData({ ...formData, itemName: e.target.value })} 
-                            className="bg-white dark:bg-gray-800"
+                            className="bg-white dark:bg-gray-800 h-10 w-full"
                         />
                     </div>
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Brand Name</label>
                         <Select value={formData.brandName} onValueChange={(val) => setFormData({...formData, brandName: val})}>
-                            <SelectTrigger className="bg-white dark:bg-gray-800"><SelectValue placeholder="-- Select Brand --" /></SelectTrigger>
+                            <SelectTrigger className="bg-white dark:bg-gray-800 h-10 w-full"><SelectValue placeholder="Select Brand" /></SelectTrigger>
                             <SelectContent>
                                 {brandNames.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                             </SelectContent>
@@ -303,7 +306,7 @@ export default function ItemMaster() {
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Packaging Type</label>
                         <Select value={formData.packagingType} onValueChange={(val) => setFormData({...formData, packagingType: val})}>
-                            <SelectTrigger className="bg-white dark:bg-gray-800"><SelectValue placeholder="-- Select Packaging Type --" /></SelectTrigger>
+                            <SelectTrigger className="bg-white dark:bg-gray-800 h-10 w-full"><SelectValue placeholder="Select Packaging Type" /></SelectTrigger>
                             <SelectContent>
                                 {packagingTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                             </SelectContent>
@@ -315,7 +318,7 @@ export default function ItemMaster() {
                             placeholder="0.00" 
                             value={formData.price} 
                             onChange={(e) => setFormData({ ...formData, price: e.target.value })} 
-                            className="bg-white dark:bg-gray-800"
+                            className="bg-white dark:bg-gray-800 h-10 w-full"
                         />
                     </div>
                </div>
@@ -323,7 +326,7 @@ export default function ItemMaster() {
 
             <div className="flex justify-end gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                 <Button onClick={handleCancel} variant="outline" className="min-w-[100px]">Cancel</Button>
-                <Button onClick={handleSubmit} className="bg-[#1E6B8C] hover:bg-[#15526d] text-white min-w-[100px]">
+                <Button onClick={handleSubmit} className="bg-medivardaan-blue hover:bg-[#15526d] text-white min-w-[100px]">
                     {editingId ? "Update" : "Save"}
                 </Button>
            </div>

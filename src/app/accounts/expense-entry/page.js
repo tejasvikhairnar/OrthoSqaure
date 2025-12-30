@@ -170,13 +170,13 @@ export default function ExpenseEntryPage() {
   const currentItems = filteredExpenses.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-2 space-y-2">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500 uppercase">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-medivardaan-blue uppercase">
           EXPENSE
         </h1>
       </div>
@@ -218,7 +218,7 @@ export default function ExpenseEntryPage() {
         <div className="flex gap-2 w-full md:w-auto">
           <Button
             onClick={handleSearch}
-            className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-6 h-10 transition-colors"
+            className="bg-medivardaan-blue hover:bg-[#ba4a00] text-white px-6 h-10 transition-colors"
           >
             Search
           </Button>
@@ -231,7 +231,7 @@ export default function ExpenseEntryPage() {
       {/* Table */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
         <Table>
-          <TableHeader className="bg-[#e6ffcc] dark:bg-[#e6ffcc]/20">
+          <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-[60px] font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">
                 Sr. No.

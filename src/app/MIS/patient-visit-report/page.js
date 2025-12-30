@@ -30,7 +30,7 @@ export default function PatientVisitReportPage() {
   ]
 
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="p-2 space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
       <div className="flex items-center gap-2 text-primary mb-8 border-b border-border pb-4">
         <Settings className="w-5 h-5 text-medivardaan-teal" />

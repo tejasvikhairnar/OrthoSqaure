@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, MinusSquare, Trash2 } from "lucide-react";
+import { Plus, MinusSquare, Trash2, Stethoscope } from "lucide-react";
 
 export default function ConsultationPage() {
   const printRef = useRef(null);
@@ -229,7 +229,7 @@ export default function ConsultationPage() {
       <div className="max-w-6xl mx-auto space-y-6" ref={printRef}>
         {/* Clinic & Doctor Details */}
         <Card className="border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800">
-          <CardHeader className="p-6 bg-[#1E6B8C] border-b border-[#1E6B8C]">
+          <CardHeader className="p-6 bg-medivardaan-blue border-b border-medivardaan-blue">
             <div className="flex items-start justify-between">
               <div>
                 <h1 className="text-2xl font-bold text-white">{clinicInfo.name}</h1>
@@ -251,6 +251,14 @@ export default function ConsultationPage() {
         {/* Patient Info Section */}
         <Card className="border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800">
           <CardContent className="p-6 grid md:grid-cols-2 gap-6">
+            <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <Stethoscope className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          CONSULTATION
+        </h1>
+      </div>
             <div className="space-y-1">
               <p className="font-semibold text-xl text-gray-900 dark:text-white">{patientInfo.name}</p>
               <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -266,7 +274,7 @@ export default function ConsultationPage() {
                 <p><span className="font-medium">Last Diagnosis:</span> {patientInfo.lastDiagnosis}</p>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" data-no-print size="sm" className="print:hidden border-[#4DB8AC] text-[#4DB8AC] hover:bg-[#4DB8AC] hover:text-white">
+                    <Button variant="outline" data-no-print size="sm" className="print:hidden border-medivardaan-teal text-medivardaan-teal hover:bg-medivardaan-teal hover:text-white">
                       View Details
                     </Button>
                   </DialogTrigger>
@@ -289,39 +297,39 @@ export default function ConsultationPage() {
         {/* Consultation Section */}
         <Card className="border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800">
           <CardHeader className="p-5 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-            <p className="text-xl font-semibold text-[#1E6B8C] dark:text-[#4DB8AC]">
+            <p className="text-xl font-semibold text-medivardaan-blue dark:text-medivardaan-teal">
               Consultation Details
             </p>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             {/* Vitals */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Date of Consultation</Label>
-                <Input type="date" className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]" />
+                <Input type="date" className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal h-10" />
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Height (cm)</Label>
-                <Input name="height" value={form.height} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]" />
+                <Input name="height" value={form.height} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal h-10" />
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Weight (kg)</Label>
-                <Input name="weight" value={form.weight} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]" />
+                <Input name="weight" value={form.weight} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal h-10" />
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Blood Pressure</Label>
-                <Input name="bloodPressure" value={form.bloodPressure} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]" />
+                <Input name="bloodPressure" value={form.bloodPressure} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal h-10" />
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Pulse Rate</Label>
-                <Input name="pulseRate" value={form.pulseRate} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]" />
+                <Input name="pulseRate" value={form.pulseRate} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal h-10" />
               </div>
             </div>
 
             {/* Diagnosis */}
             <div className="space-y-2">
               <Label className="text-sm font-medium text-gray-700 dark:text-gray-200">Diagnosis Details</Label>
-              <Textarea name="diagnosis" value={form.diagnosis} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC] min-h-[100px]" />
+              <Textarea name="diagnosis" value={form.diagnosis} onChange={handleChange} className="bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal min-h-[100px]" />
             </div>
 
             {/* Ongoing Treatments */}
@@ -333,10 +341,10 @@ export default function ConsultationPage() {
                     placeholder="Add new treatment"
                     value={newTreatment}
                     onChange={(e) => setNewTreatment(e.target.value)}
-                    className="w-48 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]"
+                    className="w-48 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal"
                     data-no-print
                   />
-                  <Button onClick={addTreatment} data-no-print className="bg-[#4DB8AC] hover:bg-[#3a9d92] text-white"><Plus className="h-4 w-4"/></Button>
+                  <Button onClick={addTreatment} data-no-print className="bg-medivardaan-teal hover:bg-[#3a9d92] text-white"><Plus className="h-4 w-4"/></Button>
                 </div>
               </div>
               <ul className="mt-2 space-y-2">
@@ -359,12 +367,12 @@ export default function ConsultationPage() {
 
             {/* Medicines */}
             <div className="space-y-3">
-              <Label className="text-lg font-semibold text-[#1E6B8C] dark:text-[#4DB8AC]">Medicines</Label>
+              <Label className="text-lg font-semibold text-medivardaan-blue dark:text-medivardaan-teal">Medicines</Label>
 
               <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-green-100 dark:bg-green-900/20">
+                    <tr className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                       <th className="p-2 text-left font-medium text-gray-700 dark:text-gray-300 min-w-[140px]">Type</th>
                       <th className="p-2 text-center font-medium text-gray-700 dark:text-gray-300 min-w-[80px]">In House</th>
                       <th className="p-2 text-left font-medium text-gray-700 dark:text-gray-300 min-w-[200px]">Medicines</th>
@@ -568,7 +576,7 @@ export default function ConsultationPage() {
                 <div className="flex items-center gap-3 print:hidden" data-no-print>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" data-no-print className="border-[#4DB8AC] text-[#4DB8AC] hover:bg-[#4DB8AC] hover:text-white">
+                      <Button variant="outline" size="sm" data-no-print className="border-medivardaan-teal text-medivardaan-teal hover:bg-medivardaan-teal hover:text-white">
                         View Previous Tests
                       </Button>
                     </DialogTrigger>
@@ -588,10 +596,10 @@ export default function ConsultationPage() {
                       placeholder="Enter lab test"
                       value={newLabTest}
                       onChange={(e) => setNewLabTest(e.target.value)}
-                      className="w-64 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]"
+                      className="w-64 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal"
                       data-no-print
                     />
-                    <Button onClick={addLabTest} data-no-print className="bg-[#4DB8AC] hover:bg-[#3a9d92] text-white"><Plus className="h-4 w-4"/></Button>
+                    <Button onClick={addLabTest} data-no-print className="bg-medivardaan-teal hover:bg-[#3a9d92] text-white"><Plus className="h-4 w-4"/></Button>
                   </div>
                 </div>
               </div>
@@ -621,7 +629,7 @@ export default function ConsultationPage() {
                   <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Notes</Label>
                   <Dialog data-no-print>
                     <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="print:hidden border-[#4DB8AC] text-[#4DB8AC] hover:bg-[#4DB8AC] hover:text-white" data-no-print>
+                      <Button variant="outline" size="sm" className="print:hidden border-medivardaan-teal text-medivardaan-teal hover:bg-medivardaan-teal hover:text-white" data-no-print>
                         History
                       </Button>
                     </DialogTrigger>
@@ -641,7 +649,7 @@ export default function ConsultationPage() {
                   value={form.notes}
                   onChange={handleChange}
                   placeholder="Enter consultation notes..."
-                  className="min-h-[180px] bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC]"
+                  className="min-h-[180px] bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal"
                 />
               </div>
 
@@ -655,7 +663,7 @@ export default function ConsultationPage() {
                     name="nextConsultationDate"
                     value={form.nextConsultationDate}
                     onChange={handleChange}
-                    className="bg-white dark:bg-gray-900/50 border-gray-300 dark:border-teal-800/50 text-gray-900 dark:text-teal-50 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC] dark:focus:border-teal-500"
+                    className="bg-white dark:bg-gray-900/50 border-gray-300 dark:border-teal-800/50 text-gray-900 dark:text-teal-50 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal dark:focus:border-teal-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -665,10 +673,10 @@ export default function ConsultationPage() {
                     name="nextConsultationTime"
                     value={form.nextConsultationTime}
                     onChange={handleChange}
-                    className="bg-white dark:bg-gray-900/50 border-gray-300 dark:border-teal-800/50 text-gray-900 dark:text-teal-50 focus:ring-2 focus:ring-[#4DB8AC] focus:border-[#4DB8AC] dark:focus:border-teal-500"
+                    className="bg-white dark:bg-gray-900/50 border-gray-300 dark:border-teal-800/50 text-gray-900 dark:text-teal-50 focus:ring-2 focus:ring-medivardaan-teal focus:border-medivardaan-teal dark:focus:border-teal-500"
                   />
                 </div>
-                <Button className="w-full mt-4 print:hidden bg-[#4DB8AC] hover:bg-[#3a9d92] text-white dark:bg-teal-600 dark:hover:bg-teal-700 dark:shadow-lg dark:shadow-teal-900/30" data-no-print>Book Appointment</Button>
+                <Button className="w-full mt-4 print:hidden bg-medivardaan-teal hover:bg-[#3a9d92] text-white dark:bg-teal-600 dark:hover:bg-teal-700 dark:shadow-lg dark:shadow-teal-900/30" data-no-print>Book Appointment</Button>
               </div>
             </div>
 
@@ -677,7 +685,7 @@ export default function ConsultationPage() {
               <Button variant="outline" data-no-print onClick={handlePrint} className="px-6 border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700">
                 Print
               </Button>
-              <Button data-no-print className="px-8 bg-[#4DB8AC] hover:bg-[#3a9d92] text-white">Submit</Button>
+              <Button data-no-print className="px-8 bg-medivardaan-teal hover:bg-[#3a9d92] text-white">Submit</Button>
             </div>
           </CardContent>
         </Card>

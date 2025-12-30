@@ -195,14 +195,14 @@ export default function RegistrationForm() {
                 </div>
 
                 {/* Patient No. and Date */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="patientNo">Patient No.</Label>
                     <Input
                       id="patientNo"
                       value={formData.patientNo}
                       onChange={(e) => handleInputChange('patientNo', e.target.value)}
-                      className="mt-1 bg-gray-50"
+                      className="mt-1 bg-gray-50 h-10"
                       readOnly
                     />
                   </div>
@@ -213,14 +213,14 @@ export default function RegistrationForm() {
                       type="date"
                       value={formData.date}
                       onChange={(e) => handleInputChange('date', e.target.value)}
-                      className="mt-1 bg-gray-50"
+                      className="mt-1 bg-gray-50 h-10"
                       readOnly
                     />
                   </div>
                 </div>
 
                 {/* First Name and Last Name */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="firstName">
                       First Name <span className="text-red-500">*</span>
@@ -229,7 +229,7 @@ export default function RegistrationForm() {
                       id="firstName"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       required
                     />
                   </div>
@@ -241,14 +241,14 @@ export default function RegistrationForm() {
                       id="lastName"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       required
                     />
                   </div>
                 </div>
 
                 {/* Date of Birth and Gender */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="dateOfBirth">Date of Birth</Label>
                     <Input
@@ -256,7 +256,7 @@ export default function RegistrationForm() {
                       type="date"
                       value={formData.dateOfBirth}
                       onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                     />
                   </div>
                   <div>
@@ -289,8 +289,8 @@ export default function RegistrationForm() {
                 </div>
 
                 {/* Address Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="md:col-span-2">
                     <Label htmlFor="flatHouseNo">
                       Flat, House no., Building, Company, Apartment <span className="text-red-500">*</span>
                     </Label>
@@ -298,11 +298,11 @@ export default function RegistrationForm() {
                       id="flatHouseNo"
                       value={formData.flatHouseNo}
                       onChange={(e) => handleInputChange('flatHouseNo', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       required
                     />
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <Label htmlFor="areaStreet">
                       Area, Street, Sector, Village <span className="text-red-500">*</span>
                     </Label>
@@ -310,14 +310,14 @@ export default function RegistrationForm() {
                       id="areaStreet"
                       value={formData.areaStreet}
                       onChange={(e) => handleInputChange('areaStreet', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       required
                     />
                   </div>
                 </div>
 
                 {/* Landmark and Country */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="landmark">Landmark</Label>
                     <Input
@@ -325,7 +325,7 @@ export default function RegistrationForm() {
                       placeholder="Enter Landmark"
                       value={formData.landmark}
                       onChange={(e) => handleInputChange('landmark', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                     />
                   </div>
                   <div>
@@ -334,7 +334,7 @@ export default function RegistrationForm() {
                       value={formData.country}
                       onValueChange={(value) => handleInputChange('country', value)}
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 h-10">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -347,14 +347,14 @@ export default function RegistrationForm() {
                 </div>
 
                 {/* State and City */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="state">State</Label>
                     <Select
                       value={formData.state}
                       onValueChange={(value) => handleInputChange('state', value)}
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 h-10">
                         <SelectValue placeholder="Select State" />
                       </SelectTrigger>
                       <SelectContent>
@@ -370,7 +370,7 @@ export default function RegistrationForm() {
                       value={formData.city}
                       onValueChange={(value) => handleInputChange('city', value)}
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 h-10">
                         <SelectValue placeholder="Select City" />
                       </SelectTrigger>
                       <SelectContent>
@@ -383,14 +383,14 @@ export default function RegistrationForm() {
                 </div>
 
                 {/* Age and Blood Group */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="age">Age</Label>
                     <Input
                       id="age"
                       value={formData.age}
                       onChange={(e) => handleInputChange('age', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       readOnly
                     />
                   </div>
@@ -401,13 +401,13 @@ export default function RegistrationForm() {
                       placeholder="Enter Blood Group"
                       value={formData.bloodGroup}
                       onChange={(e) => handleInputChange('bloodGroup', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                     />
                   </div>
                 </div>
 
                 {/* Email and Enquiry Source */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -416,7 +416,7 @@ export default function RegistrationForm() {
                       placeholder="Enter Email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                     />
                   </div>
                   <div>
@@ -427,7 +427,7 @@ export default function RegistrationForm() {
                       value={formData.enquirySource}
                       onValueChange={(value) => handleInputChange('enquirySource', value)}
                     >
-                      <SelectTrigger className="mt-1">
+                      <SelectTrigger className="mt-1 h-10">
                         <SelectValue placeholder="Select Source" />
                       </SelectTrigger>
                       <SelectContent>
@@ -441,7 +441,7 @@ export default function RegistrationForm() {
                 </div>
 
                 {/* Mobile No. and Telephone No. */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div>
                     <Label htmlFor="mobileNo">
                       Mobile No. <span className="text-red-500">*</span>
@@ -451,7 +451,7 @@ export default function RegistrationForm() {
                       type="tel"
                       value={formData.mobileNo}
                       onChange={(e) => handleInputChange('mobileNo', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                       required
                     />
                   </div>
@@ -463,7 +463,7 @@ export default function RegistrationForm() {
                       placeholder="Enter Telephone"
                       value={formData.telephoneNo}
                       onChange={(e) => handleInputChange('telephoneNo', e.target.value)}
-                      className="mt-1"
+                      className="mt-1 h-10"
                     />
                   </div>
                 </div>

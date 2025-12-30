@@ -62,8 +62,8 @@ export default function ChequeInvoicePage() {
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-         <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-         <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+         <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+         <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
             CHEQUE INVOICE
          </h1>
       </div>
@@ -108,7 +108,7 @@ export default function ChequeInvoicePage() {
         <div className="md:col-span-3 flex gap-2">
             <Button
                 size="sm"
-                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 h-9 rounded-md"
             >
                 Search
             </Button>
@@ -124,7 +124,7 @@ export default function ChequeInvoicePage() {
       <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
                   <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10 w-12">Sr. No.</TableHead>
                   <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Invoice No.</TableHead>

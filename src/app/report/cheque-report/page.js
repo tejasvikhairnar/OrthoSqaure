@@ -180,11 +180,11 @@ export default function ChequeReport() {
 
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
+    <div className="p-2 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           CHEQUE REPORT
         </h1>
       </div>
@@ -263,7 +263,7 @@ export default function ChequeReport() {
             </div>
 
             <div className="flex-none pt-4">
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all">
+                 <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 font-medium shadow-sm transition-all">
                     Search
                 </Button>
             </div>
@@ -278,7 +278,7 @@ export default function ChequeReport() {
       {/* Table */}
        <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden overflow-x-auto">
         <Table>
-          <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+          <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
             <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
               <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
               <TableHead className="font-bold text-gray-700 dark:text-gray-300">Invoice No.</TableHead>

@@ -117,13 +117,13 @@ export default function PaymentModeReportPage() {
   }, 0);
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-6 space-y-6">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 p-2 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500 uppercase">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-medivardaan-blue uppercase">
           PAYMENT COLLECTION REPORT
         </h1>
       </div>
@@ -221,7 +221,7 @@ export default function PaymentModeReportPage() {
             <div className="w-full md:w-auto flex gap-2">
                 <Button
                     onClick={handleSearch}
-                    className="bg-[#D35400] hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto transition-colors"
+                    className="bg-medivardaan-blue hover:bg-[#ba4a00] text-white px-8 h-10 w-full md:w-auto transition-colors"
                 >
                     Search
                 </Button>
@@ -243,7 +243,7 @@ export default function PaymentModeReportPage() {
       {/* Table */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-x-auto">
         <Table className="w-full">
-          <TableHeader className="bg-[#e6ffcc] dark:bg-[#e6ffcc]/20">
+          <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
             <TableRow className="hover:bg-transparent">
               <TableHead className="min-w-[100px] font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">Month</TableHead>
               <TableHead className="min-w-[100px] font-bold text-gray-800 dark:text-gray-200 border-r border-white dark:border-gray-600">Cash</TableHead>

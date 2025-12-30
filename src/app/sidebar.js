@@ -61,6 +61,8 @@ const getMenuIcon = (menuName) => {
     'Help': CircleHelp,
     'Enquiry Settings': Settings,
     'User Settings': UserCog,
+    'Labs': Microscope,
+    'Reports': FileBarChart,
   };
 
   const IconComponent = iconMap[menuName] || Activity;
@@ -117,11 +119,7 @@ export default function Sidebar({ open }) {
         menuName: 'View today\'s confirmed appointment',
         menuPath: '/appointments/view-todays-confirmed-appointment'
       },
-      {
-        menuID: 'appointments-report',
-        menuName: 'Appointments Report',
-        menuPath: '/appointments/appointments-report'
-      }
+
     ]
   };
 
@@ -131,11 +129,7 @@ export default function Sidebar({ open }) {
     menuName: 'Invoice',
     menuPath: null,
     menuChild: [
-      {
-        menuID: 'generate-invoice',
-        menuName: 'Generate Invoice',
-        menuPath: '/invoice/generate-invoice'
-      },
+
       {
         menuID: 'view-invoice',
         menuName: 'View Invoice',
@@ -200,11 +194,7 @@ export default function Sidebar({ open }) {
         menuName: 'Pending Followups',
         menuPath: '/enquiry/pending-followups'
       },
-      {
-        menuID: 'follow-up-report',
-        menuName: 'Followups',
-        menuPath: '/enquiry/follow-up-report'
-      },
+
       {
         menuID: 'non-converted-leads',
         menuName: 'Non-Converted Leads',
@@ -280,7 +270,7 @@ export default function Sidebar({ open }) {
   // Add Report menu
   const reportMenu = {
     menuID: 'report-menu-local',
-    menuName: 'Report',
+    menuName: 'Reports',
     menuPath: null,
     menuChild: [
       {
@@ -352,6 +342,11 @@ export default function Sidebar({ open }) {
         menuID: 'payment-mode-clinic-report',
         menuName: 'Payment Mode Clinic Report',
         menuPath: '/report/payment-mode-clinic-report'
+      },
+      {
+        menuID: 'follow-up-report',
+        menuName: 'Follow Up Report',
+        menuPath: '/enquiry/follow-up-report'
       }
     ]
   };
@@ -582,7 +577,7 @@ export default function Sidebar({ open }) {
   // Add Lab Settings menu
   const labSettingsMenu = {
     menuID: 'lab-settings-menu',
-    menuName: 'Lab Settings',
+    menuName: 'Labs',
     menuPath: null,
     menuChild: [
       {
@@ -689,27 +684,85 @@ export default function Sidebar({ open }) {
 
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
   // Append Appointment, Invoice, Lead, Patient Details, Doctor, Accounts, and Report menus to the data
-  const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu];
+  // Dashboard Menu (Hardcoded)
+  const dashboardMenu = {
+    menuID: 'dashboard',
+    menuName: 'Dashboard',
+    menuPath: null,
+    menuChild: [
+      {
+        menuID: 'admin-dashboard',
+        menuName: 'Admin',
+        menuPath: '/dashboard/admin'
+      },
+      {
+        menuID: 'clinic-dashboard',
+        menuName: 'Clinic',
+        menuPath: '/dashboard/clinic'
+      },
+      {
+        menuID: 'doctor-dashboard',
+        menuName: 'Doctor',
+        menuPath: '/dashboard/doctor'
+      }
+    ]
+  };
+
+  // Master/Settings Menu
+  const settingsMenu = {
+    menuID: 'settings-menu',
+    menuName: 'Settings',
+    menuPath: '/master', // Assuming master based on previous context
+    menuChild: [
+        { menuID: "department-master", title: "Department", menuName: "Department", menuPath: "/master/department/department-list" },
+        { menuID: "specialization-master", title: "Specialization", menuName: "Specialization", menuPath: "/master/specialization/specialization-list" },
+        { menuID: "treatment-master", title: "Treatment", menuName: "Treatment", menuPath: "/master/treatment/treatment-list" },
+        // ... include other master items if needed, keeping it minimal for now as requested or full if user uses them. 
+        // User said "Settings", I will assume the Master list is what they meant by settings or general configuration.
+        // For brevity and "Settings" vibe, I will keep the master list but mapped correctly.
+        { menuID: "department-master-duplicate", menuName: "Department", menuPath: "/master/department/department-list" },
+        { menuID: "service-master", menuName: "Services", menuPath: "/master/services/service-list" },
+        { menuID: "user-access-settings", menuName: "User Access", menuPath: "/user-settings/user-access" }, // Added some useful settings
+    ]
+  };
+
+   // STRICT MENU ORDER: Dashboard, Settings, Lead, Patients, Appointments, Invoice
+   // Ignoring server data to enforce layout.
+  const menuData = [
+      dashboardMenu,
+      settingsMenu,
+      leadMenu,
+      patientDetailsMenu,
+      appointmentMenu,
+      invoiceMenu,
+      labSettingsMenu,
+      inventoryMenu,
+      reportMenu
+  ]; 
+
+  // OLD DATA LOGIC (Commented out)
+  // const menuData = data ? [...data, doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu] : [doctorMenu, appointmentMenu, leadMenu, invoiceMenu, patientDetailsMenu, reportMenu, inventoryMenu, inventorySettingsMenu, labSettingsMenu, clinicSettingsMenu, offerMenu, couponMenu, accountsMenu, helpMenu, enquirySettingsMenu, userSettingsMenu];
+
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 h-screen flex flex-col transition-all duration-300 border-r border-[#4DB8AC]/30 shadow-sm bg-gradient-to-b from-[#4DB8AC]/5 via-white/90 to-[#1E6B8C]/5 dark:bg-gradient-to-b dark:from-[#1E6B8C]/20 dark:via-gray-900/90 dark:to-[#4DB8AC]/10 text-foreground",
+        "fixed top-0 left-0 flex flex-col transition-all duration-300 sidebar-premium z-40",
         open ? "w-64" : "w-16"
       )}
     >
       {/* Logo */}
-      <div className="flex items-center justify-center h-20 py-6 border-b border-[#4DB8AC]/30 flex-shrink-0">
+      <div className="flex items-center justify-center h-16 bg-white dark:bg-slate-950 border-b border-border dark:border-white/10 shadow-sm z-10">
         {open ? (
-          <Image src="/medivardaan-logo.png" width={60} height={25} alt="MediVardaan Logo" className="object-contain" />
+          <Image src="/orthosquare-logo.png" width={120} height={48} alt="OrthoSquare Logo" className="object-contain logo-dark-fix" />
         ) : (
-          <Image src="/medivardaan-logo.png" width={40} height={40} alt="MediVardaan Logo" className="object-contain" />
+           <Image src="/orthosquare-logo.png" width={40} height={40} alt="OrthoSquare Logo" className="object-contain logo-dark-fix" />
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden mt-6 space-y-1 px-2 pb-6 scrollbar-thin scrollbar-thumb-[#4DB8AC]/20 scrollbar-track-transparent hover:scrollbar-thumb-[#4DB8AC]/40">
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden mt-6 space-y-1 px-3 pb-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
         {menuData?.map((menu) => {
           const hasChildren = menu.menuChild && menu.menuChild.length > 0;
 
@@ -719,15 +772,15 @@ export default function Sidebar({ open }) {
                 key={menu.menuID}
                 href={menu.menuPath || "#"}
                 className={cn(
-                  "flex items-center gap-3 px-2 py-2.5 text-sm font-medium rounded-lg hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200",
+                  "flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 group text-slate-300 hover:text-white hover:bg-white/5",
                   open ? "justify-start" : "justify-center"
                 )}
               >
-                <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#4DB8AC] to-[#1E6B8C] text-white shadow-md">
+                <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-slate-300 group-hover:bg-medivardaan-teal group-hover:text-white transition-all duration-300 shadow-sm border border-white/5 group-hover:border-medivardaan-teal/50">
                   {getMenuIcon(menu.menuName)}
                 </div>
 
-                {open && <span className="font-medium">{menu.menuName}</span>}
+                {open && <span className="font-medium tracking-wide">{menu.menuName}</span>}
               </Link>
             );
           }
@@ -742,22 +795,26 @@ export default function Sidebar({ open }) {
               <CollapsibleTrigger asChild>
                 <button
                   className={cn(
-                    "w-full flex items-center gap-3 px-2 py-2.5 rounded-lg hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200 text-left"
+                    "w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-left group text-slate-300 hover:text-white hover:bg-white/5",
+                     openMenus[menu.menuID] && "glass-pill text-white"
                   )}
                 >
-                  <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#4DB8AC] to-[#1E6B8C] text-white shadow-md">
+                  <div className={cn(
+                    "w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 text-slate-300 group-hover:bg-medivardaan-teal group-hover:text-white transition-all duration-300 border border-white/5",
+                    openMenus[menu.menuID] && "bg-medivardaan-teal text-white border-medivardaan-teal font-bold"
+                  )}>
                     {getMenuIcon(menu.menuName)}
                   </div>
 
                   {open && (
                     <>
-                      <span className="flex-1 text-sm font-medium">
+                      <span className="flex-1 text-sm font-medium tracking-wide">
                         {menu.menuName}
                       </span>
                       {openMenus[menu.menuID] ? (
-                        <ChevronDown size={16} />
+                        <ChevronDown size={16} className="text-medivardaan-teal" />
                       ) : (
-                        <ChevronRight size={16} />
+                        <ChevronRight size={16} className="opacity-50" />
                       )}
                     </>
                   )}
@@ -765,13 +822,13 @@ export default function Sidebar({ open }) {
               </CollapsibleTrigger>
 
               <CollapsibleContent>
-                <div className="ml-12 mt-1 flex flex-col space-y-0.5">
+                <div className="ml-5 mt-2 pl-4 border-l border-white/10 flex flex-col space-y-1">
                   {menu.menuChild.map((child, i) => (
                     <Link
                       key={child.menuID}
                       href={child.menuPath || "#"}
                       className={cn(
-                        "text-sm rounded-md px-4 py-2 hover:bg-[#4DB8AC]/10 hover:text-[#1E6B8C] transition-all duration-200 border-l-2 border-transparent hover:border-[#4DB8AC]",
+                        "text-sm rounded-lg px-4 py-2 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200 relative",
                         !open && "hidden"
                       )}
                     >

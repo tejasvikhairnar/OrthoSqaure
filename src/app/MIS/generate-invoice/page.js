@@ -80,9 +80,13 @@ export default function GenerateInvoicePage() {
   return (
     <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-2 text-primary mb-4 border-b border-border pb-4">
-        <Settings className="w-5 h-5 text-medivardaan-teal" />
-        <h1 className="text-xl font-bold tracking-tight text-medivardaan-teal uppercase">Generate Invoice</h1>
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <Receipt className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          GENERATE INVOICE
+        </h1>
       </div>
 
       {/* Info Form */}
@@ -206,10 +210,10 @@ export default function GenerateInvoicePage() {
 
       {/* Action Buttons */}
        <div className="flex justify-center gap-4 py-6">
-            <Button className="bg-green-600 hover:bg-green-700 text-white px-10 shadow-lg">
+            <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-10 shadow-lg">
                 Submit
             </Button>
-            <Button className="bg-red-600 hover:bg-red-700 text-white px-10 shadow-lg">
+            <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-10 shadow-lg">
                 Cancel
             </Button>
        </div>

@@ -374,7 +374,7 @@ header: key.includes("W2") || key.includes("M2") || key.includes("Q2") || key.in
       </div>
     </header>
 {period!=="All"?
-<div className="pt-20 space-y-8">
+<div className="pt-2 space-y-8">
 
       {/* Stats Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">

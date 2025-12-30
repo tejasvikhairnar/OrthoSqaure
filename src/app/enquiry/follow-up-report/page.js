@@ -65,7 +65,7 @@ export default function FollowUpReportPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 min-h-screen bg-gray-50/50 dark:bg-slate-950 transition-colors duration-200">
+    <div className="p-2 space-y-2 min-h-screen bg-gray-50/50 dark:bg-slate-950 transition-colors duration-200">
       {/* Breadcrumb */}
       <div className="flex items-center text-sm text-muted-foreground mb-4">
         <Link href="/dashboard" className="flex items-center hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
@@ -88,7 +88,7 @@ export default function FollowUpReportPage() {
 
       {/* Filter Section */}
       <Card className="border-none shadow-sm bg-white dark:bg-slate-900">
-        <CardContent className="p-6">
+        <CardContent className="p-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center">
              {/* Clinic Select */}
             <div className="w-full">

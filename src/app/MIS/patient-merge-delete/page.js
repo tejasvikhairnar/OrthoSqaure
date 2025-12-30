@@ -10,11 +10,15 @@ export default function PatientMergeDeletePage() {
   const [showSelection, setShowSelection] = useState(false)
 
   return (
-    <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="p-2 space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-2 text-primary mb-8 border-b border-border pb-4">
-        <Settings className="w-5 h-5 text-medivardaan-teal" />
-        <h1 className="text-xl font-bold tracking-tight text-medivardaan-teal uppercase">Patients Merge And Delete</h1>
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          PATIENT MERGE & DELETE
+        </h1>
       </div>
 
       {/* Search Section */}
@@ -44,7 +48,7 @@ export default function PatientMergeDeletePage() {
         {/* Action Toolbar */}
         <div className="py-4 px-6 bg-muted/20 border-b border-border flex justify-center sticky top-0 bg-opacity-95 backdrop-blur">
              {!showSelection ? (
-                <Button onClick={() => setShowSelection(true)} className="bg-green-600 hover:bg-green-700 text-white px-8 shadow-sm transition-all hover:scale-105">
+                <Button onClick={() => setShowSelection(true)} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 shadow-sm transition-all hover:scale-105">
                     Select Patients to Merge
                 </Button>
              ) : (

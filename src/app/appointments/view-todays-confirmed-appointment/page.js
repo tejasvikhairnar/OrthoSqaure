@@ -56,9 +56,9 @@ export default function ViewTodaysConfirmedAppointments() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-2 mb-6 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
-          CONSULTATION ADD TREATMENT
+        <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
+          CONSULTATION AND TREATMENT
         </h1>
       </div>
 
@@ -83,7 +83,7 @@ export default function ViewTodaysConfirmedAppointments() {
         <div>
           <Button
             onClick={handleSearch}
-            className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all"
+            className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 font-medium shadow-sm transition-all"
           >
             Search
           </Button>

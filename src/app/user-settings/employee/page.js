@@ -177,14 +177,14 @@ const EmployeePage = () => {
   };
 
   return (
-    <div className="w-full p-6 space-y-6 bg-background text-foreground min-h-screen">
+    <div className="w-full p-2 space-y-6 bg-background text-foreground min-h-screen">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600 dark:text-red-500" />
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <Users className="w-4 h-4 text-medivardaan-blue" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
-          EMPLOYEE
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          EMPLOYEE MANAGEMENT
         </h1>
       </div>
 
@@ -222,7 +222,7 @@ const EmployeePage = () => {
             </div>
             <div>
               <Button 
-                className="bg-[#D35400] hover:bg-[#A04000] text-white dark:bg-orange-700 dark:hover:bg-orange-800 px-8"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white dark:bg-orange-700 dark:hover:bg-orange-800 px-8"
                 onClick={handleSearch}
               >
                 Search
@@ -244,7 +244,7 @@ const EmployeePage = () => {
           {/* Table */}
           <div className="rounded-md border border-gray-200 dark:border-gray-700 overflow-hidden">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-green-900/20">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="border-b border-gray-200 dark:border-gray-700 hover:bg-transparent">
                   <TableHead className="w-16 text-gray-700 dark:text-gray-200 font-semibold">Sr. No.</TableHead>
                   <TableHead className="w-32 text-gray-700 dark:text-gray-200 font-semibold">Photo</TableHead>
@@ -336,7 +336,7 @@ const EmployeePage = () => {
                 name="empCode"
                 value={formData.empCode}
                 onChange={handleInputChange}
-                className="col-span-3"
+                className="col-span-3 h-10"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
@@ -348,7 +348,7 @@ const EmployeePage = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="col-span-3"
+                className="col-span-3 h-10"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
@@ -360,7 +360,7 @@ const EmployeePage = () => {
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleInputChange}
-                className="col-span-3"
+                className="col-span-3 h-10"
               />
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
@@ -372,7 +372,7 @@ const EmployeePage = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="col-span-3"
+                className="col-span-3 h-10"
               />
             </div>
              <div className="grid grid-cols-4 items-center gap-4">
@@ -385,12 +385,12 @@ const EmployeePage = () => {
                 type="date"
                 value={formData.regDate}
                 onChange={handleInputChange}
-                className="col-span-3"
+                className="col-span-3 h-10"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button type="submit" onClick={handleSave} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white">
                 {isEditing ? "Update" : "Save"}
             </Button>
           </DialogFooter>

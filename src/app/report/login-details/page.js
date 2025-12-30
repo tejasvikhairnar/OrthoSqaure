@@ -99,11 +99,11 @@ export default function LoginDetailsPage() {
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
+    <div className="p-2 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           LOGIN
         </h1>
       </div>
@@ -112,7 +112,7 @@ export default function LoginDetailsPage() {
         <>
             {/* Filters */}
             <div className="space-y-4">
-                <RadioGroup value={loginType} onValueChange={setLoginType} className="flex gap-6">
+                <RadioGroup value={loginType} onValueChange={setLoginType} className="flex gap-4">
                     <div className="flex items-center space-x-2">
                     <RadioGroupItem value="clinic" id="clinic" className="text-blue-600 border-blue-600" />
                     <Label htmlFor="clinic" className="text-gray-700 dark:text-gray-300 font-medium">Clinic</Label>
@@ -123,27 +123,27 @@ export default function LoginDetailsPage() {
                     </div>
                 </RadioGroup>
 
-                <div className="flex flex-col md:flex-row gap-4 items-end">
-                <div className="w-full md:w-1/3">
-                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Name</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                    <Label className="text-xs font-medium text-gray-700 dark:text-gray-300">Name</Label>
                     <Input
                     placeholder="Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 h-10 mt-1"
                     />
                 </div>
-                <div className="w-full md:w-1/3">
-                    <label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mobile No</label>
+                <div>
+                    <Label className="text-xs font-medium text-gray-700 dark:text-gray-300">Mobile No</Label>
                     <Input
                     placeholder="Mobile No"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
-                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
+                    className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 h-10 mt-1"
                     />
                 </div>
 
-                <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto">
+                <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 font-medium shadow-sm transition-all w-full md:w-auto h-10">
                     Search
                 </Button>
                 </div>
@@ -157,7 +157,7 @@ export default function LoginDetailsPage() {
             {/* Table */}
             <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden">
                 <Table>
-                <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+                <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                     <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
                     <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
                     <TableHead className="font-bold text-gray-700 dark:text-gray-300">Name</TableHead>
@@ -211,9 +211,9 @@ export default function LoginDetailsPage() {
             </div>
       </>
     ) : (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm space-y-6 max-w-2xl mx-auto">
+        <div className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-2 max-w-2xl mx-auto">
              <div className="space-y-4">
-                 <h3 className="font-bold text-lg text-red-500 border-b pb-2">EDIT LOGIN DETAILS</h3>
+                 <h3 className="font-bold text-lg text-[#0f7396] border-b pb-2">EDIT LOGIN DETAILS</h3>
                  
                  <div className="space-y-2">
                     <Label>Name</Label>
@@ -242,7 +242,7 @@ export default function LoginDetailsPage() {
 
              <div className="flex justify-end gap-4 pt-4">
                 <Button onClick={handleCancel} variant="outline" className="min-w-[100px]">Cancel</Button>
-                <Button onClick={handleSubmit} className="bg-[#1E6B8C] hover:bg-[#15526d] text-white min-w-[100px]">
+                <Button onClick={handleSubmit} className="bg-medivardaan-blue hover:bg-[#15526d] text-white min-w-[100px]">
                     Update
                 </Button>
              </div>

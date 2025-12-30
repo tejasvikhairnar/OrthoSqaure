@@ -463,7 +463,7 @@ function PatientEditContent() {
             Back to Search
           </Button>
           <div className="flex-1">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+            <h1 className="text-2xl font-semibold text-[#0f7396] dark:text-[#0f7396]">
               Edit Patient Details
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -535,14 +535,14 @@ function PatientEditContent() {
                   </div>
 
                   {/* Patient No. and Date */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <Label htmlFor="patientNo">Patient No.</Label>
                       <Input
                         id="patientNo"
                         value={formData.patientNo}
                         onChange={(e) => handleInputChange("patientNo", e.target.value)}
-                        className="mt-1 bg-gray-50 dark:bg-gray-900"
+                        className="mt-1 bg-gray-50 dark:bg-gray-900 h-10"
                         readOnly
                       />
                     </div>
@@ -553,13 +553,13 @@ function PatientEditContent() {
                         type="date"
                         value={formData.date}
                         onChange={(e) => handleInputChange("date", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                       />
                     </div>
                   </div>
 
                   {/* First Name and Last Name */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <Label htmlFor="firstName">
                         First Name <span className="text-red-500">*</span>
@@ -568,7 +568,7 @@ function PatientEditContent() {
                         id="firstName"
                         value={formData.firstName}
                         onChange={(e) => handleInputChange("firstName", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                         required
                       />
                     </div>
@@ -580,7 +580,7 @@ function PatientEditContent() {
                         id="lastName"
                         value={formData.lastName}
                         onChange={(e) => handleInputChange("lastName", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                         required
                       />
                     </div>
@@ -628,8 +628,8 @@ function PatientEditContent() {
                   </div>
 
                   {/* Address Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="md:col-span-2">
                       <Label htmlFor="flatHouseNo">
                         Flat, House no., Building, Company, Apartment <span className="text-red-500">*</span>
                       </Label>
@@ -637,11 +637,11 @@ function PatientEditContent() {
                         id="flatHouseNo"
                         value={formData.flatHouseNo}
                         onChange={(e) => handleInputChange("flatHouseNo", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                         required
                       />
                     </div>
-                    <div>
+                    <div className="md:col-span-2">
                       <Label htmlFor="areaStreet">
                         Area, Street, Sector, Village <span className="text-red-500">*</span>
                       </Label>
@@ -649,14 +649,14 @@ function PatientEditContent() {
                         id="areaStreet"
                         value={formData.areaStreet}
                         onChange={(e) => handleInputChange("areaStreet", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                         required
                       />
                     </div>
                   </div>
 
                   {/* Landmark and Country */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <Label htmlFor="landmark">Landmark</Label>
                       <Input
@@ -664,7 +664,7 @@ function PatientEditContent() {
                         placeholder="Enter Landmark"
                         value={formData.landmark}
                         onChange={(e) => handleInputChange("landmark", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                       />
                     </div>
                     <div>
@@ -673,7 +673,7 @@ function PatientEditContent() {
                         value={formData.country}
                         onValueChange={(value) => handleInputChange("country", value)}
                       >
-                        <SelectTrigger className="mt-1">
+                        <SelectTrigger className="mt-1 h-10">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -686,14 +686,14 @@ function PatientEditContent() {
                   </div>
 
                   {/* State and City */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <Label htmlFor="state">State</Label>
                       <Select
                         value={formData.state}
                         onValueChange={(value) => handleInputChange("state", value)}
                       >
-                        <SelectTrigger className="mt-1">
+                        <SelectTrigger className="mt-1 h-10">
                           <SelectValue placeholder="Select State" />
                         </SelectTrigger>
                         <SelectContent>
@@ -711,7 +711,7 @@ function PatientEditContent() {
                         value={formData.city}
                         onValueChange={(value) => handleInputChange("city", value)}
                       >
-                        <SelectTrigger className="mt-1">
+                        <SelectTrigger className="mt-1 h-10">
                           <SelectValue placeholder="Select City" />
                         </SelectTrigger>
                         <SelectContent>
@@ -726,14 +726,14 @@ function PatientEditContent() {
                   </div>
 
                   {/* Age and Blood Group */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div>
                       <Label htmlFor="age">Age</Label>
                       <Input
                         id="age"
                         value={formData.age}
                         onChange={(e) => handleInputChange("age", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                         readOnly
                       />
                     </div>
@@ -744,7 +744,7 @@ function PatientEditContent() {
                         placeholder="Enter Blood Group"
                         value={formData.bloodGroup}
                         onChange={(e) => handleInputChange("bloodGroup", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 h-10"
                       />
                     </div>
                   </div>
@@ -1949,7 +1949,7 @@ function PatientEditContent() {
                   <Button
                     type="button"
                     onClick={handleNextFromPersonal}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -1959,7 +1959,7 @@ function PatientEditContent() {
                   <Button
                     type="button"
                     onClick={handleNextFromMedical}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -1967,13 +1967,13 @@ function PatientEditContent() {
 
                 {activeTab === "dental" && (
                   <>
-                    <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-8">
+                    <Button type="submit" className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8">
                       Submit
                     </Button>
                     <Button
                       type="button"
                       onClick={handleCancel}
-                      className="bg-red-600 hover:bg-red-700 text-white px-8"
+                      className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                     >
                       Cancel
                     </Button>
@@ -1990,12 +1990,22 @@ function PatientEditContent() {
 
 export default function PatientEditPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-400">Loading patient data...</div>
+    <>
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <UserCog className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          PATIENT EDIT
+        </h1>
       </div>
-    }>
-      <PatientEditContent />
-    </Suspense>
+      <Suspense fallback={
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+          <div className="text-gray-600 dark:text-gray-400">Loading patient data...</div>
+        </div>
+      }>
+        <PatientEditContent />
+      </Suspense>
+    </>
   );
 }

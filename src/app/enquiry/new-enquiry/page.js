@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { getLeads } from "@/api/client/leads";
 import { Pagination } from "@/components/Pagination";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,7 +21,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Settings, Eye, Trash2, CheckCircle } from "lucide-react";
+import { 
+  Settings, 
+  Eye, 
+  Trash2, 
+  CheckCircle, 
+  Search, 
+  User, 
+  Phone, 
+  Building2, 
+  Calendar, 
+  Plus 
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function NewLeadPage() {
@@ -41,8 +52,7 @@ export default function NewLeadPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
-  // Fetch leads on component mount and when page changes
-  // Fetch leads on component mount and when filters change (not on page change)
+  // Fetch leads on component mount
   useEffect(() => {
     fetchLeads();
   }, []);
@@ -58,17 +68,15 @@ export default function NewLeadPage() {
       // Add pagination params
       const queryParams = {
         ...cleanFilters,
-        PageNumber: 1, // Always fetch from page 1
+        PageNumber: 1, // Always fetch from page 1 initially
         PageSize: 1000, // Fetch large batch for client-side pagination
       };
 
       const data = await getLeads(queryParams);
       
-      console.log('[DEBUG] Raw API Data (First Item):', data && data[0] ? data[0] : 'No data');
-      
       // Transform API data to match table structure
       const transformedLeads = Array.isArray(data) ? data.map((lead, index) => ({
-        srNo: index + 1, // Absolute index for client-side list
+        srNo: index + 1,
         leadNo: lead.enquiryNo || "-",
         name: `${lead.firstName || ""} ${lead.lastName || ""}`.trim() || "-",
         mobileNo: lead.mobile || "-",
@@ -103,12 +111,6 @@ export default function NewLeadPage() {
     fetchLeads(filters);
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage > 0) {
-      setCurrentPage(newPage);
-    }
-  };
-
   const handleAddNewLead = () => {
     router.push("/enquiry/add-enquiry-form");
   };
@@ -125,38 +127,78 @@ export default function NewLeadPage() {
   };
 
   return (
-    <div className="w-full p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+    <div className="w-full p-6 space-y-8 bg-gray-50/50 dark:bg-gray-950/50 min-h-screen">
+      {/* Header & Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0f7396] to-[#0a5c7a] shadow-lg shadow-[#0f7396]/20 flex items-center justify-center text-white">
+            <Settings className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+              Lead Management
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Manage and track your enquiry leads
+            </p>
+          </div>
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
-          LEAD
-        </h1>
+        <Button
+          onClick={handleAddNewLead}
+          className="bg-[#0f7396] hover:bg-[#0a5c7a] text-white shadow-md hover:shadow-lg transition-all duration-200"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add New Lead
+        </Button>
       </div>
 
       {/* Search Filters */}
-      <Card className="border-gray-200 dark:border-gray-800">
+      <Card className="border-none shadow-sm bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800">
+        <CardHeader className="pb-4 border-b border-gray-100 dark:border-gray-800">
+          <CardTitle className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <Search className="w-4 h-4 text-[#0f7396]" />
+            Search Filters
+          </CardTitle>
+        </CardHeader>
         <CardContent className="p-6">
-          <div className="space-y-4">
-            {/* First Row */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Input
-                placeholder="Name"
-                value={filters.name}
-                onChange={(e) => handleFilterChange("name", e.target.value)}
-                className="border-gray-300 dark:border-gray-700"
-              />
-              <Input
-                placeholder="Mobile No"
-                value={filters.mobileNo}
-                onChange={(e) => handleFilterChange("mobileNo", e.target.value)}
-                className="border-gray-300 dark:border-gray-700"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+            {/* Name */}
+            <div className="lg:col-span-2 space-y-2">
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Patient Name</label>
+              <div className="relative group">
+                <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-hover:text-[#0f7396] transition-colors" />
+                <Input
+                  placeholder="Search name"
+                  value={filters.name}
+                  onChange={(e) => handleFilterChange("name", e.target.value)}
+                  className="pl-9 border-gray-200 dark:border-gray-800 focus:border-[#0f7396] transition-all bg-gray-50/50 dark:bg-gray-900/50"
+                />
+              </div>
+            </div>
+
+            {/* Mobile */}
+            <div className="lg:col-span-2 space-y-2">
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Mobile No</label>
+              <div className="relative group">
+                <Phone className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-hover:text-[#0f7396] transition-colors" />
+                <Input
+                  placeholder="Search mobile"
+                  value={filters.mobileNo}
+                  onChange={(e) => handleFilterChange("mobileNo", e.target.value)}
+                  className="pl-9 border-gray-200 dark:border-gray-800 focus:border-[#0f7396] transition-all bg-gray-50/50 dark:bg-gray-900/50"
+                />
+              </div>
+            </div>
+
+            {/* Clinic */}
+            <div className="lg:col-span-2 space-y-2">
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Clinic</label>
               <Select value={filters.clinic} onValueChange={(value) => handleFilterChange("clinic", value)}>
-                <SelectTrigger className="border-gray-300 dark:border-gray-700">
-                  <SelectValue placeholder="-- Select Clinic --" />
+                <SelectTrigger className="border-gray-200 dark:border-gray-800 focus:ring-[#0f7396] bg-gray-50/50 dark:bg-gray-900/50">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-gray-400" />
+                    <SelectValue placeholder="All Clinics" />
+                  </div>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Clinics</SelectItem>
@@ -167,26 +209,41 @@ export default function NewLeadPage() {
               </Select>
             </div>
 
-            {/* Second Row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-              <Input
-                type="date"
-                placeholder="From Enquiry Date"
-                value={filters.fromDate}
-                onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-                className="border-gray-300 dark:border-gray-700"
-              />
-              <Input
-                type="date"
-                placeholder="To Enquiry Date"
-                value={filters.toDate}
-                onChange={(e) => handleFilterChange("toDate", e.target.value)}
-                className="border-gray-300 dark:border-gray-700"
-              />
+            {/* Date Range - From */}
+            <div className="lg:col-span-2 space-y-2">
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">From Date</label>
+              <div className="relative group">
+                <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-hover:text-[#0f7396] transition-colors" />
+                <Input
+                  type="date"
+                  value={filters.fromDate}
+                  onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+                  className="pl-9 border-gray-200 dark:border-gray-800 focus:border-[#0f7396] transition-all bg-gray-50/50 dark:bg-gray-900/50"
+                />
+              </div>
+            </div>
+
+            {/* Date Range - To */}
+            <div className="lg:col-span-2 space-y-2">
+              <label className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">To Date</label>
+              <div className="relative group">
+                <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-hover:text-[#0f7396] transition-colors" />
+                <Input
+                  type="date"
+                  value={filters.toDate}
+                  onChange={(e) => handleFilterChange("toDate", e.target.value)}
+                  className="pl-9 border-gray-200 dark:border-gray-800 focus:border-[#0f7396] transition-all bg-gray-50/50 dark:bg-gray-900/50"
+                />
+              </div>
+            </div>
+
+            {/* Search Button */}
+            <div className="lg:col-span-2">
               <Button
                 onClick={handleSearch}
-                className="bg-red-600 hover:bg-red-700 text-white"
+                className="w-full bg-[#0f7396] hover:bg-[#0a5c7a] text-white shadow-sm transition-all"
               >
+                <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
             </div>
@@ -194,42 +251,32 @@ export default function NewLeadPage() {
         </CardContent>
       </Card>
 
-      {/* Action Buttons and Total */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={handleAddNewLead}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Add New Lead
-          </Button>
-        </div>
-
-      </div>
-
       {/* Leads Table */}
-      <Card className="border-gray-200 dark:border-gray-800">
+      <Card className="border-none shadow-sm bg-white dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-800">
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
+          <div className="rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800">
             <Table>
               <TableHeader>
-                <TableRow className="bg-green-100 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/20">
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Sr. No.</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Lead No</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Name</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Mobile No</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Clinic Name</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Source Name</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Status</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100">Date</TableHead>
-                  <TableHead className="font-semibold text-gray-900 dark:text-gray-100 text-center">Actions</TableHead>
+                <TableRow className="bg-[#0f7396]/5 hover:bg-[#0f7396]/10 border-b border-gray-200 dark:border-gray-800">
+                  <TableHead className="font-semibold text-[#0f7396] py-3">Sr. No.</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Lead No</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Name</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Mobile No</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Clinic Name</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Source Name</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Status</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396]">Date</TableHead>
+                  <TableHead className="font-semibold text-[#0f7396] text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
                     <TableCell colSpan={9} className="h-24 text-center">
-                      Loading leads...
+                      <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
+                         <div className="w-6 h-6 border-2 border-[#0f7396] border-t-transparent rounded-full animate-spin"></div>
+                         Loading leads...
+                      </div>
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -237,32 +284,39 @@ export default function NewLeadPage() {
                   currentItems.map((lead, index) => (
                   <TableRow
                     key={index}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
                   >
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.srNo}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.leadNo}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.name}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.mobileNo}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.clinicName}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.sourceName}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.status}</TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100">{lead.date}</TableCell>
+                    <TableCell className="font-medium text-gray-700 dark:text-gray-300">{lead.srNo}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">{lead.leadNo}</TableCell>
+                    <TableCell className="font-medium text-gray-900 dark:text-gray-100">{lead.name}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">{lead.mobileNo}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                        {lead.clinicName}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">{lead.sourceName}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">{lead.status}</TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">{lead.date}</TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-1">
                         <button
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                          className="p-1.5 hover:bg-green-50 text-green-600 rounded-md transition-colors"
+                          title="Approve"
                         >
-                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <CheckCircle className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                          className="p-1.5 hover:bg-blue-50 text-blue-600 rounded-md transition-colors"
+                          title="View Details"
                         >
-                          <Eye className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                          <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                          className="p-1.5 hover:bg-red-50 text-red-600 rounded-md transition-colors"
+                          title="Delete"
                         >
-                          <Trash2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </TableCell>
@@ -270,8 +324,11 @@ export default function NewLeadPage() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={9} className="h-24 text-center text-gray-500">
-                     No leads found.
+                  <TableCell colSpan={9} className="h-32 text-center text-gray-500">
+                     <div className="flex flex-col items-center justify-center gap-2">
+                       <Search className="w-8 h-8 text-gray-300" />
+                       <p>No leads found matching your criteria.</p>
+                     </div>
                   </TableCell>
                 </TableRow>
               )
@@ -279,8 +336,6 @@ export default function NewLeadPage() {
               </TableBody>
             </Table>
           </div>
-          
-
         </CardContent>
       </Card>
 

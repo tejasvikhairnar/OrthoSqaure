@@ -89,11 +89,11 @@ export default function NewAppointmentPage() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 pb-4 border-b border-border">
-        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#4DB8AC]/10 dark:bg-[#1E6B8C]/20">
-          <Settings className="w-5 h-5 text-[#E74C3C]" />
+        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-medivardaan-teal/10 dark:bg-medivardaan-blue/20">
+          <Settings className="w-5 h-5 text-[#0f7396]" />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold text-[#E74C3C]">BOOK APPOINTMENT</h1>
+          <h1 className="text-2xl font-semibold text-[#0f7396]">BOOK APPOINTMENT</h1>
         </div>
       </div>
 
@@ -241,7 +241,7 @@ export default function NewAppointmentPage() {
                   value="Male"
                   checked={formData.gender === 'Male'}
                   onChange={(e) => handleInputChange('gender', e.target.value)}
-                  className="w-4 h-4 text-[#E74C3C] focus:ring-[#E74C3C] cursor-pointer"
+                  className="w-4 h-4 text-[#0f7396] focus:ring-[#0f7396] cursor-pointer"
                 />
                 <span className="text-sm">Male</span>
               </label>
@@ -252,7 +252,7 @@ export default function NewAppointmentPage() {
                   value="Female"
                   checked={formData.gender === 'Female'}
                   onChange={(e) => handleInputChange('gender', e.target.value)}
-                  className="w-4 h-4 text-[#E74C3C] focus:ring-[#E74C3C] cursor-pointer"
+                  className="w-4 h-4 text-[#0f7396] focus:ring-[#0f7396] cursor-pointer"
                 />
                 <span className="text-sm">Female</span>
               </label>
@@ -317,7 +317,7 @@ export default function NewAppointmentPage() {
           <Button
             type="button"
             onClick={handleCancel}
-            className="px-12 bg-red-600 hover:bg-red-700 text-white"
+            className="px-12 bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white"
           >
             Cancel
           </Button>

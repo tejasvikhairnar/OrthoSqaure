@@ -313,20 +313,24 @@ export default function DoctorRegistrationPage() {
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-lg bg-medivardaan-blue/10 flex items-center justify-center">
+          <Settings className="w-5 h-5 text-medivardaan-blue" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
-          DOCTOR
+        <h1 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight">
+          DOCTOR REGISTRATION
         </h1>
       </div>
 
       {/* Add Doctor Form Section */}
       {showAddForm && (
-        <Card className="border-2 border-blue-500 dark:border-blue-700">
+        <Card className="card-premium border-0">
           <CardContent className="p-6">
+            <div className="flex items-center gap-2 mb-4 border-b border-[#0f7396]/20 pb-2">
+        <Briefcase className="w-5 h-5 text-[#0f7396]" />
+        <h3 className="text-lg font-bold text-[#0f7396]">Professional Profile</h3>
+      </div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-blue-600 dark:text-blue-500">
+              <h2 className="text-lg font-bold text-slate-800 dark:text-white">
                 Add New Doctor
               </h2>
               <Button
@@ -362,31 +366,37 @@ export default function DoctorRegistrationPage() {
 
             {/* Tabs Section */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="w-full grid grid-cols-3 bg-gray-100 dark:bg-gray-800">
+              <TabsList className="w-full grid grid-cols-3 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
                 <TabsTrigger
                   value="personal"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-white data-[state=active]:text-medivardaan-blue data-[state=active]:shadow-sm rounded-md transition-all"
                 >
                   Personal Information
                 </TabsTrigger>
                 <TabsTrigger
                   value="education"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-white data-[state=active]:text-medivardaan-blue data-[state=active]:shadow-sm rounded-md transition-all"
                 >
                   Education
                 </TabsTrigger>
                 <TabsTrigger
                   value="documents"
-                  className="data-[state=active]:bg-[#4DB8AC] data-[state=active]:text-white"
+                  className="data-[state=active]:bg-white data-[state=active]:text-medivardaan-blue data-[state=active]:shadow-sm rounded-md transition-all"
                 >
                   Documents
                 </TabsTrigger>
               </TabsList>
 
-              {/* Personal Information Tab - Content will be added here */}
+                {/* Personal Information Tab - Content */}
               <TabsContent value="personal" className="space-y-6 mt-6">
+                 {/* Section Header: Personal Details */}
+                 <div className="flex items-center gap-2 mb-4 border-b border-[#0f7396]/20 pb-2">
+                    <User className="w-5 h-5 text-[#0f7396]" />
+                    <h3 className="text-lg font-bold text-[#0f7396]">Personal Details</h3>
+                 </div>
+
                 {/* Doctor Type and Date */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="doctorType" className="text-sm font-medium">
                       Doctor Type
@@ -395,7 +405,7 @@ export default function DoctorRegistrationPage() {
                       value={formData.doctorType}
                       onValueChange={(value) => handleInputChange("doctorType", value)}
                     >
-                      <SelectTrigger className="border-gray-300 dark:border-gray-700">
+                      <SelectTrigger className="border-gray-300 dark:border-gray-700 h-10">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -415,13 +425,13 @@ export default function DoctorRegistrationPage() {
                       id="date"
                       value={formData.date}
                       onChange={(e) => handleInputChange("date", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                     />
                   </div>
                 </div>
 
                 {/* Title, First Name, Last Name */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="title" className="text-sm font-medium">
                       Title
@@ -430,7 +440,7 @@ export default function DoctorRegistrationPage() {
                       value={formData.title}
                       onValueChange={(value) => handleInputChange("title", value)}
                     >
-                      <SelectTrigger className="border-gray-300 dark:border-gray-700">
+                      <SelectTrigger className="border-gray-300 dark:border-gray-700 h-10">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -450,7 +460,7 @@ export default function DoctorRegistrationPage() {
                       id="firstName"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange("firstName", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                     />
                   </div>
 
@@ -462,196 +472,7 @@ export default function DoctorRegistrationPage() {
                       id="lastName"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange("lastName", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                    />
-                  </div>
-                </div>
-
-                {/* Date of Birth and Gender */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="dateOfBirth" className="text-sm font-medium">
-                      Date Of Birth
-                    </Label>
-                    <Input
-                      type="date"
-                      id="dateOfBirth"
-                      value={formData.dateOfBirth}
-                      onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Gender</Label>
-                    <RadioGroup
-                      value={formData.gender}
-                      onValueChange={(value) => handleInputChange("gender", value)}
-                      className="flex gap-6 mt-2"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="male" id="male" />
-                        <Label htmlFor="male" className="font-normal cursor-pointer">
-                          Male
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="female" id="female" />
-                        <Label htmlFor="female" className="font-normal cursor-pointer">
-                          Female
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                </div>
-
-                {/* Address Line 1 and 2 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="addressLine1" className="text-sm font-medium">
-                      Address Line 1
-                    </Label>
-                    <Textarea
-                      id="addressLine1"
-                      value={formData.addressLine1}
-                      onChange={(e) => handleInputChange("addressLine1", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700 min-h-[80px]"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="addressLine2" className="text-sm font-medium">
-                      Address Line 2
-                    </Label>
-                    <Textarea
-                      id="addressLine2"
-                      value={formData.addressLine2}
-                      onChange={(e) => handleInputChange("addressLine2", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700 min-h-[80px]"
-                    />
-                  </div>
-                </div>
-
-                {/* Country and State */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="country" className="text-sm font-medium">
-                      Country
-                    </Label>
-                    <Select
-                      value={formData.country}
-                      onValueChange={(value) => handleInputChange("country", value)}
-                    >
-                      <SelectTrigger className="border-gray-300 dark:border-gray-700">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="India">India</SelectItem>
-                        <SelectItem value="USA">USA</SelectItem>
-                        <SelectItem value="UK">UK</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="state" className="text-sm font-medium">
-                      State
-                    </Label>
-                    <Select
-                      value={formData.state}
-                      onValueChange={(value) => handleInputChange("state", value)}
-                    >
-                      <SelectTrigger className="border-gray-300 dark:border-gray-700">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Maharashtra">Maharashtra</SelectItem>
-                        <SelectItem value="Gujarat">Gujarat</SelectItem>
-                        <SelectItem value="Karnataka">Karnataka</SelectItem>
-                        <SelectItem value="Delhi">Delhi</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* City and Area Pin */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="city" className="text-sm font-medium">
-                      City
-                    </Label>
-                    <Select
-                      value={formData.city}
-                      onValueChange={(value) => handleInputChange("city", value)}
-                    >
-                      <SelectTrigger className="border-gray-300 dark:border-gray-700">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Mumbai">Mumbai</SelectItem>
-                        <SelectItem value="Pune">Pune</SelectItem>
-                        <SelectItem value="Nashik">Nashik</SelectItem>
-                        <SelectItem value="Panvel">Panvel</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="areaPin" className="text-sm font-medium">
-                      Area Pin
-                    </Label>
-                    <Input
-                      id="areaPin"
-                      value={formData.areaPin}
-                      onChange={(e) => handleInputChange("areaPin", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                      placeholder="Enter PIN code"
-                    />
-                  </div>
-                </div>
-
-                {/* Mobile Numbers */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="mobileNo1" className="text-sm font-medium">
-                      Mobile No 1. <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      id="mobileNo1"
-                      value={formData.mobileNo1}
-                      onChange={(e) => handleInputChange("mobileNo1", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                      placeholder="Enter mobile number"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="mobileNo2" className="text-sm font-medium">
-                      Mobile No 2.
-                    </Label>
-                    <Input
-                      id="mobileNo2"
-                      value={formData.mobileNo2}
-                      onChange={(e) => handleInputChange("mobileNo2", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                      placeholder="Enter mobile number"
-                    />
-                  </div>
-                </div>
-
-                {/* Email and Blood Group */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-medium">
-                      Email <span className="text-red-500">*</span>
-                    </Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
-                      placeholder="Enter email address"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                     />
                   </div>
 
@@ -663,14 +484,14 @@ export default function DoctorRegistrationPage() {
                       id="bloodGroup"
                       value={formData.bloodGroup}
                       onChange={(e) => handleInputChange("bloodGroup", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                       placeholder="Enter blood group"
                     />
                   </div>
                 </div>
 
                 {/* In Time and Out Time */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="inTime" className="text-sm font-medium">
                       In Time (HH:MM) <span className="text-red-500">*</span>
@@ -680,7 +501,7 @@ export default function DoctorRegistrationPage() {
                       id="inTime"
                       value={formData.inTime}
                       onChange={(e) => handleInputChange("inTime", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                     />
                   </div>
 
@@ -693,7 +514,7 @@ export default function DoctorRegistrationPage() {
                       id="outTime"
                       value={formData.outTime}
                       onChange={(e) => handleInputChange("outTime", e.target.value)}
-                      className="border-gray-300 dark:border-gray-700"
+                      className="border-gray-300 dark:border-gray-700 h-10"
                     />
                   </div>
                 </div>
@@ -702,7 +523,7 @@ export default function DoctorRegistrationPage() {
                 <div className="flex justify-end pt-4">
                   <Button
                     onClick={handleNext}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -916,7 +737,7 @@ export default function DoctorRegistrationPage() {
                 <div className="flex justify-end pt-6">
                   <Button
                     onClick={handleNext}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
                   >
                     Next
                   </Button>
@@ -1159,7 +980,7 @@ export default function DoctorRegistrationPage() {
                   <Button
                     onClick={handleFormSubmit}
                     disabled={upsertMutation.isPending}
-                    className="bg-green-600 hover:bg-green-700 text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {upsertMutation.isPending ? (
                       <>
@@ -1174,7 +995,7 @@ export default function DoctorRegistrationPage() {
                     onClick={() => setShowAddForm(false)}
                     disabled={upsertMutation.isPending}
                     variant="outline"
-                    className="bg-red-600 hover:bg-red-700 text-white border-red-600 px-8 disabled:opacity-50"
+                    className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white border-medivardaan-blue px-8 disabled:opacity-50"
                   >
                     Cancel
                   </Button>
@@ -1233,13 +1054,13 @@ export default function DoctorRegistrationPage() {
           {/* <Button
             onClick={handleExcelUpload}
             variant="outline"
-            className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
+            className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white border-medivardaan-blue"
           >
             Excel Upload
           </Button> */}
           <Button
             onClick={handleAddNew}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white"
           >
             Add New
           </Button>
@@ -1260,7 +1081,7 @@ export default function DoctorRegistrationPage() {
               <p className="text-red-700 dark:text-red-300">{error.message}</p>
               <button
                 onClick={() => refetch()}
-                className="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition-colors"
+                className="mt-3 px-4 py-2 bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white rounded-md text-sm font-medium transition-colors"
               >
                 Retry
               </button>
@@ -1284,7 +1105,7 @@ export default function DoctorRegistrationPage() {
               ) : (
                 <Table>
               <TableHeader>
-                <TableRow className="bg-green-100 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/20">
+                <TableRow className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border hover:bg-medivardaan-teal/20 dark:hover:bg-accent/80">
                   <TableHead className="font-semibold text-gray-900 dark:text-gray-100">
                     Sr. No.
                   </TableHead>

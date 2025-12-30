@@ -69,8 +69,8 @@ export default function AssignedCoupon() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue" />
+        <h1 className="text-lg font-bold text-[#0f7396] uppercase tracking-wide">
           COMPANY / ORGANISATION ASSIGNED COUPON
         </h1>
       </div>
@@ -100,12 +100,12 @@ export default function AssignedCoupon() {
                     ))}
                 </SelectContent>
             </Select>
-             <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+             <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
                 Search
             </Button>
               <Button 
                 onClick={handleAddNew}
-                className="bg-[#1E6B8C] hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
+                className="bg-medivardaan-blue hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
             >
                 Add New
             </Button>
@@ -202,7 +202,7 @@ export default function AssignedCoupon() {
               
               <div className="flex justify-end gap-3 pt-4">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                <Button type="submit" className="bg-[#1E6B8C] hover:bg-[#15526d]">Submit</Button>
+                <Button type="submit" className="bg-medivardaan-blue hover:bg-[#15526d]">Submit</Button>
               </div>
             </form>
           </div>

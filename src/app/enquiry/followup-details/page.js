@@ -102,10 +102,10 @@ export default function FollowupDetailsPage() {
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           FOLLOWUP DETAILS
         </h1>
       </div>
@@ -148,7 +148,7 @@ export default function FollowupDetailsPage() {
           <div className="mt-4">
             <Table>
               <TableBody>
-                <TableRow className="bg-green-50 dark:bg-green-900/20">
+                <TableRow className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                   <TableCell className="font-semibold text-gray-700 dark:text-gray-300">Sr. No.</TableCell>
                   <TableCell className="font-semibold text-gray-700 dark:text-gray-300">Conversation Date</TableCell>
                   <TableCell className="font-semibold text-gray-700 dark:text-gray-300">Follow up Mode</TableCell>
@@ -173,7 +173,7 @@ export default function FollowupDetailsPage() {
       {/* Today's Followup Information Form */}
       <Card className="border-gray-200 dark:border-gray-800">
         <CardContent className="p-4">
-          <h3 className="text-lg font-bold text-red-600 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-[#0f7396] mb-4 flex items-center gap-2">
             <Settings className="w-4 h-4" />
             TODAY'S FOLLOWUP INFORMATION
           </h3>
@@ -340,14 +340,14 @@ export default function FollowupDetailsPage() {
             <div className="flex items-center justify-center gap-4 pt-4">
               <Button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 text-white px-8"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
               >
                 Submit
               </Button>
               <Button
                 type="button"
                 onClick={handleCancel}
-                className="bg-red-600 hover:bg-red-700 text-white px-8"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
               >
                 Cancel
               </Button>

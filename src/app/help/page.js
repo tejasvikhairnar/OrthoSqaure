@@ -46,7 +46,7 @@ const HelpPage = () => {
   return (
     <div className="p-6 bg-background min-h-screen text-foreground">
       {/* Header */}
-      <h1 className="text-xl font-bold text-red-500 flex items-center gap-2 mb-8">
+      <h1 className="text-xl font-bold text-[#0f7396] flex items-center gap-2 mb-8">
         <span className="text-2xl">⚙</span> HELP
       </h1>
 
@@ -65,7 +65,7 @@ const HelpPage = () => {
             onChange={(e) => setSearchName(e.target.value)}
           />
           <Button 
-            className="bg-[#D35400] hover:bg-[#A04000] text-white px-8"
+            className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8"
             onClick={handleSearch}
           >
             Search

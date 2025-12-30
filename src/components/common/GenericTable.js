@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 
-export default function GenericTable({ columns, data,showSorting=true,showPagination=true }) {
+export default function GenericTable({ columns, data=[],showSorting=true,showPagination=true }) {
   const [sorting, setSorting] = React.useState([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
 

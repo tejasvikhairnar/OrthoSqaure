@@ -189,97 +189,99 @@ export default function OnlinePaymentInvoicePage() {
   return (
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
       {/* Header */}
-      <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+      <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
         CREDIT CARD / DEBIT CARD AND UPI INVOICE REPORT
       </h1>
 
       {/* Filters Section */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end bg-white dark:bg-gray-900 rounded-lg">
-        {/* Clinic Name */}
-        <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Clinic Name</Label>
-          <Select
-            value={filters.clinicName}
-            onValueChange={(val) => handleFilterChange("clinicName", val)}
-          >
-            <SelectTrigger className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
-              <SelectValue placeholder="-- Select Clinic --" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="dehradun">Dehradun</SelectItem>
-              <SelectItem value="lb nagar">LB Nagar</SelectItem>
-              <SelectItem value="madhapur">Madhapur</SelectItem>
-              <SelectItem value="mambalam">Mambalam</SelectItem>
-              <SelectItem value="adyar">Adyar</SelectItem>
-              <SelectItem value="trichy">Trichy</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Filters Section */}
+      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 border border-gray-200 dark:border-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+          {/* Clinic Name */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Clinic Name</Label>
+            <Select
+              value={filters.clinicName}
+              onValueChange={(val) => handleFilterChange("clinicName", val)}
+            >
+              <SelectTrigger className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full">
+                <SelectValue placeholder="-- Select Clinic --" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="dehradun">Dehradun</SelectItem>
+                <SelectItem value="lb nagar">LB Nagar</SelectItem>
+                <SelectItem value="madhapur">Madhapur</SelectItem>
+                <SelectItem value="mambalam">Mambalam</SelectItem>
+                <SelectItem value="adyar">Adyar</SelectItem>
+                <SelectItem value="trichy">Trichy</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        {/* Invoice No */}
-        <div className="md:col-span-3 space-y-1">
-          <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">Invoice No</Label>
-          <Input
-             className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-             placeholder="Invoice No"
-             value={filters.invoiceNo}
-             onChange={(e) => handleFilterChange("invoiceNo", e.target.value)}
-          />
-        </div>
-
-         {/* Empty Spacer */}
-         <div className="hidden md:block md:col-span-6"></div>
-
-         {/* From Date */}
-         <div className="md:col-span-3">
-           <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">From Date</Label>
-           <Input
-               type="date"
-               className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-               value={filters.fromDate}
-               onChange={(e) => handleFilterChange("fromDate", e.target.value)}
-            />
-         </div>
-
-          {/* To Date */}
-          <div className="md:col-span-3">
-            <Label className="text-xs font-semibold text-gray-500 dark:text-gray-400">To Date</Label>
+          {/* Invoice No */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Invoice No</Label>
             <Input
-               type="date"
-               className="h-9 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700"
-               value={filters.toDate}
-               onChange={(e) => handleFilterChange("toDate", e.target.value)}
+              className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+              placeholder="Invoice No"
+              value={filters.invoiceNo}
+              onChange={(e) => handleFilterChange("invoiceNo", e.target.value)}
             />
           </div>
 
-        {/* Buttons */}
-        <div className="md:col-span-3 flex gap-2">
-            <Button
-                size="sm"
-                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
-            >
-                Search
-            </Button>
-            <Button
-                size="sm"
-                onClick={handleClear}
-                className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 h-9 rounded-md"
-            >
-                Clear
-            </Button>
+          {/* From Date */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">From Date</Label>
+            <Input
+              type="date"
+              className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+              value={filters.fromDate}
+              onChange={(e) => handleFilterChange("fromDate", e.target.value)}
+            />
+          </div>
+
+          {/* To Date */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">To Date</Label>
+            <Input
+              type="date"
+              className="h-10 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 w-full"
+              value={filters.toDate}
+              onChange={(e) => handleFilterChange("toDate", e.target.value)}
+            />
+          </div>
         </div>
-        
-        {/* Total Count */}
-        <div className="md:col-span-3 flex justify-end pb-2">
-             <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total : {filteredData.length}</span>
+
+        {/* Buttons Row */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
+            <div className="flex gap-2 w-full md:w-auto">
+                <Button
+                    size="sm"
+                    className="flex-none bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white h-10 px-6 shadow-sm"
+                >
+                    Search
+                </Button>
+                <Button
+                    size="sm"
+                    onClick={handleClear}
+                    variant="outline"
+                    className="flex-none border-gray-300 hover:bg-gray-100 h-10 px-6"
+                >
+                    Clear
+                </Button>
+            </div>
         </div>
+      </div>
+
+      <div className="flex justify-end mb-4">
+        <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total : {filteredData.length}</span>
       </div>
 
       {/* Table Section */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-sm overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
         <div className="overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="border-b border-gray-100 dark:border-gray-700 hover:bg-[#E8F8F5] dark:hover:bg-gray-800">
                   <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10 w-12">Sr. No.</TableHead>
                   <TableHead className="text-xs font-bold text-gray-700 dark:text-gray-300 h-10">Clinic Name</TableHead>

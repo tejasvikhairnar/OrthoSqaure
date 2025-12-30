@@ -53,8 +53,8 @@ export default function CancellationTreatmentPage() {
     <div className="w-full p-6 space-y-6 min-h-screen bg-white dark:bg-gray-950 transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-gray-800">
-         <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+         <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
           CANCELLATION TREATMENT
         </h1>
       </div>
@@ -216,7 +216,7 @@ export default function CancellationTreatmentPage() {
        <div className="flex justify-center">
             <Button 
                 onClick={handleSubmit} 
-                className="bg-[#D35400] hover:bg-[#A04000] text-white font-bold py-2 px-8 shadow-md"
+                className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white font-bold py-2 px-8 shadow-md"
             >
                 Submit Cancellation
             </Button>

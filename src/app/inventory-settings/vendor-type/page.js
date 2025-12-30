@@ -86,8 +86,8 @@ export default function VendorType() {
   return (
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           VENDOR TYPE
         </h1>
       </div>
@@ -102,7 +102,7 @@ export default function VendorType() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 flex-1"
                 />
-                 <Button onClick={() => setSearchTerm("")} className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+                 <Button onClick={() => setSearchTerm("")} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
                     Clear
                 </Button>
                 <Button onClick={handleAdd} className="bg-[#0e7490] hover:bg-[#0891b2] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
@@ -114,7 +114,7 @@ export default function VendorType() {
 
           <div className="border border-gray-200 dark:border-gray-700 rounded-t-lg overflow-hidden overflow-x-auto">
             <Table>
-              <TableHeader className="bg-[#E8F8F5] dark:bg-gray-800">
+              <TableHeader className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                 <TableRow className="hover:bg-[#E8F8F5] dark:hover:bg-gray-700/50 border-gray-200 dark:border-gray-700">
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300 w-[60px]">Sr. No.</TableHead>
                   <TableHead className="font-bold text-gray-700 dark:text-gray-300">Vendor Type</TableHead>
@@ -177,7 +177,7 @@ export default function VendorType() {
            </div>
           <div className="flex justify-end gap-4 pt-4">
             <Button onClick={handleCancel} variant="outline" className="min-w-[100px]">Cancel</Button>
-            <Button onClick={handleSubmit} className="bg-[#1E6B8C] hover:bg-[#15526d] text-white min-w-[100px]">
+            <Button onClick={handleSubmit} className="bg-medivardaan-blue hover:bg-[#15526d] text-white min-w-[100px]">
                 {editingId ? "Update" : "Save"}
             </Button>
           </div>

@@ -80,31 +80,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-medivardaan-teal/20 via-medivardaan-blue/20 to-medivardaan-blue-light/20 p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-medivardaan-teal/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-medivardaan-blue/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-      </div>
-
-      <Card className="w-full max-w-md border border-gray-200 bg-white shadow-2xl backdrop-blur-sm relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <CardHeader className="space-y-4 pb-8">
-          <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <Card className="w-full max-w-md border-0 shadow-2xl shadow-slate-200/50 bg-white">
+        <CardHeader className="space-y-6 pb-8 text-center">
+          <div className="flex justify-center">
             <div className="relative group">
-              <div className="absolute -inset-2 bg-gradient-to-r from-medivardaan-teal to-medivardaan-blue rounded-full blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
               <Image
-                src="/medivardaan-logo.png"
-                width={100}
-                height={100}
-                alt="MediVardaan Logo"
-                className="object-contain relative rounded-full ring-4 ring-white shadow-lg"
+                src="/orthosquare-logo.png"
+                width={140}
+                height={70}
+                alt="OrthoSquare Logo"
+                className="object-contain"
               />
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-medivardaan-teal to-medivardaan-blue bg-clip-text text-transparent">
+          </div>
+          <div className="space-y-2">
+            <CardTitle className="text-3xl font-bold text-slate-900">
               Welcome Back
             </CardTitle>
-            <CardDescription className="text-center text-gray-600">
-              Sign in to access your MediVardaan account
+            <CardDescription className="text-base text-slate-600">
+              Sign in to access your OrthoSquare account
             </CardDescription>
           </div>
         </CardHeader>
@@ -113,7 +108,7 @@ export default function LoginPage() {
           <form onSubmit={handleSignIn} className="space-y-5">
             {/* Error Alert */}
             {loginError && (
-              <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 animate-in slide-in-from-top-2 duration-300">
+              <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 animate-in slide-in-from-top-2 duration-300">
                 <AlertCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <p className="text-sm">{loginError}</p>
               </div>
@@ -121,19 +116,19 @@ export default function LoginPage() {
 
             {/* Username Field */}
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="username" className="text-sm font-semibold text-slate-700">
                 Username
               </Label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <User size={18} />
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-medivardaan-blue transition-colors">
+                  <User size={20} />
                 </div>
                 <Input
                   id="username"
                   type="text"
                   placeholder="Enter your username"
-                  className={`pl-10 h-11 bg-gray-50 border-gray-300 focus:bg-white focus:border-medivardaan-teal focus:ring-2 focus:ring-medivardaan-teal/20 transition-all ${
-                    errors.UserId ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""
+                  className={`pl-12 h-12 rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white focus:border-medivardaan-blue focus:ring-4 focus:ring-medivardaan-blue/10 transition-all text-base ${
+                    errors.UserId ? "border-red-300 focus:border-red-500 focus:ring-red-500/20" : ""
                   }`}
                   value={form.UserId}
                   onChange={(e) => handleInputChange("UserId", e.target.value)}
@@ -141,7 +136,7 @@ export default function LoginPage() {
                 />
               </div>
               {errors.UserId && (
-                <p className="text-sm text-red-600 flex items-center gap-1 animate-in slide-in-from-top-1 duration-200">
+                <p className="text-sm text-red-600 flex items-center gap-1.5 animate-in slide-in-from-top-1 duration-200">
                   <AlertCircle size={14} />
                   {errors.UserId}
                 </p>
@@ -150,19 +145,19 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+              <Label htmlFor="password" className="text-sm font-semibold text-slate-700">
                 Password
               </Label>
-              <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <Lock size={18} />
+              <div className="relative group">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-medivardaan-blue transition-colors">
+                  <Lock size={20} />
                 </div>
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className={`pl-10 pr-10 h-11 bg-gray-50 border-gray-300 focus:bg-white focus:border-medivardaan-teal focus:ring-2 focus:ring-medivardaan-teal/20 transition-all ${
-                    errors.UserPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""
+                  className={`pl-12 pr-12 h-12 rounded-xl border-slate-200 bg-slate-50/50 focus:bg-white focus:border-medivardaan-blue focus:ring-4 focus:ring-medivardaan-blue/10 transition-all text-base ${
+                    errors.UserPassword ? "border-red-300 focus:border-red-500 focus:ring-red-500/20" : ""
                   }`}
                   value={form.UserPassword}
                   onChange={(e) => handleInputChange("UserPassword", e.target.value)}
@@ -171,15 +166,15 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none focus:text-medivardaan-teal"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-medivardaan-blue transition-colors focus:outline-none focus:text-medivardaan-blue"
                   disabled={isPending}
                   tabIndex={-1}
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               {errors.UserPassword && (
-                <p className="text-sm text-red-600 flex items-center gap-1 animate-in slide-in-from-top-1 duration-200">
+                <p className="text-sm text-red-600 flex items-center gap-1.5 animate-in slide-in-from-top-1 duration-200">
                   <AlertCircle size={14} />
                   {errors.UserPassword}
                 </p>
@@ -189,7 +184,8 @@ export default function LoginPage() {
             {/* Login Button */}
             <Button
               type="submit"
-              className="w-full h-11 bg-gradient-to-r from-medivardaan-teal to-medivardaan-blue hover:from-medivardaan-teal-dark hover:to-medivardaan-blue-dark text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+              variant="ghost"
+              className="w-full h-12 !bg-[#0f7396] hover:!bg-[#0d6582] text-white font-semibold rounded-xl shadow-lg shadow-[#0f7396]/30 hover:shadow-xl hover:shadow-[#0f7396]/40 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
               disabled={isPending}
             >
               {isPending ? (
@@ -204,8 +200,9 @@ export default function LoginPage() {
           </form>
 
           {/* Footer */}
-          <div className="pt-4 text-center border-t border-gray-200">
-            <p className="text-sm text-gray-500">
+          <div className="pt-6 text-center border-t border-slate-100">
+            <p className="text-sm text-slate-500 flex items-center justify-center gap-2">
+              <Lock size={14} className="text-medivardaan-teal" />
               Secure healthcare management platform
             </p>
           </div>

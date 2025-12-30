@@ -192,10 +192,10 @@ export default function EnquiryFollowupsPage() {
     <div className="w-full p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
-          <Settings className="w-4 h-4 text-red-600" />
+        <div className="w-8 h-8 rounded-full bg-[#0f7396]/10 dark:bg-[#0f7396]/20 flex items-center justify-center">
+          <Settings className="w-4 h-4 text-[#0f7396]" />
         </div>
-        <h1 className="text-xl font-bold text-red-600 dark:text-red-500">
+        <h1 className="text-xl font-bold text-[#0f7396] dark:text-[#0f7396]">
           FOLLOWUP DETAILS
         </h1>
       </div>
@@ -367,7 +367,7 @@ export default function EnquiryFollowupsPage() {
                 <CardContent className="p-0">
                   <div className="grid grid-cols-1 lg:grid-cols-12">
                     {/* Sr. No. Column */}
-                    <div className="lg:col-span-1 bg-green-50 dark:bg-green-900/20 p-4 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700">
+                    <div className="lg:col-span-1 bg-medivardaan-teal/10 dark:bg-accent p-4 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-border">
                       <div className="text-center">
                         <div className="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-1">
                           Sr. No.
@@ -380,7 +380,7 @@ export default function EnquiryFollowupsPage() {
 
                     {/* Enquiry Details Table */}
                     <div className="lg:col-span-8 p-4">
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 bg-medivardaan-teal/10 dark:bg-accent px-3 py-2 rounded">
                         Enquiry Details
                       </h3>
                       <Table>
@@ -516,7 +516,7 @@ export default function EnquiryFollowupsPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
+                          className="border-medivardaan-blue text-medivardaan-blue hover:bg-medivardaan-blue/10 dark:hover:bg-accent"
                           onClick={() => handleView(followup)}
                           title="View details"
                         >

@@ -86,8 +86,8 @@ export default function MedicalProblem() {
       return (
         <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
              <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-                <Settings className="w-5 h-5 text-red-500" />
-                <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">MEDICAL PROBLEM</h1>
+                <Settings className="w-5 h-5 text-medivardaan-blue" />
+                <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">MEDICAL PROBLEM</h1>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -98,7 +98,7 @@ export default function MedicalProblem() {
 
                 <div className="flex gap-4">
                      <Button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-6">Submit</Button>
-                     <Button type="button" className="bg-red-600 hover:bg-red-700 text-white px-6" onClick={() => setViewMode("list")}>Cancel</Button>
+                     <Button type="button" className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6" onClick={() => setViewMode("list")}>Cancel</Button>
                 </div>
             </form>
         </div>
@@ -109,8 +109,8 @@ export default function MedicalProblem() {
     <div className="p-6 bg-white dark:bg-gray-900 min-h-screen space-y-6">
       {/* Header */}
       <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <Settings className="w-5 h-5 text-red-500" />
-        <h1 className="text-lg font-bold text-red-500 uppercase tracking-wide">
+        <Settings className="w-5 h-5 text-medivardaan-blue" />
+        <h1 className="text-lg font-bold text-medivardaan-blue uppercase tracking-wide">
           MEDICAL PROBLEM
         </h1>
       </div>
@@ -124,12 +124,12 @@ export default function MedicalProblem() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 flex-1"
             />
-             <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
+             <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap">
                 Search
             </Button>
             <Button 
                 onClick={handleAddNew}
-                className="bg-[#1E6B8C] hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
+                className="bg-medivardaan-blue hover:bg-[#15526d] text-white px-6 font-medium shadow-sm transition-all whitespace-nowrap"
             >
                 Add New
             </Button>

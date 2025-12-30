@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Settings, Pencil, Eye, Trash2 } from "lucide-react"
+import { Settings, Pencil, Eye, Trash2, FileSignature } from "lucide-react"
 
 export default function ConsentPage() {
   const [filters, setFilters] = useState({
@@ -54,9 +54,13 @@ export default function ConsentPage() {
   return (
     <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-2 text-primary mb-8 border-b border-border pb-4">
-        <Settings className="w-5 h-5 text-medivardaan-teal" />
-        <h1 className="text-xl font-bold tracking-tight text-medivardaan-teal uppercase">Consent Details List</h1>
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-medivardaan-blue/10 flex items-center justify-center">
+          <FileSignature className="w-4 h-4 text-[#0f7396]" />
+        </div>
+        <h1 className="text-xl font-bold text-[#0f7396]">
+          CONSENT
+        </h1>
       </div>
 
       {/* Filters */}
@@ -67,13 +71,13 @@ export default function ConsentPage() {
                     placeholder="Patient Name" 
                     value={filters.patientName}
                     onChange={(e) => setFilters({...filters, patientName: e.target.value})}
-                    className="bg-background w-full"
+                    className="bg-background w-full h-10"
                  />
              </div>
 
              <div className="space-y-2">
                  <Select value={filters.clinic} onValueChange={(v) => setFilters({...filters, clinic: v})}>
-                  <SelectTrigger className="bg-background w-full">
+                  <SelectTrigger className="bg-background w-full h-10">
                     <SelectValue placeholder="-- Select Clinic --" />
                   </SelectTrigger>
                   <SelectContent>
@@ -88,7 +92,7 @@ export default function ConsentPage() {
                     type="date"
                     value={filters.fromDate}
                     onChange={(e) => setFilters({...filters, fromDate: e.target.value})}
-                    className="bg-background w-full"
+                    className="bg-background w-full h-10"
                  />
              </div>
 
@@ -97,12 +101,12 @@ export default function ConsentPage() {
                     type="date"
                     value={filters.toDate}
                     onChange={(e) => setFilters({...filters, toDate: e.target.value})}
-                    className="bg-background w-full"
+                    className="bg-background w-full h-10"
                  />
              </div>
 
              <div className="space-y-2">
-                 <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-6 w-full">
+                 <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-6 w-full h-10">
                     Search
                  </Button>
              </div>

@@ -41,10 +41,10 @@ export default function UpgradationPage() {
     <div className="w-full p-6 space-y-6 min-h-screen bg-white dark:bg-gray-950 transition-colors duration-300">
       {/* Header */}
       <div className="flex items-center gap-3 pb-2 border-b border-gray-200 dark:border-gray-800">
-         <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
-             <Settings className="w-5 h-5 text-red-500 animate-spin-slow" />
+         <div className="p-2 bg-[#0f7396]/10 dark:bg-[#0f7396]/20 rounded-lg">
+             <Settings className="w-5 h-5 text-medivardaan-blue animate-spin-slow" />
          </div>
-        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+        <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
           UPGRADATION
         </h1>
       </div>
@@ -183,7 +183,7 @@ export default function UpgradationPage() {
           
            {/* Submit Button */}
            <div className="flex justify-center pt-4">
-            <Button className="bg-[#D35400] hover:bg-[#A04000] text-white px-8 h-10 font-bold shadow-md">
+            <Button className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8 h-10 font-bold shadow-md">
                 Submit Upgradation
             </Button>
            </div>

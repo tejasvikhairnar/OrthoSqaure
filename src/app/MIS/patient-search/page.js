@@ -135,13 +135,13 @@ export default function PatientSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-6 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-2 px-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Search Patient Section */}
         <Card className="border border-gray-200 dark:border-gray-700 shadow-md bg-white dark:bg-gray-800">
-          <CardHeader className="p-4 bg-red-50 dark:bg-red-900/20 border-b border-red-200 dark:border-red-800">
-            <h2 className="text-lg font-semibold text-red-600 dark:text-red-400 flex items-center gap-2">
-              <span className="text-red-500">⚙</span> PATIENT
+          <CardHeader className="p-4 bg-[#0f7396]/10 dark:bg-[#0f7396]/20 border-b border-[#0f7396]/20 dark:border-[#0f7396]/20">
+            <h2 className="text-lg font-semibold text-[#0f7396] dark:text-[#0f7396] flex items-center gap-2">
+              <span className="text-[#0f7396]">⚙</span> PATIENT
             </h2>
           </CardHeader>
           <CardContent className="p-6">
@@ -205,13 +205,13 @@ export default function PatientSearchPage() {
                 />
               </div>
               <div className="flex gap-2">
-                <Button onClick={handleSearch} className="bg-red-600 hover:bg-red-700 text-white px-8">
+                <Button onClick={handleSearch} className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white px-8">
                   Search
                 </Button>
                 <Button
                   onClick={handleExcelUpload}
                   variant="outline"
-                  className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 px-6"
+                  className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white border-medivardaan-blue px-6"
                 >
                   Excel upload
                 </Button>
@@ -228,7 +228,7 @@ export default function PatientSearchPage() {
               <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-green-100 dark:bg-green-900/20">
+                    <tr className="bg-medivardaan-teal/10 dark:bg-accent text-foreground font-semibold border-b border-border">
                       <th className="p-3 text-left font-medium text-gray-700 dark:text-gray-300">Sr. No.</th>
                       <th className="p-3 text-left font-medium text-gray-700 dark:text-gray-300">Case Paper No.</th>
                       <th className="p-3 text-left font-medium text-gray-700 dark:text-gray-300">Name</th>

@@ -36,11 +36,11 @@ export default function Header() {
   };
 
   return (
-    <header className="w-full bg-gradient-to-r from-[#4DB8AC]/10 via-[#1E6B8C]/10 to-[#4DB8AC]/10 dark:bg-gradient-to-r dark:from-[#1E6B8C]/20 dark:via-[#4DB8AC]/20 dark:to-[#1E6B8C]/20 border border-[#4DB8AC]/20 dark:border-[#4DB8AC]/30 rounded-lg shadow-sm px-6 py-4 mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <header className="glass-header w-full h-16 flex items-center justify-between px-6 z-30">
       {/* Left Section */}
       <div className="flex items-center gap-2">
-        <LayoutDashboard className="w-5 h-5 text-[#1E6B8C] dark:text-[#4DB8AC]" />
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">
+        <LayoutDashboard className="w-5 h-5 text-medivardaan-blue dark:text-medivardaan-teal" />
+        <h1 className="text-xl font-semibold text-[#0f7396] dark:text-[#0f7396] tracking-tight">
           Dashboard
         </h1>
       </div>
@@ -55,7 +55,7 @@ export default function Header() {
           }}
           value={region}
         >
-          <SelectTrigger className="w-[160px] bg-gradient-to-br from-[#4DB8AC]/5 to-[#1E6B8C]/5 dark:bg-gradient-to-br dark:from-[#1E6B8C]/10 dark:to-[#4DB8AC]/10 border border-[#4DB8AC]/30 dark:border-[#4DB8AC]/40 rounded-md text-sm font-medium">
+          <SelectTrigger className="w-[160px] bg-gradient-to-br from-medivardaan-teal/5 to-medivardaan-blue/5 dark:bg-gradient-to-br dark:from-medivardaan-blue/10 dark:to-medivardaan-teal/10 border border-medivardaan-teal/30 dark:border-medivardaan-teal/40 rounded-md text-sm font-medium">
             <SelectValue placeholder="Region" />
           </SelectTrigger>
           <SelectContent>

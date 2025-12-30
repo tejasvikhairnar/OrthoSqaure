@@ -76,10 +76,10 @@ export default function PaymentCollectionPage() {
     <div className="w-full p-4 space-y-6 min-h-screen bg-white dark:bg-gray-950">
        {/* Header */}
       <div className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
-        <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
-             <Settings className="w-6 h-6 text-red-500 animate-spin-slow" />
+        <div className="p-2 bg-[#0f7396]/10 dark:bg-[#0f7396]/20 rounded-lg">
+             <Settings className="w-6 h-6 text-[#0f7396] animate-spin-slow" />
         </div>
-        <h1 className="text-xl font-bold text-red-500 uppercase tracking-wide">
+        <h1 className="text-xl font-bold text-medivardaan-blue uppercase tracking-wide">
           PAYMENT COLLECTION
         </h1>
       </div>
@@ -375,7 +375,7 @@ export default function PaymentCollectionPage() {
         <div className="flex justify-center gap-4 pt-6">
           <Button
             type="submit"
-            className="bg-[#D35400] hover:bg-[#A04000] text-white min-w-[150px] font-bold shadow-md"
+            className="bg-medivardaan-blue hover:bg-medivardaan-blue-dark text-white min-w-[150px] font-bold shadow-md"
           >
             Submit Payment
           </Button>

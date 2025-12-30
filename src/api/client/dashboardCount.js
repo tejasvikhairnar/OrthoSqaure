@@ -15,14 +15,14 @@ return response.data;
 
 
 getClinicDashboardCountData : async (ClinicId,DoctorId) => {
-    const response = await axiosClient.get(`/api/Dashboard/GetAllClinicDashboard`,{
-        params:{
-            ClinicId,
-            DoctorId
-            
-        }
-    })
-return response.data;
+    // Use fetch to hit internal Next.js API (relative path) instead of external axiosClient
+    const params = new URLSearchParams();
+    if (ClinicId !== undefined && ClinicId !== null) params.append('Regions', ClinicId);
+    if (DoctorId !== undefined && DoctorId !== null) params.append('Id', DoctorId);
+    
+    const response = await fetch(`/api/dashboard?${params.toString()}`);
+    if (!response.ok) throw new Error('Failed to fetch dashboard data');
+    return response.json();
 },
 
 
