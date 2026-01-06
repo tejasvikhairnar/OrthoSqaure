@@ -5,6 +5,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -54,6 +55,7 @@ import {
 import GenericTable from "@/components/common/GenericTable";
 import { Spinner } from "@/components/ui/spinner";
 import { getUser } from "@/api/client/getUser";
+import { setHeaderData } from "@/store/slices/headerSlice";
 // import { useDashboardData } from "@/hooks/useDashboardData";
 
 
