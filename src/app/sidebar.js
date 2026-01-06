@@ -726,11 +726,12 @@ export default function Sidebar({ open }) {
     ]
   };
 
-   // STRICT MENU ORDER: Dashboard, Settings, Lead, Patients, Appointments, Invoice
+   // STRICT MENU ORDER: Dashboard, Settings, Doctor, Lead, Patients, Appointments, Invoice
    // Ignoring server data to enforce layout.
   const menuData = [
       dashboardMenu,
       settingsMenu,
+      doctorMenu,
       leadMenu,
       patientDetailsMenu,
       appointmentMenu,
