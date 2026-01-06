@@ -531,6 +531,7 @@ export default function InvoicesPage() {
     setFilters((prev) => ({ ...prev, ...newFilters }));
   };
 
+
   const handleNewInvoice = () => {
     setEditingInvoice(undefined); // Clear any previous editing state
     setIsFormDialogOpen(true);
